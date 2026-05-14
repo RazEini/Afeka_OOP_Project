@@ -1,3 +1,5 @@
+import classes.Administrative;
+
 import java.util.Scanner;
 
 // מגישים:
@@ -76,8 +78,8 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        System.out.print("Welcome! Please enter the College Name: ");
-        String collegeName = scanner.nextLine();
+        Administrative administrative = new Administrative();
+        administrative.SetCollegeName();
 
         String[] lecturers = new String[1];
         String[] committees = new String[1];
@@ -87,7 +89,7 @@ public class Main {
         int choice = -1;
 
         while (choice != 0) {
-            System.out.println("\n--- " + collegeName + " Management Menu ---");
+            System.out.println("\n--- " + administrative.getName() + " Management Menu ---");
             System.out.println("1 - Add Lecturer");
             System.out.println("2 - Add Committee");
             System.out.println("3 - Add Department");

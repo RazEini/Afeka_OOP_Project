@@ -16,6 +16,13 @@ public class Lecturer {
         department = new Department();
     }
 
+    public Lecturer(String name, String id, String degreeName, Department department){
+        this.name = name;
+        this.id = id;
+        this.degreeName = degreeName;
+        department = new Department(department);
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -46,7 +53,5 @@ public class Lecturer {
     public Department getDepartment(){
         return this.department;
     }
-
-
 
 }
