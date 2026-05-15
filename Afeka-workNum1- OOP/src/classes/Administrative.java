@@ -1,20 +1,17 @@
 package classes;
 import java.util.Scanner;
 
-
 public class Administrative {
-    public Lecturer[] lecturers;
-    public Department[] department;
-    public Committee[] committee;
-    public String collegeName;
+    private Lecturer[] lecturers;
+    private Department[] departments;
+    private String collegeName;
     private int lecturerCount = 0;
+    private int departmentCount = 0;
     private static Scanner scanner = new Scanner(System.in);
 
-
-    public Administrative(){
-        lecturers = new Lecturer[0];
-        department = new Department[0];
-        committee = new Committee[0];
+    public Administrative() {
+        lecturers = new Lecturer[2];
+        departments = new Department[2];
         collegeName = "";
     }
 
@@ -23,93 +20,97 @@ public class Administrative {
         this.collegeName = scanner.nextLine();
     }
 
-    public String getName() {
+    public String getCollegeName() {
         return this.collegeName;
     }
 
-    public Lecturer[] resizeArray() {
-        Lecturer[] newItems = new Lecturer[lecturers.length * 2];
-
+    private void resizeLecturers() {
+        Lecturer[] newArray = new Lecturer[lecturers.length * 2];
         for (int i = 0; i < lecturers.length; i++) {
-            newItems[i] = lecturers[i];
+            newArray[i] = lecturers[i];
         }
-
-        return newItems;
+        lecturers = newArray;
     }
 
-    public boolean CheckExistingLecturer(String name){
-        for (Lecturer lecturer : this.lecturers){
-            if (lecturer.name.equals(name)){
-                return false;
+    private void resizeDepartments() {
+        Department[] newArray = new Department[departments.length * 2];
+        for (int i = 0; i < departments.length; i++) {
+            newArray[i] = departments[i];
+        }
+        departments = newArray;
+    }
+
+    public boolean isLecturerExists(String name) {
+        for (int i = 0; i < lecturerCount; i++) {
+            if (lecturers[i].getName().equalsIgnoreCase(name)) {
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
-    public Department AddDepartmentToLecturer(String name){
-        Department newDepartment = new Department();
-        return newDepartment;
+    public void AddLecturer() {
+        System.out.println("Enter lecturer name: ");
+        String name = scanner.nextLine();
 
-    }
-
-    public Lecturer[] AddLecturer() {
-        System.out.println("Please enter the name of the lecturer you would like to add: ");
-        String lecturerName = scanner.nextLine();
-        System.out.println("Please enter the ID of the lecturer: ");
-        String lecturerID = scanner.nextLine();
-        System.out.println("Please enter the status degree of the lecturer: ");
-        String lecturerDegree = scanner.nextLine();
-        System.out.println("Please enter the salary of the lecturer: ");
-        int lecturerSalary = Integer.parseInt(scanner.nextLine());
-        System.out.println("Please enter the degree name of the lecturer: ");
-        String lecturerDegreeName = scanner.nextLine();
-        System.out.println("Please enter the name of the department of the lecturer: ");
-        String lecturerDepartment = scanner.nextLine();
-
-        while (!CheckExistingLecturer(lecturerName)) {
-            System.out.println("this name already exists, Enter new lecturer name: ");
-            lecturerName = scanner.nextLine();
+        while (isLecturerExists(name)) {
+            System.out.println("Name already exists, Enter new name: ");
+            name = scanner.nextLine();
         }
+
+        System.out.println("Enter ID: ");
+        String id = scanner.nextLine();
+        System.out.println("Enter degree (BACHELOR_DEGREE, MASTER_DEGREE, DR, PROFESSOR): ");
+        String degree = scanner.nextLine();
+        System.out.println("Enter salary: ");
+        int salary = Integer.parseInt(scanner.nextLine());
+        System.out.println("Enter degree name: ");
+        String degreeName = scanner.nextLine();
 
         if (lecturerCount == lecturers.length) {
-            lecturers = resizeArray();
+            resizeLecturers();
         }
 
-        lecturers[lecturerCount].setDegree(lecturerDegree);
-        lecturers[lecturerCount++] = new Lecturer(lecturerName, lecturerID, lecturerDegreeName, lecturerSalary);
-        System.out.println("Lecturer '" + lecturerName + "' added successfully!");
-        return lecturers;
+        Lecturer newLecturer = new Lecturer(name, id, degreeName, salary, new Department());
+        newLecturer.setDegree(degree);
+        lecturers[lecturerCount++] = newLecturer;
+
+        System.out.println("Lecturer added successfully!");
     }
 
-    public boolean CheckChairman(Lecturer chairname){
-        if (chairname.getDegree().name().equals("DR"))
-            return false;
-        if (chairname.getDegree().name().equals("PROFESSOR"))
-            return false;
-        return true;
+    public boolean isChairmanQualified(Lecturer chair) {
+        if (chair == null || chair.getDegree() == null) return false;
+        String degree = chair.getDegree().name();
+        return degree.equals("DR") || degree.equals("PROFESSOR");
     }
 
-    public boolean CheckExistingDepartment(String name){
-        for (Department department : this.department){
-            if (department.department_name.equals(name)){
-                return false;
+    public Lecturer findLecturerByName(String name) {
+        for (int i = 0; i < lecturerCount; i++) {
+            if (lecturers[i].getName().equalsIgnoreCase(name)) {
+                return lecturers[i];
             }
         }
-        return true;
+        return null;
     }
 
     public void AddDepartment() {
-        System.out.println("Please enter the department name: ");
-        String departmentName = scanner.nextLine();
-        System.out.println("Please enter the chairman name: ");
-        String chairname = scanner.nextLine();
-        //if (CheckChairman(chairname)){
-          //  if (!CheckExistingDepartment(departmentName)){
+        System.out.println("Enter department name: ");
+        String deptName = scanner.nextLine();
+        System.out.println("Enter chairman name: ");
+        String chairName = scanner.nextLine();
 
-          //  }
-        //}
+        Lecturer chair = findLecturerByName(chairName);
 
+        if (chair != null && isChairmanQualified(chair)) {
+            if (departmentCount == departments.length) {
+                resizeDepartments();
+            }
+            Department newDept = new Department();
+            newDept.setDepartmentName(deptName);
+            departments[departmentCount++] = newDept;
+            System.out.println("Department added successfully!");
+        } else {
+            System.out.println("Error: Chairman must be DR or PROFESSOR and must exist in system.");
+        }
     }
-
-
 }
