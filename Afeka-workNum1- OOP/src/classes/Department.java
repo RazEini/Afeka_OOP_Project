@@ -1,9 +1,9 @@
 package classes;
 
 public class Department {
-    private String department_name;
-    private int student_count;
-    private Lecturer[] lecturers_Array;
+    public String department_name;
+    public int student_count;
+    public Lecturer[] lecturers_Array;
 
     public Department() {
         this.department_name = "";

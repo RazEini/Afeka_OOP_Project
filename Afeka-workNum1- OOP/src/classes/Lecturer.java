@@ -1,26 +1,32 @@
 package classes;
 
+import java.util.Locale;
+
 public class Lecturer {
     public String name;
     public String id;
-    public enum  degree {
+    public enum degree {
        bachelor_degree , master_degree, DR, Professor
     }
+    private degree lecturerDegree;
     public String degreeName;
+    public int salary;
     public Department department;
 
     public Lecturer(){
         this.name = "";
         this.id = "";
         this.degreeName = "";
+        this.salary = 0;
         department = new Department();
     }
 
-    public Lecturer(String name, String id, String degreeName, Department department){
+    public Lecturer(String name, String id, String degreeName, int salary, Department department){
         this.name = name;
         this.id = id;
         this.degreeName = degreeName;
-        department = new Department(department);
+        this.salary = salary;
+        this.department = new Department(department);
     }
 
     public void setName(String name) {
@@ -30,8 +36,12 @@ public class Lecturer {
         this.id = id;
     }
 
-    public void setDegree(String degree) {
-        this.degreeName = degree;
+    public void setDegree(String lecturerDegree) {
+        this.lecturerDegree = degree.valueOf(lecturerDegree.toUpperCase());
+    }
+
+    public void setDegreeName(String degreeName) {
+        this.degreeName = degreeName;
     }
 
     public void SetDepartment(Department department){
@@ -44,6 +54,10 @@ public class Lecturer {
 
     public String getId(){
         return this.id;
+    }
+
+    public degree getDegree(){
+        return this.lecturerDegree;
     }
 
     public String getDegreeName(){
