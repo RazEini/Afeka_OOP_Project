@@ -34,15 +34,12 @@ public class Administrative {
         return false;
     }
 
-    public boolean addLecturer(String name, String id, String degree, int salary, String degreeName) {
-        if (isLecturerExists(name)) return false;
-
+    public void addLecturer(String name, String id, String degree, int salary, String degreeName) {
         if (lecturerCount == lecturers.length) resizeLecturers();
 
-        Lecturer l = new Lecturer(name, id, degreeName, salary, null);
+        Lecturer l = new Lecturer(name, id,degreeName, salary, null);
         l.setDegree(degree);
         lecturers[lecturerCount++] = l;
-        return true;
     }
 
     public Lecturer findLecturerByName(String name) {

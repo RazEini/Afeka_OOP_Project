@@ -43,6 +43,21 @@ public class Main {
 
             switch (choice) {
                 case 1:
+                    String lecturerName;
+                    do {
+                        System.out.println("Enter Lecturer's name: ");
+                        lecturerName = scanner.nextLine();
+                    } while (administrative.isLecturerExists(lecturerName));
+
+                    System.out.println("Enter Lecturer's ID: ");
+                    String lecturerID = scanner.nextLine();
+                    System.out.println("Enter Lecturer's degree: ");
+                    String lecturerDegree = scanner.nextLine();
+                    System.out.println("Enter Lecturer's salary: ");
+                    int lecturerSalary = scanner.nextInt();
+                    System.out.println("Enter Lecturer's degreeName: ");
+                    String lecturerDegreeName = scanner.nextLine();
+                    administrative.addLecturer(lecturerName, lecturerID,  lecturerDegree, lecturerSalary, lecturerDegreeName);
                     break;
                 case 2:
                     break;
