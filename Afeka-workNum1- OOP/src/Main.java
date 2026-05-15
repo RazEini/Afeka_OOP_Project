@@ -36,8 +36,7 @@ public class Main {
             System.out.print("Select an option: ");
 
             if (scanner.hasNextInt()) {
-                choice = scanner.nextInt();
-                scanner.nextLine();
+                choice = Integer.parseInt(scanner.nextLine());
             } else {
                 System.out.println("Invalid input. Please enter a number.");
                 scanner.nextLine();
@@ -48,23 +47,23 @@ public class Main {
                 case 1:
                     String lecturerName;
                     do {
-                        System.out.println("Enter Lecturer's name: ");
+                        System.out.print("Enter Lecturer's name: ");
                         lecturerName = scanner.nextLine();
                         if(administrative.isLecturerExists(lecturerName)) {
                             System.out.println("Lecturer already exists! Try a different name.");
                         }
                     } while (administrative.isLecturerExists(lecturerName));
 
-                    System.out.println("Enter Lecturer's ID (9 digits): ");
+                    System.out.print("Enter Lecturer's ID (9 digits): ");
                     String lecturerID = scanner.nextLine();
-                    System.out.println("Enter Lecturer's degree ( BACHELOR_DEGREE, MASTER_DEGREE, DR, PROFESSOR ): ");
+                    System.out.print("Enter Lecturer's degree ( BACHELOR_DEGREE, MASTER_DEGREE, DR, PROFESSOR ): ");
                     String lecturerDegree = scanner.nextLine();
 
-                    System.out.println("Enter Lecturer's salary: ");
+                    System.out.print("Enter Lecturer's salary: ");
                     int lecturerSalary = scanner.nextInt();
                     scanner.nextLine();
 
-                    System.out.println("Enter Lecturer's degree name: ");
+                    System.out.print("Enter Lecturer's degree name: ");
                     String lecturerDegreeName = scanner.nextLine();
 
                     administrative.addLecturer(lecturerName, lecturerID, lecturerDegree, lecturerSalary, lecturerDegreeName);
@@ -76,7 +75,7 @@ public class Main {
                     String committeeName = scanner.nextLine();
 
                     if (administrative.isCommitteeExists(committeeName)) {
-                        System.out.println("Error: A committee with this name already exists.");
+                        System.out.print("Error: A committee with this name already exists.");
                         break;
                     }
 
@@ -103,6 +102,13 @@ public class Main {
                     }
                     break;
                 case 3:
+                    System.out.print("Enter committee's name: ");
+                    committeeName = scanner.nextLine();
+                    System.out.print("Enter lecturer's name: ");
+                    lecturerName = scanner.nextLine();
+                    if (administrative.addLecturerToCommittee(committeeName, lecturerName)){
+                        System.out.println("Added successfully " + lecturerName + " to committee '" + committeeName + "'.");
+                    }
                     break;
                 case 4:
                     break;
