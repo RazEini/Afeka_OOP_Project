@@ -21,10 +21,10 @@ public class Main {
 
         while (choice != 0) {
             System.out.println("\n--- " + administrative.getCollegeName() + " Management Menu ---");
-            System.out.println("1 - Add Lecturer");
-            System.out.println("2 - Add Committee");
-            System.out.println("3 - Add Department");
-            System.out.println("4 - Placement lecturer to committee");
+            System.out.println("1 - Add Lecturer to the college");
+            System.out.println("2 - Add Committee to the college");
+            System.out.println("3 - Add Lecturer to committee");
+            System.out.println("4 - Update committee chairman");
             System.out.println("5 - Display average salary of all lecturers");
             System.out.println("6 - Display average salary of committee lecturers");
             System.out.println("7 - Display all Lecturers");
@@ -111,6 +111,15 @@ public class Main {
                     }
                     break;
                 case 4:
+                    System.out.print("Enter committee's name: ");
+                    committeeName = scanner.nextLine();
+                    System.out.print("Enter chairman's name: ");
+                    chairmanName = scanner.nextLine();
+
+                    if (administrative.UpdateChairmanCommittee(committeeName, chairmanName)){
+                        System.out.println("Updated successfully " + chairmanName + " to committee '" + committeeName + "'.");
+                    }
+
                     break;
                 case 5:
                 case 6:

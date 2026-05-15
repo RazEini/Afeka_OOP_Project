@@ -109,7 +109,7 @@ public class Administrative {
         for (int i = 0; i < committeeCount; i++) {
             if (committees[i].getCommitteeName().equalsIgnoreCase(committeeName)) {
                 String degree = l.getDegree().name();
-                if (!degree.equalsIgnoreCase("DR") && !degree.equalsIgnoreCase("Professor")) {
+                if (!committees[i].getChairman().getName().equalsIgnoreCase(lecturerName)) {
                     if (committees[i].isLecturerExitst(lecturerName)) {
                         System.out.println("Lecturer " + lecturerName + " is already exitst.");
                         return false;
@@ -120,12 +120,41 @@ public class Administrative {
                     return true;
 
                 } else {
-                    System.out.println("Lecturer " + lecturerName + " is has a DR or Professor.");
+                    System.out.println("Lecturer " + lecturerName + " is a chairman.");
                     return false;
                 }
             }
         }
         System.out.println("Lecturer " + lecturerName + " is not exitst.");
+        return false;
+    }
+
+    public boolean ChairmanExists(Lecturer l) {
+        if (l == null){
+            System.out.println("Error: " + l.getName() + " is not exists.");
+            return false;
+        }
+        for (int i = 0; i < committeeCount; i++)
+            if (committees[i].getChairman().getName().equals(l.getName()))
+                return true;
+        return false;
+    }
+
+    public boolean UpdateChairmanCommittee(String committeeName, String chairmanName) {
+        Lecturer l = findLecturerByName(chairmanName);
+        if (ChairmanExists(l)) {
+            System.out.println("Lecturer " + chairmanName + " is already chairman.");
+            return false;
+        }
+        for (int i = 0; i < committeeCount; i++) {
+            if (committees[i].getCommitteeName().equalsIgnoreCase(committeeName)) {
+                String degree = l.getDegree().name();
+                if (degree.equalsIgnoreCase("DR") || degree.equalsIgnoreCase("PROFESSOR")) {
+                    committees[i].setChairman(l);
+                    return true;
+                }
+            }
+        }
         return false;
     }
 }

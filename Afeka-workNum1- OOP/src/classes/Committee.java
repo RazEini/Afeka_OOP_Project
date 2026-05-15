@@ -102,6 +102,6 @@ public class Committee {
     @Override
     public String toString() {
         String chairName = (chairman != null) ? chairman.getName() : "None";
-        return "Committee: " + committee_name + " | Chairman: " + chairName + " | Members: " + lecturers_Array.length;
+        return "Committee: " + committee_name + " | Chairman: " + chairName + " | Members: " + lecturerCount;
     }
 }
