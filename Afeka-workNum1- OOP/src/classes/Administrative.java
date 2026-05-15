@@ -46,7 +46,7 @@ public class Administrative {
         return true;
     }
 
-    public Department AddDepartmentToLecturer(){
+    public Department AddDepartmentToLecturer(String name){
         Department newDepartment = new Department();
         return newDepartment;
 
@@ -64,7 +64,7 @@ public class Administrative {
         System.out.println("Please enter the degree name of the lecturer: ");
         String lecturerDegreeName = scanner.nextLine();
         System.out.println("Please enter the name of the department of the lecturer: ");
-        Department lecturerDepartment = AddDepartmentToLecturer();
+        String lecturerDepartment = scanner.nextLine();
 
         while (!CheckExistingLecturer(lecturerName)) {
             System.out.println("this name already exists, Enter new lecturer name: ");
@@ -75,7 +75,8 @@ public class Administrative {
             lecturers = resizeArray();
         }
 
-        lecturers[lecturerCount++] = new Lecturer(lecturerName, lecturerID, lecturerDegreeName, lecturerSalary, lecturerDepartment);
+        lecturers[lecturerCount].setDegree(lecturerDegree);
+        lecturers[lecturerCount++] = new Lecturer(lecturerName, lecturerID, lecturerDegreeName, lecturerSalary);
         System.out.println("Lecturer '" + lecturerName + "' added successfully!");
         return lecturers;
     }

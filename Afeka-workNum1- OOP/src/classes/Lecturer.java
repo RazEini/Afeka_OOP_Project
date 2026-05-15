@@ -15,10 +15,13 @@ public class Lecturer {
 
     public Lecturer(){
         this.name = "";
-        this.id = "";
+        this.id = "";;
         this.degreeName = "";
         this.salary = 0;
         department = new Department();
+    }
+    public Lecturer(String name, String id, String degreeName, int salary){
+        this(name, id,  degreeName, salary, new Department());
     }
 
     public Lecturer(String name, String id, String degreeName, int salary, Department department){
