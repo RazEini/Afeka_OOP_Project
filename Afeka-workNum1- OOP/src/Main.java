@@ -86,18 +86,19 @@ public class Main {
                     Lecturer chair = administrative.findLecturerByName(chairmanName);
 
                     if (chair == null) {
-                        System.out.println("Error: Lecturer not found. Add them first via option 1.");
+                        System.out.println("Error: Lecturer not found. You must add the lecturer first.");
                     } else {
-                        Committee newCommittee = new Committee();
-                        newCommittee.setCommitteeName(committeeName);
-                        newCommittee.setChairman(chair);
+                        String degree = chair.getDegree().toString();
 
-                        // וידוא שהיו"ר הוגדר (כלומר עמד בתנאי התואר DR/PROFESSOR)
-                        if (newCommittee.getChairman().getName().equals(chair.getName())) {
+                        if (degree.equalsIgnoreCase("DR") || degree.equalsIgnoreCase("PROFESSOR")) {
+                            Committee newCommittee = new Committee();
+                            newCommittee.setCommitteeName(committeeName);
+                            newCommittee.setChairman(chair);
+
                             administrative.addCommittee(newCommittee);
-                            System.out.println("Committee '" + committeeName + "' created successfully.");
+                            System.out.println("Committee '" + committeeName + "' created successfully with " + chairmanName + " as chairman.");
                         } else {
-                            System.out.println("Committee creation failed: Invalid chairman degree.");
+                            System.out.println("Error: Committee cannot be created. Chairman must be a DR or PROFESSOR.");
                         }
                     }
                     break;
