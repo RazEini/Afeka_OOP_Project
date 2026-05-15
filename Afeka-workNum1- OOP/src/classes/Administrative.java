@@ -34,6 +34,13 @@ public class Administrative {
         return false;
     }
 
+    public boolean isLecturersIdExists(String id) {
+        for (int i = 0; i < lecturerCount; i++) {
+            if (lecturers[i].getId().equalsIgnoreCase(id)) return true;
+        }
+        return false;
+    }
+
     public void addLecturer(String name, String id, String degree, int salary, String degreeName) {
         if (lecturerCount == lecturers.length) resizeLecturers();
 
@@ -110,7 +117,7 @@ public class Administrative {
             if (committees[i].getCommitteeName().equalsIgnoreCase(committeeName)) {
                 String degree = l.getDegree().name();
                 if (!committees[i].getChairman().getName().equalsIgnoreCase(lecturerName)) {
-                    if (committees[i].isLecturerExitst(lecturerName)) {
+                    if (committees[i].isLecturerExists(lecturerName)) {
                         System.out.println("Lecturer " + lecturerName + " is already exitst.");
                         return false;
                     }

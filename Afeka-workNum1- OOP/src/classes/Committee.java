@@ -78,7 +78,7 @@ public class Committee {
         }
     }
 
-    public boolean isLecturerExitst(String lecturerName) {
+    public boolean isLecturerExists(String lecturerName) {
         if  (this.lecturers_Array.length == 0) return false;
         for (int i = 0; i < this.lecturers_Array.length; i++) {
             if (this.lecturers_Array[i] == null)
