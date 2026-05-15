@@ -118,7 +118,7 @@ public class Administrative {
                 String degree = l.getDegree().name();
                 if (!committees[i].getChairman().getName().equalsIgnoreCase(lecturerName)) {
                     if (committees[i].isLecturerExists(lecturerName)) {
-                        System.out.println("Lecturer " + lecturerName + " is already exitst.");
+                        System.out.println("Lecturer " + lecturerName + " is already exist.");
                         return false;
                     }
 
@@ -132,7 +132,27 @@ public class Administrative {
                 }
             }
         }
-        System.out.println("Lecturer " + lecturerName + " is not exitst.");
+        System.out.println("Lecturer " + lecturerName + " is not exist.");
+        return false;
+    }
+
+    public boolean deleteLecturerFromCommittee(String committeeName, String lecturerName) {
+
+        Lecturer l = findLecturerByName(lecturerName);
+
+        if (l == null) {
+            return false;
+        }
+
+        for (int i = 0; i < committeeCount; i++) {
+            if (committees[i].getCommitteeName().equalsIgnoreCase(committeeName)) {
+                String degree = l.getDegree().name();
+                if (committees[i].isLecturerExists(lecturerName)) {
+                    committees[i].deleteLecturer(l);
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
@@ -157,6 +177,9 @@ public class Administrative {
             if (committees[i].getCommitteeName().equalsIgnoreCase(committeeName)) {
                 String degree = l.getDegree().name();
                 if (degree.equalsIgnoreCase("DR") || degree.equalsIgnoreCase("PROFESSOR")) {
+                    if (committees[i].isLecturerExists(chairmanName)) {
+                        deleteLecturerFromCommittee(committeeName, chairmanName);
+                    }
                     committees[i].setChairman(l);
                     return true;
                 }

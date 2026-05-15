@@ -91,12 +91,28 @@ public class Committee {
     }
 
     public void addLecturer(Lecturer lecturer) {
+        System.out.println(lecturerCount + ", " + lecturers_Array.length);
         if (lecturerCount == lecturers_Array.length) {
+            if (lecturers_Array.length == 0)
+                lecturers_Array = new Lecturer[1];
             Lecturer[] temp = new Lecturer[lecturers_Array.length * 2];
             for (int i = 0; i < lecturerCount; i++) temp[i] = lecturers_Array[i];
             lecturers_Array = temp;
         }
-            lecturers_Array[lecturerCount++] = lecturer;
+        lecturers_Array[lecturerCount++] = lecturer;
+    }
+
+    public void deleteLecturer(Lecturer lecturer) {
+        Lecturer[] temp = new Lecturer[lecturers_Array.length-1];
+        int j = 0;
+        for (int i = 0; i < lecturerCount; i++) {
+            if (!lecturers_Array[i].getName().equalsIgnoreCase(lecturer.getName())) {
+                temp[j] = lecturers_Array[i];
+                j++;
+            }
+        }
+        lecturers_Array = temp;
+        lecturerCount--;
     }
 
     @Override
