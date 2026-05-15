@@ -5,7 +5,7 @@ public class Administrative {
     private int lecturerCount;
     private Department[] departments;
     private int departmentCount;
-    private Committee[] committees;
+    public Committee[] committees;
     private int committeeCount;
     private String collegeName;
 
@@ -96,5 +96,36 @@ public class Administrative {
             committees = temp;
         }
         committees[committeeCount++] = c;
+    }
+
+    public boolean addLecturerToCommittee(String committeeName, String lecturerName) {
+
+        Lecturer l = findLecturerByName(lecturerName);
+
+        if (l == null) {
+            return false;
+        }
+
+        for (int i = 0; i < committeeCount; i++) {
+            if (committees[i].getCommitteeName().equalsIgnoreCase(committeeName)) {
+                String degree = l.getDegree().name();
+                if (!degree.equalsIgnoreCase("DR") && !degree.equalsIgnoreCase("Professor")) {
+                    if (committees[i].isLecturerExitst(lecturerName)) {
+                        System.out.println("Lecturer " + lecturerName + " is already exitst.");
+                        return false;
+                    }
+
+                    committees[i].addLecturer(l);
+                    System.out.println(committees[i].toString());
+                    return true;
+
+                } else {
+                    System.out.println("Lecturer " + lecturerName + " is has a DR or Professor.");
+                    return false;
+                }
+            }
+        }
+        System.out.println("Lecturer " + lecturerName + " is not exitst.");
+        return false;
     }
 }

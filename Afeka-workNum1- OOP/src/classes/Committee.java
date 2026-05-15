@@ -4,10 +4,11 @@ public class Committee {
     private String committee_name;
     private Lecturer[] lecturers_Array;
     private Lecturer chairman;
+    private int lecturerCount = 0;
 
     public Committee() {
         setCommitteeName("General");
-        this.lecturers_Array = new Lecturer[0];
+        this.lecturers_Array = new Lecturer[1];
         this.chairman = new Lecturer();
     }
 
@@ -30,7 +31,7 @@ public class Committee {
     }
 
     public Lecturer[] getLecturers() {
-        if (this.lecturers_Array == null) return new Lecturer[0];
+        if (this.lecturers_Array == null) return new Lecturer[1];
         Lecturer[] copy = new Lecturer[this.lecturers_Array.length];
         for (int i = 0; i < this.lecturers_Array.length; i++) {
             copy[i] = new Lecturer(this.lecturers_Array[i]);
@@ -75,6 +76,27 @@ public class Committee {
         } else {
             System.out.println("Error: Invalid Chairman.");
         }
+    }
+
+    public boolean isLecturerExitst(String lecturerName) {
+        if  (this.lecturers_Array.length == 0) return false;
+        for (int i = 0; i < this.lecturers_Array.length; i++) {
+            if (this.lecturers_Array[i] == null)
+                return false;
+            if (this.lecturers_Array[i].getName().equals(lecturerName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void addLecturer(Lecturer lecturer) {
+        if (lecturerCount == lecturers_Array.length) {
+            Lecturer[] temp = new Lecturer[lecturers_Array.length * 2];
+            for (int i = 0; i < lecturerCount; i++) temp[i] = lecturers_Array[i];
+            lecturers_Array = temp;
+        }
+            lecturers_Array[lecturerCount++] = lecturer;
     }
 
     @Override
