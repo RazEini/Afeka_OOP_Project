@@ -79,7 +79,7 @@ public class Main {
 
     public static void main(String[] args) {
         Administrative administrative = new Administrative();
-        administrative.SetCollegeName();
+        administrative.getCollegeName();
 
         String[] lecturers = new String[1];
         String[] committees = new String[1];
