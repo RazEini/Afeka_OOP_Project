@@ -1,4 +1,6 @@
 import classes.Administrative;
+import classes.Committee;
+import classes.Lecturer;
 
 import java.util.Scanner;
 
@@ -7,6 +9,7 @@ import java.util.Scanner;
 // רז עייני - 328153101
 
 public class Main {
+
     public static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
@@ -47,19 +50,56 @@ public class Main {
                     do {
                         System.out.println("Enter Lecturer's name: ");
                         lecturerName = scanner.nextLine();
+                        if(administrative.isLecturerExists(lecturerName)) {
+                            System.out.println("Lecturer already exists! Try a different name.");
+                        }
                     } while (administrative.isLecturerExists(lecturerName));
 
-                    System.out.println("Enter Lecturer's ID: ");
+                    System.out.println("Enter Lecturer's ID (9 digits): ");
                     String lecturerID = scanner.nextLine();
-                    System.out.println("Enter Lecturer's degree: ");
+                    System.out.println("Enter Lecturer's degree ( BACHELOR_DEGREE, MASTER_DEGREE, DR, PROFESSOR ): ");
                     String lecturerDegree = scanner.nextLine();
+
                     System.out.println("Enter Lecturer's salary: ");
                     int lecturerSalary = scanner.nextInt();
-                    System.out.println("Enter Lecturer's degreeName: ");
+                    scanner.nextLine();
+
+                    System.out.println("Enter Lecturer's degree name: ");
                     String lecturerDegreeName = scanner.nextLine();
-                    administrative.addLecturer(lecturerName, lecturerID,  lecturerDegree, lecturerSalary, lecturerDegreeName);
+
+                    administrative.addLecturer(lecturerName, lecturerID, lecturerDegree, lecturerSalary, lecturerDegreeName);
+                    System.out.println("Lecturer added successfully.");
                     break;
+
                 case 2:
+                    System.out.print("Enter committee name: ");
+                    String committeeName = scanner.nextLine();
+
+                    if (administrative.isCommitteeExists(committeeName)) {
+                        System.out.println("Error: A committee with this name already exists.");
+                        break;
+                    }
+
+                    System.out.print("Enter chairman name: ");
+                    String chairmanName = scanner.nextLine();
+
+                    Lecturer chair = administrative.findLecturerByName(chairmanName);
+
+                    if (chair == null) {
+                        System.out.println("Error: Lecturer not found. Add them first via option 1.");
+                    } else {
+                        Committee newCommittee = new Committee();
+                        newCommittee.setCommitteeName(committeeName);
+                        newCommittee.setChairman(chair);
+
+                        // וידוא שהיו"ר הוגדר (כלומר עמד בתנאי התואר DR/PROFESSOR)
+                        if (newCommittee.getChairman().getName().equals(chair.getName())) {
+                            administrative.addCommittee(newCommittee);
+                            System.out.println("Committee '" + committeeName + "' created successfully.");
+                        } else {
+                            System.out.println("Committee creation failed: Invalid chairman degree.");
+                        }
+                    }
                     break;
                 case 3:
                     break;

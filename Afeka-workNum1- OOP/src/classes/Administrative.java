@@ -81,4 +81,31 @@ public class Administrative {
         }
         return result;
     }
+
+    public boolean isCommitteeExists(String name) {
+        for (int i = 0; i < committeeCount; i++) {
+            if (committees[i].getCommitteeName().equalsIgnoreCase(name)) return true;
+        }
+        return false;
+    }
+
+    public void addCommittee(Committee c) {
+        if (committeeCount == committees.length) {
+            Committee[] temp = new Committee[committees.length * 2];
+            for (int i = 0; i < committeeCount; i++) {
+                temp[i] = committees[i];
+            }
+            committees = temp;
+        }
+        committees[committeeCount++] = c;
+    }
+
+    public String getAllCommitteesData() {
+        if (committeeCount == 0) return "No committees registered.";
+        String result = "";
+        for (int i = 0; i < committeeCount; i++) {
+            result += committees[i].toString() + "\n";
+        }
+        return result;
+    }
 }
