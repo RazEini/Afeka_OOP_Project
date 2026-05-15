@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class Administrative {
     public Lecturer[] lecturers;
     public Department[] department;
-    public Committe[] committe;
+    public Committee[] committee;
     public String collegeName;
     private int lecturerCount = 0;
     private static Scanner scanner = new Scanner(System.in);
@@ -14,7 +14,7 @@ public class Administrative {
     public Administrative(){
         lecturers = new Lecturer[0];
         department = new Department[0];
-        committe = new Committe[0];
+        committee = new Committee[0];
         collegeName = "";
     }
 
