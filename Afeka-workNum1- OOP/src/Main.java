@@ -89,7 +89,7 @@ public class Main {
         int choice = -1;
 
         while (choice != 0) {
-            System.out.println("\n--- " + administrative.getName() + " Management Menu ---");
+            System.out.println("\n--- " + administrative.getCollegeName() + " Management Menu ---");
             System.out.println("1 - Add Lecturer");
             System.out.println("2 - Add Committee");
             System.out.println("3 - Add Department");
