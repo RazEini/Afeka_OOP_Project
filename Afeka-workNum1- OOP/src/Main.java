@@ -10,6 +10,25 @@ import java.util.Scanner;
 
 public class Main {
 
+    public static boolean isValidIsraeliID(String idStr) {
+        if (idStr == null || idStr.length() != 9 || !idStr.matches("\\d+")) {
+            return false;
+        }
+
+        int sum = 0;
+        for (int i = 0; i < 9; i++) {
+            int digit = Character.getNumericValue(idStr.charAt(i));
+            int weight = (i % 2 == 0) ? 1 : 2;
+            int stepProduct = digit * weight;
+
+            if (stepProduct > 9) {
+                stepProduct -= 9;
+            }
+            sum += stepProduct;
+        }
+        return (sum % 10 == 0);
+    }
+
     public static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
@@ -106,8 +125,8 @@ public class Main {
                         System.out.print("Enter Lecturer's ID (9 digits): ");
                         lecturerID = scanner.nextLine();
 
-                        if (lecturerID.length() != 9) {
-                            System.out.println("Invalid ID! ID must be exactly 9 digits.");
+                        if (!isValidIsraeliID(lecturerID)) {
+                            System.out.println("Invalid ID! ID must be exactly 9 digits and be a valid one.");
                             continue;
                         }
 
