@@ -8,7 +8,13 @@ public class Department {
     public Department() {
         setDepartmentName("Unknown");
         setStudentCount(0);
-        this.lecturers_Array = new Lecturer[0];
+        this.lecturers_Array = new Lecturer[1];
+    }
+
+    public Department(String department_name, int student_count) {
+        this.department_name = department_name;
+        this.student_count = student_count;
+        this.lecturers_Array = new Lecturer[1];
     }
 
     public Department(Department other) {
@@ -28,7 +34,7 @@ public class Department {
     }
 
     public Lecturer[] getLecturers() {
-        if (this.lecturers_Array == null) return new Lecturer[0];
+        if (this.lecturers_Array == null) return new Lecturer[1];
         Lecturer[] copy = new Lecturer[this.lecturers_Array.length];
         for (int i = 0; i < this.lecturers_Array.length; i++) {
             copy[i] = new Lecturer(this.lecturers_Array[i]);

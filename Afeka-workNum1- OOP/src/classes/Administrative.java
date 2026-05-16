@@ -56,23 +56,6 @@ public class Administrative {
         return null;
     }
 
-    public boolean addDepartment(String deptName) {
-        for (int i = 0; i < departmentCount; i++) {
-            if (departments[i].getDepartmentName().equalsIgnoreCase(deptName)) return false;
-        }
-
-        if (departmentCount == departments.length) {
-            Department[] newArr = new Department[departments.length * 2];
-            for (int i = 0; i < departmentCount; i++) newArr[i] = departments[i];
-            departments = newArr;
-        }
-
-        Department d = new Department();
-        d.setDepartmentName(deptName);
-        departments[departmentCount++] = d;
-        return true;
-    }
-
     public double getAverageSalary() {
         if (lecturerCount == 0) return 0;
         double sum = 0;
@@ -186,5 +169,26 @@ public class Administrative {
             }
         }
         return false;
+    }
+
+    public boolean isDepartmentExists(String departmentName) {
+        for (int i = 0; i < departmentCount; i++) {
+            if (departments[i].getDepartmentName().equalsIgnoreCase(departmentName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean AddDepartment(Department department) {
+        if (department == null) return false;
+        if (isDepartmentExists(department.getDepartmentName())) return false;
+        if (departmentCount == departments.length) {
+            Department[] temp = new Department[departments.length * 2];
+            for (int i = 0; i < departmentCount; i++) temp[i] = departments[i];
+            departments = temp;
+        }
+        departments[departmentCount++] = department;
+        return true;
     }
 }

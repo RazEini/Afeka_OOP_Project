@@ -1,5 +1,6 @@
 import classes.Administrative;
 import classes.Committee;
+import classes.Department;
 import classes.Lecturer;
 
 import java.util.Scanner;
@@ -271,6 +272,20 @@ public class Main {
                     }
                     break;
                 case 6:
+                    System.out.print("Enter department's name: ");
+                    String departmentName = scanner.nextLine();
+                    int studentsNumber = 0;
+                    do {
+                        System.out.print("Enter the number of students studying there: ");
+                        studentsNumber = Integer.parseInt(scanner.nextLine());
+                    } while (studentsNumber < 0);
+                    Department department = new Department(departmentName, studentsNumber);
+
+                    if (administrative.AddDepartment(department)){
+                        System.out.println("Added successfully " + departmentName + " to department.");
+                    } else {
+                        System.out.println("Error: Department cannot be added, the department's name already exist.");
+                    }
                     break;
                 case 7:
                     break;
