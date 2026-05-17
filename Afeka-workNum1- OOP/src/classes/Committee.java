@@ -91,7 +91,6 @@ public class Committee {
     }
 
     public void addLecturer(Lecturer lecturer) {
-        System.out.println(lecturerCount + ", " + lecturers_Array.length);
         if (lecturerCount == lecturers_Array.length) {
             if (lecturers_Array.length == 0)
                 lecturers_Array = new Lecturer[1];
