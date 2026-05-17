@@ -184,6 +184,9 @@ public class Administrative {
                     }
                     committees[i].setChairman(l);
                     return true;
+                } else {
+                    System.out.println("Lecturer " + chairmanName + " cannot be a chairman because they are not a DR or PROFESSOR.");
+                    return false;
                 }
             }
         }

@@ -53,7 +53,7 @@ public class Main {
             System.out.println("3 - Add member to committee");
             System.out.println("4 - Update committee chairman");
             System.out.println("5 - Delete member from the committee");
-            System.out.println("6 - Display average salary of committee lecturers");
+            System.out.println("6 - Add Department");
             System.out.println("7 - Display all Lecturers");
             System.out.println("8 - Display all Committees");
             System.out.println("9 - Display average salary of all committees");
