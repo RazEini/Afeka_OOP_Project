@@ -171,6 +171,9 @@ public class Administrative {
 
     public boolean UpdateChairmanCommittee(String committeeName, String chairmanName) {
         Lecturer l = findLecturerByName(chairmanName);
+        if (l == null){
+            System.out.println("Error: " + chairmanName + " is not exists.");
+        }
         if (ChairmanExists(l)) {
             System.out.println("Lecturer " + chairmanName + " is already chairman.");
             return false;
