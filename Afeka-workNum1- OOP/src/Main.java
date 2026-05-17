@@ -153,11 +153,11 @@ public class Main {
 
                     String lecturerDegree;
                     while (true) {
-                        System.out.print("Enter Lecturer's degree (BACHELOR_DEGREE, MASTER_DEGREE, DR, PROFESSOR): ");
+                        System.out.print("Enter Lecturer's degree (BACHELOR DEGREE, MASTER DEGREE, DR, PROFESSOR): ");
                         lecturerDegree = scanner.nextLine().toUpperCase();
 
-                        if (lecturerDegree.equals("BACHELOR_DEGREE") ||
-                                lecturerDegree.equals("MASTER_DEGREE") ||
+                        if (lecturerDegree.equals("BACHELOR DEGREE") ||
+                                lecturerDegree.equals("MASTER DEGREE") ||
                                 lecturerDegree.equals("DR") ||
                                 lecturerDegree.equals("PROFESSOR")) {
                             break;
@@ -212,35 +212,73 @@ public class Main {
                     break;
 
                 case 2:
-                    System.out.print("Enter committee name: ");
-                    String committeeName = scanner.nextLine();
+                    String committeeName;
+                    while (true) {
+                        System.out.print("Enter committee name: ");
+                        committeeName = scanner.nextLine().trim();
 
-                    if (administrative.isCommitteeExists(committeeName)) {
-                        System.out.println("Error: A committee with this name already exists.");
+                        if (committeeName.isEmpty()) {
+                            System.out.println("Error: Committee name cannot be empty.");
+                            continue;
+                        }
+
+                        if (administrative.isCommitteeExists(committeeName)) {
+                            System.out.println("Error: A committee with this name already exists. Try a different name.");
+                            continue;
+                        }
                         break;
                     }
 
-                    System.out.print("Enter chairman name: ");
-                    String chairmanName = scanner.nextLine();
+                    Lecturer chair = null;
+                    String chairmanName = "";
+                    boolean invalidDegreeStatus = false;
 
-                    Lecturer chair = administrative.findLecturerByName(chairmanName);
+                    while (true) {
+                        System.out.print("Enter chairman name: ");
+                        chairmanName = scanner.nextLine().trim();
 
-                    if (chair == null) {
-                        System.out.println("Error: Lecturer not found. You must add the lecturer first.");
-                    } else {
-                        String degree = chair.getDegree().toString();
-
-                        if (degree.equalsIgnoreCase("DR") || degree.equalsIgnoreCase("PROFESSOR")) {
-                            Committee newCommittee = new Committee();
-                            newCommittee.setCommitteeName(committeeName);
-                            newCommittee.setChairman(chair);
-
-                            administrative.addCommittee(newCommittee);
-                            System.out.println("Committee '" + committeeName + "' created successfully with " + chairmanName + " as chairman.");
-                        } else {
-                            System.out.println("Error: Committee cannot be created. Chairman must be a DR or PROFESSOR.");
+                        if (chairmanName.isEmpty()) {
+                            System.out.println("Error: Chairman name cannot be empty.");
+                            continue;
                         }
+
+                        boolean hasDigit = false;
+                        for (int i = 0; i < chairmanName.length(); i++) {
+                            if (chairmanName.charAt(i) >= '0' && chairmanName.charAt(i) <= '9') {
+                                hasDigit = true;
+                                break;
+                            }
+                        }
+                        if (hasDigit) {
+                            System.out.println("Invalid name! chairman's name cannot contain numbers.");
+                            continue;
+                        }
+
+                        chair = administrative.findLecturerByName(chairmanName);
+                        if (chair == null) {
+                            System.out.println("Error: Lecturer not found. You must enter a lecturer that already exists.");
+                            continue;
+                        }
+
+                        String degree = chair.getDegree().toString();
+                        if (!degree.equalsIgnoreCase("DR") && !degree.equalsIgnoreCase("PROFESSOR")) {
+                            System.out.println("Error: Committee cannot be created. Chairman must be a DR or PROFESSOR.");
+                            invalidDegreeStatus = true;
+                        }
+
+                        break;
                     }
+
+                    if (invalidDegreeStatus) {
+                        break;
+                    }
+
+                    Committee newCommittee = new Committee();
+                    newCommittee.setCommitteeName(committeeName);
+                    newCommittee.setChairman(chair);
+
+                    administrative.addCommittee(newCommittee);
+                    System.out.println("Committee '" + committeeName + "' created successfully with " + chairmanName + " as chairman.");
                     break;
                 case 3:
                     System.out.print("Enter committee's name: ");
