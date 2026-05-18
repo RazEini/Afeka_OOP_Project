@@ -293,18 +293,22 @@ public class Main {
                 case 6:
                     System.out.print("Enter department's name: ");
                     String departmentName = scanner.nextLine();
+
+                    if (administrative.isDepartmentExists(departmentName)) {
+                        System.out.println("Error: Department cannot be added, the department's name already exist.");
+                        break;
+                    }
+
                     int studentsNumber = 0;
                     do {
                         System.out.print("Enter the number of students studying there: ");
                         studentsNumber = Integer.parseInt(scanner.nextLine());
                     } while (studentsNumber < 0);
-                    Department department = new Department(departmentName, studentsNumber);
 
-                    if (administrative.AddDepartment(department)){
-                        System.out.println("Added successfully " + departmentName + " to department.");
-                    } else {
-                        System.out.println("Error: Department cannot be added, the department's name already exist.");
-                    }
+                    Department department = new Department(departmentName, studentsNumber);
+                    administrative.AddDepartment(department);
+                    System.out.println("Added successfully " + departmentName + " to department.");
+
                     break;
                 case 7:
                     break;
