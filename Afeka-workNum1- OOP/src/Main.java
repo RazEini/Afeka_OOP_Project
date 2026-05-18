@@ -311,9 +311,30 @@ public class Main {
                     Department department = new Department(departmentName, studentsNumber);
                     administrative.AddDepartment(department);
                     System.out.println("Added successfully " + departmentName + " to department.");
-
                     break;
                 case 7:
+                    System.out.print("Enter department's name: ");
+                    String deptName = scanner.nextLine();
+
+                    System.out.print("Enter lecturer's name: ");
+                    String lectName = scanner.nextLine();
+
+                    boolean deptExists = administrative.isDepartmentExists(deptName);
+                    boolean lectExists = administrative.isLecturerExists(lectName);
+
+                    if (!deptExists && !lectExists) {
+                        System.out.println("Error: Both department \"" + deptName + "\" and lecturer \"" + lectName + "\" do not exist.");
+                        break;
+                    } else if (!deptExists) {
+                        System.out.println("Error: Department \"" + deptName + "\" does not exist.");
+                        break;
+                    } else if (!lectExists) {
+                        System.out.println("Error: Lecturer \"" + lectName + "\" does not exist.");
+                        break;
+                    }
+
+                    administrative.addLecturerToDepartment(deptName, lectName);
+
                     break;
                 case 8:
                     break;

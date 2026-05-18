@@ -216,4 +216,48 @@ public class Administrative {
         departments[departmentCount++] = department;
         return true;
     }
+
+    public boolean addLecturerToDepartment(String departmentName, String lecturerName) {
+        Lecturer l = findLecturerByName(lecturerName);
+        if (l == null) return false;
+
+        for (int i = 0; i < departmentCount; i++) {
+            if (departments[i].getDepartmentName().equalsIgnoreCase(departmentName)) {
+
+                Lecturer[] currentLecturers = departments[i].getLecturers();
+
+                for (int j = 0; j < currentLecturers.length; j++) {
+                    if (currentLecturers[j] != null && currentLecturers[j].getName() != null) {
+                        if (currentLecturers[j].getName().equalsIgnoreCase(lecturerName)) {
+                            System.out.println("Error: Lecturer " + lecturerName + " already exists in this department.");
+                            return false;
+                        }
+                    }
+                }
+
+                int count = 0;
+                for (int j = 0; j < currentLecturers.length; j++) {
+                    if (currentLecturers[j] != null && currentLecturers[j].getName() != null) {
+                        count++;
+                    }
+                }
+
+                Lecturer[] newLecturersArray = new Lecturer[count + 1];
+                int index = 0;
+                for (int j = 0; j < currentLecturers.length; j++) {
+                    if (currentLecturers[j] != null && currentLecturers[j].getName() != null) {
+                        newLecturersArray[index++] = currentLecturers[j];
+                    }
+                }
+                newLecturersArray[count] = l;
+
+                departments[i].setLecturers(newLecturersArray);
+                l.setDepartment(departments[i]);
+
+                System.out.println("Successfully added lecturer " + lecturerName + " to department " + departmentName + ".");
+                return true;
+            }
+        }
+        return false;
+    }
 }
