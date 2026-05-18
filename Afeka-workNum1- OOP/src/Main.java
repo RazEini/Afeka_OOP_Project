@@ -291,12 +291,15 @@ public class Main {
                     }
                     break;
                 case 6:
-                    System.out.print("Enter department's name: ");
-                    String departmentName = scanner.nextLine();
+                    String departmentName = "";
+                    while (true) {
+                        System.out.print("Enter department's name: ");
+                        departmentName = scanner.nextLine();
 
-                    if (administrative.isDepartmentExists(departmentName)) {
-                        System.out.println("Error: Department cannot be added, the department's name already exist.");
-                        break;
+                        if (!administrative.isDepartmentExists(departmentName)) {
+                            break;
+                        }
+                        System.out.println("Error: The department's name already exists. Please try another name.");
                     }
 
                     int studentsNumber = 0;
