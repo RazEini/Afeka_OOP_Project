@@ -48,17 +48,17 @@ public class Main {
 
         while (choice != 0) {
             System.out.println("\n--- " + administrative.getCollegeName() + " Management Menu ---");
-            System.out.println("1 - Add Lecturer to the college");
-            System.out.println("2 - Add Committee to the college");
-            System.out.println("3 - Add member to committee");
-            System.out.println("4 - Update committee chairman");
-            System.out.println("5 - Delete member from the committee");
+            System.out.println("1 - Add Lecturer to College");
+            System.out.println("2 - Add Committee to College");
+            System.out.println("3 - Add Member to Committee");
+            System.out.println("4 - Update Committee Chairman");
+            System.out.println("5 - Remove Member from Committee");
             System.out.println("6 - Add Department");
-            System.out.println("7 - Display all Lecturers");
-            System.out.println("8 - Display all Committees");
-            System.out.println("9 - Display average salary of all committees");
-            System.out.println("10 - Display average salary of committee lecturers");
-            System.out.println("11 - Display average salary of committee lecturers");
+            System.out.println("7 - Assign Lecturer to Department");
+            System.out.println("8 - Display Average Salary of All College Lecturers");
+            System.out.println("9 - Display Average Salary of a Specific Department");
+            System.out.println("10 - Display All Lecturers Information");
+            System.out.println("11 - Display All Committees Information");
             System.out.println("0 - Exit");
             System.out.print("Select an option: ");
 
@@ -337,6 +337,12 @@ public class Main {
 
                     break;
                 case 8:
+                    double averageSalary = administrative.getAverageSalary();
+
+                    System.out.println("\n--- College Salary Report ---");
+                    System.out.printf("The average salary of all lecturers in the college is: %.2f\n", averageSalary);
+                    System.out.println("-----------------------------");
+
                     break;
                 case 9:
                     break;
