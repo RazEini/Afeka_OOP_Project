@@ -104,6 +104,28 @@ public class Lecturer {
 
     public void setDepartment(Department department) { this.department = department; }
 
+    public void removeCommittee(String committeeName) {
+        if (committeeName == null || commCount == 0) return;
+
+        Committee[] temp = new Committee[myCommittees.length];
+        int j = 0;
+        boolean found = false;
+
+        for (int i = 0; i < commCount; i++) {
+            if (myCommittees[i] != null && !myCommittees[i].getCommitteeName().equalsIgnoreCase(committeeName)) {
+                temp[j] = myCommittees[i];
+                j++;
+            } else {
+                found = true;
+            }
+        }
+
+        if (found) {
+            myCommittees = temp;
+            commCount--;
+        }
+    }
+
     @Override
     public String toString() {
         String info = "Lecturer Details:\n" +

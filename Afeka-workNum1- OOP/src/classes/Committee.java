@@ -9,7 +9,7 @@ public class Committee {
     public Committee() {
         setCommitteeName("General");
         this.lecturers_Array = new Lecturer[1];
-        this.chairman = new Lecturer();
+        this.chairman = null;
     }
 
     public Committee(String name, Lecturer[] lecturers, Lecturer chairman) {
@@ -34,12 +34,15 @@ public class Committee {
         if (this.lecturers_Array == null) return new Lecturer[1];
         Lecturer[] copy = new Lecturer[this.lecturers_Array.length];
         for (int i = 0; i < this.lecturers_Array.length; i++) {
-            copy[i] = new Lecturer(this.lecturers_Array[i]);
+            if (this.lecturers_Array[i] != null) {
+                copy[i] = new Lecturer(this.lecturers_Array[i]);
+            }
         }
         return copy;
     }
 
     public Lecturer getChairman() {
+        if (this.chairman == null) return null;
         return new Lecturer(this.chairman);
     }
 
@@ -69,6 +72,7 @@ public class Committee {
         if (chairman != null && chairman.getDegree() != null) {
             String degree = chairman.getDegree().name();
             if (degree.equals("DR") || degree.equals("PROFESSOR")) {
+                chairman.addCommittee(this);
                 this.chairman = new Lecturer(chairman);
             } else {
                 System.out.println("Error: Chairman must be a DR or PROFESSOR.");
@@ -79,11 +83,9 @@ public class Committee {
     }
 
     public boolean isLecturerExists(String lecturerName) {
-        if  (this.lecturers_Array.length == 0) return false;
-        for (int i = 0; i < this.lecturers_Array.length; i++) {
-            if (this.lecturers_Array[i] == null)
-                return false;
-            if (this.lecturers_Array[i].getName().equals(lecturerName)) {
+        if (this.lecturers_Array.length == 0) return false;
+        for (int i = 0; i < lecturerCount; i++) {
+            if (this.lecturers_Array[i] != null && this.lecturers_Array[i].getName().equals(lecturerName)) {
                 return true;
             }
         }
@@ -102,21 +104,38 @@ public class Committee {
     }
 
     public void deleteLecturer(Lecturer lecturer) {
-        Lecturer[] temp = new Lecturer[lecturers_Array.length-1];
-        int j = 0;
-        for (int i = 0; i < lecturerCount; i++) {
-            if (!lecturers_Array[i].getName().equalsIgnoreCase(lecturer.getName())) {
-                temp[j] = lecturers_Array[i];
-                j++;
+        if (this.chairman != null && lecturer != null) {
+            if (this.chairman.getName().equalsIgnoreCase(lecturer.getName())) {
+                System.out.println("Error: Cannot delete " + lecturer.getName() + " because they are currently the Chairman of this committee.");
+                return;
             }
         }
+
+        Lecturer[] temp = new Lecturer[lecturers_Array.length];
+        int j = 0;
+        boolean removed = false;
+
+        for (int i = 0; i < lecturerCount; i++) {
+            if (lecturers_Array[i] != null) {
+                if (!lecturers_Array[i].getName().equalsIgnoreCase(lecturer.getName())) {
+                    temp[j] = lecturers_Array[i];
+                    j++;
+                } else {
+                    removed = true;
+                }
+            }
+        }
+
         lecturers_Array = temp;
-        lecturerCount--;
+
+        if (removed) {
+            lecturerCount--;
+        }
     }
 
     @Override
     public String toString() {
-        String chairName = (chairman != null) ? chairman.getName() : "None";
+        String chairName = (chairman != null && chairman.getName() != null) ? chairman.getName() : "None";
         return "Committee: " + committee_name + " | Chairman: " + chairName + " | Members: " + lecturerCount;
     }
 }

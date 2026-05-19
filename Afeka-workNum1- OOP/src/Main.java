@@ -287,7 +287,7 @@ public class Main {
                     System.out.print("Enter lecturer's name: ");
                     lecturerName = scanner.nextLine();
                     if (administrative.deleteLecturerFromCommittee(committeeName, lecturerName)){
-                        System.out.println("Deleted successfully " + lecturerName + " to committee '" + committeeName + "'.");
+                        System.out.println("Deleted successfully " + lecturerName + " from committee '" + committeeName + "'.");
                     }
                     break;
                 case 6:

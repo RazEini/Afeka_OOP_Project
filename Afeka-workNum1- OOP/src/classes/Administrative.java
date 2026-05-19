@@ -98,11 +98,13 @@ public class Administrative {
         return sum / countInDepartment;
     }
 
+    // מתוקן: הוספת ריווח אסתטי וברור בין מרצה למרצה בהדפסה המלאה
     public String getAllLecturersFullData() {
         if (lecturerCount == 0) return "No lecturers registered.";
         String result = "";
         for (int i = 0; i < lecturerCount; i++) {
             result += lecturers[i].toString() + "\n";
+            result += "\n"; // קו מפריד וריווח
         }
         return result;
     }
@@ -115,11 +117,20 @@ public class Administrative {
     }
 
     public void addCommittee(Committee c) {
+        if (c != null && c.getChairman() != null) {
+            if (ChairmanExists(c.getChairman())) {
+                System.out.println("Error: Cannot add committee '" + c.getCommitteeName() +
+                        "' because " + c.getChairman().getName() + " is already chairman of another committee.");
+                return;
+            }
+        }
+
         if (committeeCount == committees.length) {
             Committee[] temp = new Committee[committees.length * 2];
             for (int i = 0; i < committeeCount; i++) temp[i] = committees[i];
             committees = temp;
         }
+
         committees[committeeCount++] = c;
     }
 
@@ -133,83 +144,111 @@ public class Administrative {
 
         for (int i = 0; i < committeeCount; i++) {
             if (committees[i].getCommitteeName().equalsIgnoreCase(committeeName)) {
-                String degree = l.getDegree().name();
-                if (!committees[i].getChairman().getName().equalsIgnoreCase(lecturerName)) {
-                    if (committees[i].isLecturerExists(lecturerName)) {
-                        System.out.println("Lecturer " + lecturerName + " is already exist.");
-                        return false;
-                    }
-
-                    committees[i].addLecturer(l);
-                    l.addCommittee(committees[i]);
-                    System.out.println(committees[i].toString());
-                    return true;
-
-                } else {
+                if (committees[i].getChairman() != null && committees[i].getChairman().getName().equalsIgnoreCase(lecturerName)) {
                     System.out.println("Lecturer " + lecturerName + " is a chairman.");
                     return false;
                 }
+
+                if (committees[i].isLecturerExists(lecturerName)) {
+                    System.out.println("Lecturer " + lecturerName + " is already exist.");
+                    return false;
+                }
+
+                committees[i].addLecturer(l);
+                l.addCommittee(committees[i]);
+                System.out.println(committees[i].toString());
+                return true;
             }
         }
-        System.out.println("Lecturer " + lecturerName + " is not exist.");
+        System.out.println("Committee " + committeeName + " does not exist.");
         return false;
     }
 
     public boolean deleteLecturerFromCommittee(String committeeName, String lecturerName) {
-
         Lecturer l = findLecturerByName(lecturerName);
-
         if (l == null) {
+            System.out.println("Error: Lecturer " + lecturerName + " does not exist.");
             return false;
         }
 
         for (int i = 0; i < committeeCount; i++) {
             if (committees[i].getCommitteeName().equalsIgnoreCase(committeeName)) {
-                String degree = l.getDegree().name();
-                if (committees[i].isLecturerExists(lecturerName)) {
-                    committees[i].deleteLecturer(l);
-                    return true;
+
+                if (committees[i].getChairman() != null && committees[i].getChairman().getName().equalsIgnoreCase(lecturerName)) {
+                    System.out.println("Error: Cannot remove " + lecturerName + " because they are the Chairman of " + committeeName + ".");
+                    return false;
                 }
-            }
-        }
-        return false;
-    }
 
-    public boolean ChairmanExists(Lecturer l) {
-        if (l == null){
-            System.out.println("Error: " + l.getName() + " is not exists.");
-            return false;
-        }
-        for (int i = 0; i < committeeCount; i++)
-            if (committees[i].getChairman().getName().equals(l.getName()))
-                return true;
-        return false;
-    }
+                if (committees[i].isLecturerExists(lecturerName)) {
 
-    public boolean UpdateChairmanCommittee(String committeeName, String chairmanName) {
-        Lecturer l = findLecturerByName(chairmanName);
-        if (l == null){
-            System.out.println("Error: " + chairmanName + " is not exists.");
-        }
-        if (ChairmanExists(l)) {
-            System.out.println("Lecturer " + chairmanName + " is already chairman.");
-            return false;
-        }
-        for (int i = 0; i < committeeCount; i++) {
-            if (committees[i].getCommitteeName().equalsIgnoreCase(committeeName)) {
-                String degree = l.getDegree().name();
-                if (degree.equalsIgnoreCase("DR") || degree.equalsIgnoreCase("PROFESSOR")) {
-                    if (committees[i].isLecturerExists(chairmanName)) {
-                        deleteLecturerFromCommittee(committeeName, chairmanName);
-                    }
-                    committees[i].setChairman(l);
+                    committees[i].deleteLecturer(l);
+
+                    l.removeCommittee(committeeName);
+
                     return true;
                 } else {
-                    System.out.println("Lecturer " + chairmanName + " cannot be a chairman because they are not a DR or PROFESSOR.");
+                    System.out.println("Error: Lecturer " + lecturerName + " is not a member of committee " + committeeName + ".");
                     return false;
                 }
             }
         }
+
+        System.out.println("Error: Committee " + committeeName + " does not exist.");
+        return false;
+    }
+
+    public boolean ChairmanExists(Lecturer l) {
+        if (l == null) return false;
+        for (int i = 0; i < committeeCount; i++) {
+            if (committees[i].getChairman() != null &&
+                    committees[i].getChairman().getName().equalsIgnoreCase(l.getName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean UpdateChairmanCommittee(String committeeName, String chairmanName) {
+        Lecturer newChairman = findLecturerByName(chairmanName);
+        if (newChairman == null) {
+            System.out.println("Error: Lecturer " + chairmanName + " does not exist.");
+            return false;
+        }
+
+        if (ChairmanExists(newChairman)) {
+            System.out.println("Error: Lecturer " + chairmanName + " is already chairman of a committee.");
+            return false;
+        }
+
+        for (int i = 0; i < committeeCount; i++) {
+            if (committees[i].getCommitteeName().equalsIgnoreCase(committeeName)) {
+
+                String degree = newChairman.getDegree().name();
+                if (degree.equalsIgnoreCase("DR") || degree.equalsIgnoreCase("PROFESSOR")) {
+
+                    Lecturer oldChairCopy = committees[i].getChairman();
+                    if (oldChairCopy != null && oldChairCopy.getName() != null) {
+                        Lecturer originalOldChairman = findLecturerByName(oldChairCopy.getName());
+                        if (originalOldChairman != null) {
+                            originalOldChairman.removeCommittee(committeeName);
+                        }
+                    }
+
+                    if (committees[i].isLecturerExists(chairmanName)) {
+                        committees[i].deleteLecturer(newChairman);
+                        newChairman.removeCommittee(committeeName);
+                    }
+
+                    committees[i].setChairman(newChairman);
+                    return true;
+                } else {
+                    System.out.println("Error: Lecturer " + chairmanName + " cannot be a chairman because they are not a DR or PROFESSOR.");
+                    return false;
+                }
+            }
+        }
+
+        System.out.println("Error: Committee " + committeeName + " does not exist.");
         return false;
     }
 
