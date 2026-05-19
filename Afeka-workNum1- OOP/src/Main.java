@@ -347,6 +347,10 @@ public class Main {
                 case 9:
                     break;
                 case 10:
+                    String full_data = administrative.getAllLecturersFullData();
+                    System.out.println("\n--- College Lecturers Info ---");
+                    System.out.println(full_data);
+                    System.out.println("-----------------------------");
                     break;
                 case 11:
                     break;

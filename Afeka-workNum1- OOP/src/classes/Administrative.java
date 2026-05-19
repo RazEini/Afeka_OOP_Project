@@ -125,6 +125,7 @@ public class Administrative {
                     }
 
                     committees[i].addLecturer(l);
+                    l.addCommittee(committees[i]);
                     System.out.println(committees[i].toString());
                     return true;
 

@@ -102,11 +102,27 @@ public class Lecturer {
 
     @Override
     public String toString() {
-        String info = "Lecturer: " + lecturer_name + " | Degree: " + lecturerDegree;
-        if (commCount > 0) {
-            info += " | Committees: ";
-            for (int i = 0; i < commCount; i++) info += myCommittees[i].getCommitteeName() + " ";
+        String info = "Lecturer Details:\n" +
+                "- Name: " + lecturer_name + "\n" +
+                "- ID: " + lecturer_id + "\n" +
+                "- Salary: " + salary + "\n" +
+                "- Degree: " + (lecturerDegree != null ? lecturerDegree : "None") + "\n";
+
+        if (department != null) {
+            info += "- Department: " + department.getDepartmentName() + "\n";
+        } else {
+            info += "- Department: None\n";
         }
+
+        if (commCount > 0) {
+            info += "- Committees: ";
+            for (int i = 0; i < commCount; i++) {
+                info += myCommittees[i].getCommitteeName() + (i < commCount - 1 ? ", " : "");
+            }
+        } else {
+            info += "- Committees: None";
+        }
+
         return info;
     }
 }
