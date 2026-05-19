@@ -22,12 +22,8 @@ public class Committee {
         if (other != null) {
             setCommitteeName(other.committee_name);
             setLecturers(other.lecturers_Array);
-            setChairman(other.chairman);
+            this.chairman = other.chairman;
         }
-    }
-
-    public String getCommitteeName() {
-        return this.committee_name;
     }
 
     public Lecturer[] getLecturers() {
@@ -42,8 +38,11 @@ public class Committee {
     }
 
     public Lecturer getChairman() {
-        if (this.chairman == null) return null;
-        return new Lecturer(this.chairman);
+        return this.chairman;
+    }
+
+    public String getCommitteeName() {
+        return this.committee_name;
     }
 
     public void setCommitteeName(String name) {
@@ -73,7 +72,7 @@ public class Committee {
             String degree = chairman.getDegree().name();
             if (degree.equals("DR") || degree.equals("PROFESSOR")) {
                 chairman.addCommittee(this);
-                this.chairman = new Lecturer(chairman);
+                this.chairman = chairman;
             } else {
                 System.out.println("Error: Chairman must be a DR or PROFESSOR.");
             }
@@ -136,6 +135,23 @@ public class Committee {
     @Override
     public String toString() {
         String chairName = (chairman != null && chairman.getName() != null) ? chairman.getName() : "None";
-        return "Committee: " + committee_name + " | Chairman: " + chairName + " | Members: " + lecturerCount;
+        String info = "Committee: " + committee_name + "\n" +
+                "Chairman: " + chairName + "\n" +
+                "Members List:\n";
+
+        if (lecturerCount == 0) {
+            info += "  - No members assigned yet.\n";
+        } else {
+            for (int i = 0; i < lecturerCount; i++) {
+                if (lecturers_Array[i] != null) {
+                    info += "  - " + lecturers_Array[i].getName();
+                    if (chairman != null && lecturers_Array[i].getName().equalsIgnoreCase(chairman.getName())) {
+                        info += " (Committee Chairman)";
+                    }
+                    info += "\n";
+                }
+            }
+        }
+        return info;
     }
 }

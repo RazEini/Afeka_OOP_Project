@@ -5,10 +5,6 @@ import classes.Lecturer;
 
 import java.util.Scanner;
 
-// מגישים:
-// רז יעקבי - 213864416
-// רז עייני - 328153101
-
 public class Main {
 
     public static Scanner scanner = new Scanner(System.in);
@@ -212,7 +208,7 @@ public class Main {
 
                     Lecturer chair = null;
                     String chairmanName = "";
-                    boolean invalidDegreeStatus = false;
+                    boolean aborted = false;
 
                     while (true) {
                         System.out.print("Enter chairman name: ");
@@ -244,13 +240,20 @@ public class Main {
                         String degree = chair.getDegree().toString();
                         if (!degree.equalsIgnoreCase("DR") && !degree.equalsIgnoreCase("PROFESSOR")) {
                             System.out.println("Error: Committee cannot be created. Chairman must be a DR or PROFESSOR.");
-                            invalidDegreeStatus = true;
+                            aborted = true;
+                            break;
+                        }
+
+                        if (administrative.ChairmanExists(chair)) {
+                            System.out.println("Error: Lecturer " + chairmanName + " is already chairman of another committee.");
+                            aborted = true;
+                            break;
                         }
 
                         break;
                     }
 
-                    if (invalidDegreeStatus) {
+                    if (aborted) {
                         break;
                     }
 
@@ -362,11 +365,14 @@ public class Main {
                     break;
                 case 10:
                     String full_data = administrative.getAllLecturersFullData();
-                    System.out.println("\n--- College Lecturers Info ---");
+                    System.out.println("\n--- College Lecturers Info ---\n");
                     System.out.println(full_data);
                     System.out.println("-----------------------------");
                     break;
                 case 11:
+                    String committeesData = administrative.getAllCommitteesFullData();
+                    System.out.println("\n--- College Committees Info ---\n");
+                    System.out.println(committeesData);
                     break;
                 case 0:
                     System.out.println("Exiting the program...");
