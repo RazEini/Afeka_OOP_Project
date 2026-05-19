@@ -98,6 +98,10 @@ public class Lecturer {
         }
     }
 
+    public Department getDepartment() {
+        return this.department;
+    }
+
     public void setDepartment(Department department) { this.department = department; }
 
     @Override

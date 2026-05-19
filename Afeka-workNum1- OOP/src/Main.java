@@ -345,6 +345,20 @@ public class Main {
 
                     break;
                 case 9:
+                    String department_name = "";
+                    System.out.print("Enter department's name: ");
+                    department_name = scanner.nextLine();
+                    if (administrative.isDepartmentExists(department_name)) {
+                        double departmentAverageSalary = administrative.getAverageSalaryByDepartment(department_name);
+
+                        System.out.println("\n--- College Salary Report ---");
+                        System.out.printf("The average salary of all lecturers in the college is: %.2f\n", departmentAverageSalary);
+                        System.out.println("-----------------------------");
+                    }
+
+                    else {
+                        System.out.println("Error: The department's name doesn't exist. Please try another name.");
+                    }
                     break;
                 case 10:
                     String full_data = administrative.getAllLecturersFullData();

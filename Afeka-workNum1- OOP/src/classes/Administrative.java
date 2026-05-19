@@ -82,6 +82,22 @@ public class Administrative {
         return sum / lecturerCount;
     }
 
+    public double getAverageSalaryByDepartment(String department) {
+        double sum = 0;
+        int countInDepartment = 0;
+
+        for (int i = 0; i < lecturerCount; i++) {
+            if (lecturers[i].getDepartment().equals(department)) {
+                sum += lecturers[i].getSalary();
+                countInDepartment++;
+            }
+        }
+
+        if (countInDepartment == 0) return 0;
+
+        return sum / countInDepartment;
+    }
+
     public String getAllLecturersFullData() {
         if (lecturerCount == 0) return "No lecturers registered.";
         String result = "";
