@@ -73,6 +73,18 @@ public class Department {
         }
     }
 
+    public boolean isLecturerExists(String lecturerName) {
+        if (lecturerName == null || this.lecturers_Array == null) return false;
+
+        for (int i = 0; i < this.lecturers_Array.length; i++) {
+            if (this.lecturers_Array[i] != null &&
+                    this.lecturers_Array[i].getName().equalsIgnoreCase(lecturerName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public String toString() {
         return "Department: " + department_name + " | Lecturers: " + lecturers_Array.length;

@@ -182,7 +182,6 @@ public class Administrative {
 
         targetCommittee.addLecturer(l);
         l.addCommittee(targetCommittee);
-        System.out.println(targetCommittee.toString());
         return true;
     }
 
@@ -302,45 +301,58 @@ public class Administrative {
 
     public boolean addLecturerToDepartment(String departmentName, String lecturerName) {
         Lecturer l = findLecturerByName(lecturerName);
-        if (l == null) return false;
+        if (l == null) {
+            System.out.println("Error: Lecturer " + lecturerName + " does not exist.");
+            return false;
+        }
 
+        Department targetDept = null;
         for (int i = 0; i < departmentCount; i++) {
             if (departments[i].getDepartmentName().equalsIgnoreCase(departmentName)) {
-
-                Lecturer[] currentLecturers = departments[i].getLecturers();
-
-                for (int j = 0; j < currentLecturers.length; j++) {
-                    if (currentLecturers[j] != null && currentLecturers[j].getName() != null) {
-                        if (currentLecturers[j].getName().equalsIgnoreCase(lecturerName)) {
-                            System.out.println("Error: Lecturer " + lecturerName + " already exists in this department.");
-                            return false;
-                        }
-                    }
-                }
-
-                int count = 0;
-                for (int j = 0; j < currentLecturers.length; j++) {
-                    if (currentLecturers[j] != null && currentLecturers[j].getName() != null) {
-                        count++;
-                    }
-                }
-
-                Lecturer[] newLecturersArray = new Lecturer[count + 1];
-                int index = 0;
-                for (int j = 0; j < currentLecturers.length; j++) {
-                    if (currentLecturers[j] != null && currentLecturers[j].getName() != null) {
-                        newLecturersArray[index++] = currentLecturers[j];
-                    }
-                }
-                newLecturersArray[count] = l;
-
-                departments[i].setLecturers(newLecturersArray);
-                l.setDepartment(departments[i]);
-
-                System.out.println("Successfully added lecturer " + lecturerName + " to department " + departmentName + ".");
-                return true;
+                targetDept = departments[i];
+                break;
             }
         }
-        return false;
+
+        if (targetDept == null) {
+            System.out.println("Error: Department " + departmentName + " does not exist.");
+            return false;
+        }
+
+        if (targetDept.isLecturerExists(lecturerName)) {
+            System.out.println("Error: Lecturer " + lecturerName + " already exists in this department.");
+            return false;
+        }
+
+        if (l.getDepartment() != null) {
+            System.out.println("Error: Lecturer " + lecturerName + " already belongs to another department: "
+                    + l.getDepartment().getDepartmentName());
+            return false;
+        }
+
+        Lecturer[] currentLecturers = targetDept.getLecturers();
+
+        int count = 0;
+        for (int j = 0; j < currentLecturers.length; j++) {
+            if (currentLecturers[j] != null && currentLecturers[j].getName() != null) {
+                count++;
+            }
+        }
+
+        Lecturer[] newLecturersArray = new Lecturer[count + 1];
+        int index = 0;
+        for (int j = 0; j < currentLecturers.length; j++) {
+            if (currentLecturers[j] != null && currentLecturers[j].getName() != null) {
+                newLecturersArray[index++] = currentLecturers[j];
+            }
+        }
+
+        newLecturersArray[count] = l;
+
+        targetDept.setLecturers(newLecturersArray);
+        l.setDepartment(targetDept);
+
+        System.out.println("Successfully added lecturer " + lecturerName + " to department " + departmentName + ".");
+        return true;
     }
 }
