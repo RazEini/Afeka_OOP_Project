@@ -41,23 +41,12 @@ public class Administrative {
         return false;
     }
 
-    public static boolean isValidIsraeliID(String idStr) {
-        if (idStr == null || idStr.length() != 9 || !idStr.matches("\\d+")) {
+    public static boolean isValidID(String idStr) {
+        if (idStr == null || idStr.length() != 9) {
             return false;
         }
 
-        int sum = 0;
-        for (int i = 0; i < 9; i++) {
-            int digit = Character.getNumericValue(idStr.charAt(i));
-            int weight = (i % 2 == 0) ? 1 : 2;
-            int stepProduct = digit * weight;
-
-            if (stepProduct > 9) {
-                stepProduct -= 9;
-            }
-            sum += stepProduct;
-        }
-        return (sum % 10 == 0);
+        return true;
     }
 
     public void addLecturer(String name, String id, String degree, int salary, String degreeName) {

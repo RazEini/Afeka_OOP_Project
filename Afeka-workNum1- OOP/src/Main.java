@@ -103,7 +103,7 @@ public class Main {
                         System.out.print("Enter Lecturer's ID (9 digits): ");
                         lecturerID = scanner.nextLine();
 
-                        if (!administrative.isValidIsraeliID(lecturerID)) {
+                        if (!administrative.isValidID(lecturerID)) {
                             System.out.println("Invalid ID! ID must be exactly 9 digits and be a valid one.");
                             continue;
                         }
