@@ -63,8 +63,7 @@ public class Main {
                 scanner.nextLine();
                 System.out.print("Select an option: ");
             }
-            choice = scanner.nextInt();
-            scanner.nextLine();
+            choice = Integer.parseInt(scanner.nextLine());
 
             switch (choice) {
                 case 1:
@@ -147,8 +146,7 @@ public class Main {
                         System.out.print("Enter Lecturer's salary: ");
 
                         if (scanner.hasNextInt()) {
-                            lecturerSalary = scanner.nextInt();
-                            scanner.nextLine();
+                            lecturerSalary = Integer.parseInt(scanner.nextLine());
                             if (lecturerSalary < 0) {
                                 System.out.println("Salary cannot be negative! Please try again.");
                             }
