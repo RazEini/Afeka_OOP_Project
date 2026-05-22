@@ -327,10 +327,30 @@ public class Main {
                         System.out.print("Enter department's name: ");
                         departmentName = scanner.nextLine();
 
-                        if (!administrative.isDepartmentExists(departmentName)) {
-                            break;
+                        if (departmentName == null || departmentName.trim().isEmpty()) {
+                            System.out.println("Invalid department name! Name cannot be empty.");
+                            continue;
                         }
-                        System.out.println("Error: The department's name already exists. Please try another name.");
+
+                        boolean hasDigit = false;
+                        for (int i = 0; i < departmentName.length(); i++) {
+                            if (departmentName.charAt(i) >= '0' && departmentName.charAt(i) <= '9') {
+                                hasDigit = true;
+                                break;
+                            }
+                        }
+
+                        if (hasDigit) {
+                            System.out.println("Invalid department name! Name cannot contain numbers.");
+                            continue;
+                        }
+
+                        if (administrative.isDepartmentExists(departmentName)) {
+                            System.out.println("Error: The department's name already exists. Please try another name.");
+                            continue;
+                        }
+
+                        break;
                     }
 
                     int studentsNumber = -1;
