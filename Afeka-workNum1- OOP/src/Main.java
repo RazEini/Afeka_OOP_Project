@@ -9,6 +9,10 @@ public class Main {
 
     public static Scanner scanner = new Scanner(System.in);
 
+    // מגישים:
+    // רז עייני - 328153101
+    // רז יעקבי - 213864416
+
     public static void main(String[] args) {
 
         String collegeName = "";
