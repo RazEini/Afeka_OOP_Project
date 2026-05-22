@@ -29,10 +29,6 @@ public class Department {
         return this.department_name;
     }
 
-    public int getStudentCount() {
-        return this.student_count;
-    }
-
     public Lecturer[] getLecturers() {
         if (this.lecturers_Array == null) return new Lecturer[1];
         Lecturer[] copy = new Lecturer[this.lecturers_Array.length];

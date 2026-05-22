@@ -42,11 +42,7 @@ public class Administrative {
     }
 
     public static boolean isValidID(String idStr) {
-        if (idStr == null || idStr.length() != 9) {
-            return false;
-        }
-
-        return true;
+        return idStr != null && idStr.length() == 9;
     }
 
     public void addLecturer(String name, String id, String degree, int salary, String degreeName) {
@@ -91,7 +87,7 @@ public class Administrative {
         if (lecturerCount == 0) return "No lecturers registered.";
         String result = "";
         for (int i = 0; i < lecturerCount; i++) {
-            result += lecturers[i].toString() + "\n";
+            result += (lecturers[i].toString() + "\n");
             result += "\n";
         }
         return result;
@@ -276,23 +272,22 @@ public class Administrative {
         return false;
     }
 
-    public boolean AddDepartment(Department department) {
-        if (department == null) return false;
-        if (isDepartmentExists(department.getDepartmentName())) return false;
+    public void AddDepartment(Department department) {
+        if (department == null) return;
+        if (isDepartmentExists(department.getDepartmentName())) return;
         if (departmentCount == departments.length) {
             Department[] temp = new Department[departments.length * 2];
             for (int i = 0; i < departmentCount; i++) temp[i] = departments[i];
             departments = temp;
         }
         departments[departmentCount++] = department;
-        return true;
     }
 
-    public boolean addLecturerToDepartment(String departmentName, String lecturerName) {
+    public void addLecturerToDepartment(String departmentName, String lecturerName) {
         Lecturer l = findLecturerByName(lecturerName);
         if (l == null) {
             System.out.println("Error: Lecturer " + lecturerName + " does not exist.");
-            return false;
+            return;
         }
 
         Department targetDept = null;
@@ -305,34 +300,34 @@ public class Administrative {
 
         if (targetDept == null) {
             System.out.println("Error: Department " + departmentName + " does not exist.");
-            return false;
+            return;
         }
 
         if (targetDept.isLecturerExists(lecturerName)) {
             System.out.println("Error: Lecturer " + lecturerName + " already exists in this department.");
-            return false;
+            return;
         }
 
         if (l.getDepartment() != null) {
             System.out.println("Error: Lecturer " + lecturerName + " already belongs to another department: "
                     + l.getDepartment().getDepartmentName());
-            return false;
+            return;
         }
 
         Lecturer[] currentLecturers = targetDept.getLecturers();
 
         int count = 0;
-        for (int j = 0; j < currentLecturers.length; j++) {
-            if (currentLecturers[j] != null && currentLecturers[j].getName() != null) {
+        for (Lecturer currentLecturer : currentLecturers) {
+            if (currentLecturer != null && currentLecturer.getName() != null) {
                 count++;
             }
         }
 
         Lecturer[] newLecturersArray = new Lecturer[count + 1];
         int index = 0;
-        for (int j = 0; j < currentLecturers.length; j++) {
-            if (currentLecturers[j] != null && currentLecturers[j].getName() != null) {
-                newLecturersArray[index++] = currentLecturers[j];
+        for (Lecturer currentLecturer : currentLecturers) {
+            if (currentLecturer != null && currentLecturer.getName() != null) {
+                newLecturersArray[index++] = currentLecturer;
             }
         }
 
@@ -342,6 +337,5 @@ public class Administrative {
         l.setDepartment(targetDept);
 
         System.out.println("Successfully added lecturer " + lecturerName + " to department " + departmentName + ".");
-        return true;
     }
 }
