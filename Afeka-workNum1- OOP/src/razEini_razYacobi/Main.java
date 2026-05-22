@@ -59,12 +59,27 @@ public class Main {
             System.out.println("0 - Exit");
             System.out.print("Select an option: ");
 
-            while (!scanner.hasNextInt()) {
-                System.out.println("Invalid input. Please enter a number.");
-                scanner.nextLine();
-                System.out.print("Select an option: ");
+            String menuInput = scanner.nextLine().trim();
+
+            if (menuInput.isEmpty()) {
+                System.out.println("Invalid input! Option cannot be empty. Please enter a number.");
+                continue;
             }
-            choice = Integer.parseInt(scanner.nextLine());
+
+            boolean isMenuValidNumber = true;
+            for (int i = 0; i < menuInput.length(); i++) {
+                if (menuInput.charAt(i) < '0' || menuInput.charAt(i) > '9') {
+                    isMenuValidNumber = false;
+                    break;
+                }
+            }
+
+            if (!isMenuValidNumber || menuInput.length() > 9) {
+                System.out.println("Invalid input! Please enter a valid integer number.");
+                continue;
+            }
+
+            choice = Integer.parseInt(menuInput);
 
             switch (choice) {
                 case 1:
@@ -145,15 +160,29 @@ public class Main {
                     int lecturerSalary = -1;
                     while (lecturerSalary < 0) {
                         System.out.print("Enter Lecturer's salary: ");
+                        String salaryInput = scanner.nextLine().trim();
 
-                        if (scanner.hasNextInt()) {
-                            lecturerSalary = Integer.parseInt(scanner.nextLine());
-                            if (lecturerSalary < 0) {
-                                System.out.println("Salary cannot be negative! Please try again.");
+                        if (salaryInput.isEmpty()) {
+                            System.out.println("Invalid number! Salary cannot be empty.");
+                            continue;
+                        }
+
+                        boolean isSalaryNumber = true;
+                        for (int i = 0; i < salaryInput.length(); i++) {
+                            if (salaryInput.charAt(i) < '0' || salaryInput.charAt(i) > '9') {
+                                isSalaryNumber = false;
+                                break;
                             }
-                        } else {
+                        }
+
+                        if (!isSalaryNumber || salaryInput.length() > 9) {
                             System.out.println("Invalid number! Please enter a valid non-negative integer.");
-                            scanner.nextLine();
+                            continue;
+                        }
+
+                        lecturerSalary = Integer.parseInt(salaryInput);
+                        if (lecturerSalary < 0) {
+                            System.out.println("Salary cannot be negative! Please try again.");
                         }
                     }
 
@@ -275,7 +304,7 @@ public class Main {
                 case 4:
                     System.out.print("Enter committee's name: ");
                     committeeName = scanner.nextLine();
-                    System.out.print("Enter chairman's name: ");
+                    System.out.print("Enter new chairman's name: ");
                     chairmanName = scanner.nextLine();
 
                     if (administrative.UpdateChairmanCommittee(committeeName, chairmanName)){
@@ -304,11 +333,34 @@ public class Main {
                         System.out.println("Error: The department's name already exists. Please try another name.");
                     }
 
-                    int studentsNumber = 0;
-                    do {
+                    int studentsNumber = -1;
+                    while (studentsNumber < 0) {
                         System.out.print("Enter the number of students studying there: ");
-                        studentsNumber = Integer.parseInt(scanner.nextLine());
-                    } while (studentsNumber < 0);
+                        String studentsInput = scanner.nextLine().trim();
+
+                        if (studentsInput.isEmpty()) {
+                            System.out.println("Invalid number! Input cannot be empty.");
+                            continue;
+                        }
+
+                        boolean isStudentsNumber = true;
+                        for (int i = 0; i < studentsInput.length(); i++) {
+                            if (studentsInput.charAt(i) < '0' || studentsInput.charAt(i) > '9') {
+                                isStudentsNumber = false;
+                                break;
+                            }
+                        }
+
+                        if (!isStudentsNumber || studentsInput.length() > 9) {
+                            System.out.println("Invalid number! Please enter a valid integer.");
+                            continue;
+                        }
+
+                        studentsNumber = Integer.parseInt(studentsInput);
+                        if (studentsNumber < 0) {
+                            System.out.println("Number of students cannot be negative!");
+                        }
+                    }
 
                     Department department = new Department(departmentName, studentsNumber);
                     administrative.AddDepartment(department);
@@ -342,7 +394,7 @@ public class Main {
                     double averageSalary = administrative.getAverageSalary();
 
                     System.out.println("\n--- College Salary Report ---");
-                    System.out.printf("The average salary of all lecturers in the college is: %.2f\n", averageSalary);
+                    System.out.printf("The average salary of all lecturers in the department is: %.2f\n", averageSalary);
                     System.out.println("-----------------------------");
 
                     break;
