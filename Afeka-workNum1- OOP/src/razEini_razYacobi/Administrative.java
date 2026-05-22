@@ -1,4 +1,4 @@
-package classes;
+package razEini_razYacobi;
 
 public class Administrative {
     private Lecturer[] lecturers;

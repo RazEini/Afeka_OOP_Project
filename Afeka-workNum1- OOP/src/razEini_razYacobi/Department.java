@@ -1,4 +1,4 @@
-package classes;
+package razEini_razYacobi;
 
 public class Department {
     private String department_name;

@@ -1,7 +1,4 @@
-import classes.Administrative;
-import classes.Committee;
-import classes.Department;
-import classes.Lecturer;
+package razEini_razYacobi;
 
 import java.util.Scanner;
 
