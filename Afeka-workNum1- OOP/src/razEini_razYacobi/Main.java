@@ -4,12 +4,13 @@ import java.util.Scanner;
 
 public class Main {
 
+    static Scanner scanner = new Scanner(System.in);
+
     // מגישים:
     // רז עייני - 328153101
     // רז יעקבי - 213864416
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
 
         String collegeName = "";
         boolean isCollegeNameValid = false;
@@ -451,5 +452,6 @@ public class Main {
                     System.out.println("Invalid option, please try again.");
             }
         }
+        scanner.close();
     }
 }
