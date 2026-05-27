@@ -7,7 +7,7 @@ public class Administrative {
     private int departmentCount;
     public Committee[] committees;
     private int committeeCount;
-    private String collegeName;
+    private final String collegeName;
 
     public Administrative(String collegeName) {
         this.collegeName = collegeName;
