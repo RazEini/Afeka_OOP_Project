@@ -10,6 +10,8 @@ public class Main {
     // רז עייני - 328153101
     // רז יעקבי - 213864416
 
+    //check
+
     public static void main(String[] args) {
 
         String collegeName = "";
