@@ -13,6 +13,10 @@ public class Lecturer {
     public enum Degree { BACHELOR_DEGREE, MASTER_DEGREE, DR, PROFESSOR }
     private Degree lecturerDegree;
 
+    private String[] articles;
+    private int artCount;
+    private String institution;
+
     public Lecturer() {
         setName("Unknown");
         setId("000000000");
@@ -21,6 +25,9 @@ public class Lecturer {
         this.department = null;
         this.myCommittees = new Committee[1];
         this.commCount = 0;
+        this.articles = new String[1];
+        this.artCount = 0;
+        this.institution = "Unknown";
     }
 
     public Lecturer(String name, String id, String degreeName, int salary, Department department) {
@@ -31,6 +38,9 @@ public class Lecturer {
         setDepartment(department);
         this.myCommittees = new Committee[1];
         this.commCount = 0;
+        this.articles = new String[1];
+        this.artCount = 0;
+        this.institution = "Unknown";
     }
 
     public Lecturer(Lecturer other) {
@@ -46,6 +56,9 @@ public class Lecturer {
             for(int i=0; i<other.commCount; i++) {
                 this.myCommittees[i] = other.myCommittees[i];
             }
+            this.articles = new String[other.articles.length];
+            this.artCount = other.artCount;
+            this.institution = other.institution;
         }
     }
 
@@ -103,6 +116,27 @@ public class Lecturer {
     }
 
     public void setDepartment(Department department) { this.department = department; }
+
+    public void addArticles(String articles) {
+        if (this.artCount == this.articles.length) {
+            String[] temp = new String[this.articles.length * 2];
+            for (int i = 0; i < this.articles.length; i++) temp[i] = this.articles[i];
+            this.articles = temp;
+        }
+        this.articles[artCount++] = articles;
+    }
+
+    public void setInstitution(String institution) {
+        this.institution = institution;
+    }
+
+    public String getInstitution() {
+        return this.institution;
+    }
+
+    public int getNumOfArticles() {
+        return this.artCount;
+    }
 
     public void removeCommittee(String committeeName) {
         if (committeeName == null || commCount == 0) return;

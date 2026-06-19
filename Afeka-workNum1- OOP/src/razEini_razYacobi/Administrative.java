@@ -338,4 +338,32 @@ public class Administrative {
 
         System.out.println("Successfully added lecturer " + lecturerName + " to department " + departmentName + ".");
     }
+
+    public void addArticleToLecturer(String name, String articles) {
+        Lecturer l = new Lecturer();
+        if(isLecturerExists(name)) {
+            l = findLecturerByName(name);
+        }
+
+        if (l.getDegree().name().equalsIgnoreCase("DR") || l.getDegree().name().equalsIgnoreCase("PROFESSOR")) {
+            l.addArticles(articles);
+        }
+        else {
+            System.out.println("Error: Lecturer " + name + " is not DR or PROFESSOR.");
+        }
+    }
+
+    public void addInstitution(String name, String institution){
+        Lecturer l = new Lecturer();
+        if(isLecturerExists(name)) {
+            l = findLecturerByName(name);
+        }
+
+        if (l.getDegree().name().equalsIgnoreCase("PROFESSOR")) {
+            l.setInstitution(institution);
+        }
+        else {
+            System.out.println("Error: Lecturer " + name + " is not PROFESSOR.");
+        }
+    }
 }

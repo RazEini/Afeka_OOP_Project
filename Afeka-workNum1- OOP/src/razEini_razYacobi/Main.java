@@ -56,6 +56,8 @@ public class Main {
             System.out.println("9 - Display Average Salary of a Specific Department");
             System.out.println("10 - Display All Lecturers Information");
             System.out.println("11 - Display All Committees Information");
+            System.out.println("12 - Add Article to Lecturer");
+            System.out.println("13 - Add Institution to the Professor");
             System.out.println("0 - Exit");
             System.out.print("Select an option: ");
 
@@ -445,6 +447,20 @@ public class Main {
                     System.out.println("\n--- College Committees Info ---\n");
                     System.out.println(committeesData);
                     break;
+                case 12:
+                    System.out.print("Enter lecturer's name: ");
+                    lecturerName = scanner.nextLine();
+                    System.out.print("Enter article: ");
+                    String article = scanner.nextLine();
+
+                    administrative.addArticleToLecturer(lecturerName, article);
+                case 13:
+                    System.out.print("Enter lecturer's name: ");
+                    lecturerName = scanner.nextLine();
+                    System.out.print("Enter institution name: ");
+                    String institution = scanner.nextLine();
+
+                    administrative.addInstitution(lecturerName, institution);
                 case 0:
                     System.out.println("Exiting the program...");
                     break;
