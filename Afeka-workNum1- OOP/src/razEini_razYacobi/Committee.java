@@ -1,10 +1,11 @@
 package razEini_razYacobi;
 
-public class Committee {
+public class Committee implements Comparable<Committee> {
     private String committee_name;
     private Lecturer[] lecturers_Array;
     private Lecturer chairman;
     private int lecturerCount = 0;
+    private int compareMode = 1;
 
     public Committee() {
         setCommitteeName("General");
@@ -68,6 +69,10 @@ public class Committee {
         } else {
             System.out.println("Error: Invalid Chairman.");
         }
+    }
+
+    public void setCompareMode(int compareMode){
+        this.compareMode = compareMode;
     }
 
     public boolean isLecturerExists(String lecturerName) {
@@ -142,5 +147,20 @@ public class Committee {
             }
         }
         return info;
+    }
+
+    public int sumOfArticles() {
+        int sum = 0;
+        for (int i = 0; i < lecturerCount; i++) {
+            sum += lecturers_Array[i].getNumOfArticles();
+        }
+        return sum;
+    }
+
+    @Override
+    public int compareTo(Committee o) {
+        if (compareMode == 1)
+            return Integer.compare(lecturerCount, o.lecturerCount);
+        return Integer.compare(sumOfArticles(), o.sumOfArticles());
     }
 }

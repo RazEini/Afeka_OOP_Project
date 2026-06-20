@@ -70,6 +70,13 @@ public class Administrative {
         return null;
     }
 
+    public Committee findCommitteeByName(String name) {
+        for (int i = 0; i < committeeCount; i++) {
+            if (committees[i].getCommitteeName().equalsIgnoreCase(name)) return committees[i];
+        }
+        return null;
+    }
+
     public double getAverageSalary() {
         if (lecturerCount == 0) return 0;
         double sum = 0;

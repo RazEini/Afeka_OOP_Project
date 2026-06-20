@@ -58,6 +58,7 @@ public class Main {
             System.out.println("11 - Display All Committees Information");
             System.out.println("12 - Add Article to Lecturer");
             System.out.println("13 - Compare number of articles between to Lecturers");
+            System.out.println("14 - Compare by the Member of Committee or Compare by the article of Member's Committee");
             System.out.println("0 - Exit");
             System.out.print("Select an option: ");
 
@@ -473,6 +474,48 @@ public class Main {
                             System.out.println(lectName + " has more articles than " + lecturerName);
                         } else {
                             System.out.println(lecturerName + " has more articles than " + lectName);
+                        }
+                    }
+
+                    break;
+                case 14:
+                    System.out.print("Enter Committee name: ");
+                    String committee = scanner.nextLine();
+                    System.out.print("Enter another Committee name: ");
+                    String committee2 = scanner.nextLine();
+
+                    Committee c1 = administrative.findCommitteeByName(committee);
+                    Committee c2 = administrative.findCommitteeByName(committee2);
+
+                    System.out.print("press 1 to Compare by the Member of Committee, press other number to Compare by the article of Member's Committee: ");
+                    int n = Integer.parseInt(scanner.nextLine());
+
+                    if (n == 1){
+                        c1.setCompareMode(n);
+                        int compare = c1.compareTo(c2);
+
+                        if (compare == 0) {
+                            System.out.println(c1.getCommitteeName() + " and " + c2.getCommitteeName() + " have the same number of members");
+                        }
+                        else if (compare > 0) {
+                            System.out.println(c1.getCommitteeName() + " have more members than " + c2.getCommitteeName());
+                        }
+                        else{
+                            System.out.println(c2.getCommitteeName() + " have more members than " + c1.getCommitteeName());
+                        }
+                    }
+                    else {
+                        c1.setCompareMode(n);
+                        int compare = c1.compareTo(c2);
+
+                        if (compare == 0) {
+                            System.out.println(c1.getCommitteeName() + " and" + c2.getCommitteeName() + " have the same number of articles");
+                        }
+                        else if (compare > 0) {
+                            System.out.println(c1.getCommitteeName() + " have more articles than " + c2.getCommitteeName());
+                        }
+                        else{
+                            System.out.println(c2.getCommitteeName() + " have more articles than " + c1.getCommitteeName());
                         }
                     }
 
