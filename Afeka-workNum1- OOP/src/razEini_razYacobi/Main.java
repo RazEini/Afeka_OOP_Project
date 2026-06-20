@@ -57,7 +57,7 @@ public class Main {
             System.out.println("10 - Display All Lecturers Information");
             System.out.println("11 - Display All Committees Information");
             System.out.println("12 - Add Article to Lecturer");
-            System.out.println("13 - Compare number of articles between to Lecturers");
+            System.out.println("13 - Compare number of articles between two Lecturers");
             System.out.println("14 - Compare by the Member of Committee or Compare by the article of Member's Committee");
             System.out.println("0 - Exit");
             System.out.print("Select an option: ");
