@@ -1,6 +1,6 @@
 package razEini_razYacobi;
 
-public class Lecturer {
+public class Lecturer implements Comparable<Lecturer> {
     private String lecturer_name;
     private String lecturer_id;
     private int salary;
@@ -158,6 +158,11 @@ public class Lecturer {
             myCommittees = temp;
             commCount--;
         }
+    }
+
+    @Override
+    public int compareTo(Lecturer o) {
+        return Integer.compare(this.getNumOfArticles(), o.getNumOfArticles());
     }
 
     @Override

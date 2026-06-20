@@ -1,5 +1,7 @@
 package razEini_razYacobi;
 
+import java.util.Scanner;
+
 public class Administrative {
     private Lecturer[] lecturers;
     private int lecturerCount;
@@ -50,6 +52,14 @@ public class Administrative {
 
         Lecturer l = new Lecturer(name, id, degreeName, salary, null);
         l.setDegree(degree);
+
+        if (l.getDegree().name().equalsIgnoreCase("PROFESSOR")) {
+            System.out.print("Enter institution name: ");
+            Scanner scanner = new Scanner(System.in);
+            String institution = scanner.nextLine();
+            l.setInstitution(institution);
+        }
+
         lecturers[lecturerCount++] = l;
     }
 
@@ -350,20 +360,6 @@ public class Administrative {
         }
         else {
             System.out.println("Error: Lecturer " + name + " is not DR or PROFESSOR.");
-        }
-    }
-
-    public void addInstitution(String name, String institution){
-        Lecturer l = new Lecturer();
-        if(isLecturerExists(name)) {
-            l = findLecturerByName(name);
-        }
-
-        if (l.getDegree().name().equalsIgnoreCase("PROFESSOR")) {
-            l.setInstitution(institution);
-        }
-        else {
-            System.out.println("Error: Lecturer " + name + " is not PROFESSOR.");
         }
     }
 }

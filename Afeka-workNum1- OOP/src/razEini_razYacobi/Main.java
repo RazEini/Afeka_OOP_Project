@@ -57,7 +57,7 @@ public class Main {
             System.out.println("10 - Display All Lecturers Information");
             System.out.println("11 - Display All Committees Information");
             System.out.println("12 - Add Article to Lecturer");
-            System.out.println("13 - Add Institution to the Professor");
+            System.out.println("13 - Compare number of articles between to Lecturers");
             System.out.println("0 - Exit");
             System.out.print("Select an option: ");
 
@@ -454,13 +454,29 @@ public class Main {
                     String article = scanner.nextLine();
 
                     administrative.addArticleToLecturer(lecturerName, article);
+                    break;
                 case 13:
                     System.out.print("Enter lecturer's name: ");
                     lecturerName = scanner.nextLine();
-                    System.out.print("Enter institution name: ");
-                    String institution = scanner.nextLine();
+                    System.out.print("Enter another lecturer's name: ");
+                    lectName = scanner.nextLine();
 
-                    administrative.addInstitution(lecturerName, institution);
+                    Lecturer l1 = administrative.findLecturerByName(lecturerName);
+                    Lecturer l2 = administrative.findLecturerByName(lectName);
+
+                    if((l1.getDegree().name().equalsIgnoreCase("DR") || l1.getDegree().name().equalsIgnoreCase("PROFESSOR")) && (l2.getDegree().name().equalsIgnoreCase("DR") || l2.getDegree().name().equalsIgnoreCase("PROFESSOR"))) {
+                        int n = l1.compareTo(l2);
+
+                        if (n == 0) {
+                            System.out.println("They have both the same number of articles");
+                        } else if (n < 0) {
+                            System.out.println(lectName + " has more articles than " + lecturerName);
+                        } else {
+                            System.out.println(lecturerName + " has more articles than " + lectName);
+                        }
+                    }
+
+                    break;
                 case 0:
                     System.out.println("Exiting the program...");
                     break;
