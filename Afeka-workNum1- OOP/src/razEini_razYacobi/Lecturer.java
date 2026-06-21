@@ -4,7 +4,6 @@ public class Lecturer implements Comparable<Lecturer> {
     private String lecturer_name;
     private String lecturer_id;
     private int salary;
-    private String degreeName;
     private Department department;
 
     private Committee[] myCommittees;
@@ -13,52 +12,38 @@ public class Lecturer implements Comparable<Lecturer> {
     public enum Degree { BACHELOR_DEGREE, MASTER_DEGREE, DR, PROFESSOR }
     private Degree lecturerDegree;
 
-    private String[] articles;
-    private int artCount;
-    private String institution;
-
     public Lecturer() {
         setName("Unknown");
         setId("000000000");
-        this.degreeName = "Unknown";
         setSalary(0);
         this.department = null;
         this.myCommittees = new Committee[1];
         this.commCount = 0;
-        this.articles = new String[1];
-        this.artCount = 0;
-        this.institution = "Unknown";
+        this.lecturerDegree = Degree.BACHELOR_DEGREE;
     }
 
-    public Lecturer(String name, String id, String degreeName, int salary, Department department) {
+    public Lecturer(String name, String id, int salary, Department department, Degree degree) {
         setName(name);
         setId(id);
-        this.degreeName = degreeName;
         setSalary(salary);
         setDepartment(department);
         this.myCommittees = new Committee[1];
         this.commCount = 0;
-        this.articles = new String[1];
-        this.artCount = 0;
-        this.institution = "Unknown";
+        this.lecturerDegree = degree;
     }
 
     public Lecturer(Lecturer other) {
         if (other != null) {
             setName(other.lecturer_name);
             setId(other.lecturer_id);
-            this.degreeName = other.degreeName;
             this.lecturerDegree = other.lecturerDegree;
             setSalary(other.salary);
             this.department = other.department;
             this.commCount = other.commCount;
             this.myCommittees = new Committee[other.myCommittees.length];
-            for(int i=0; i<other.commCount; i++) {
+            for (int i = 0; i < other.commCount; i++) {
                 this.myCommittees[i] = other.myCommittees[i];
             }
-            this.articles = new String[other.articles.length];
-            this.artCount = other.artCount;
-            this.institution = other.institution;
         }
     }
 
@@ -71,80 +56,30 @@ public class Lecturer implements Comparable<Lecturer> {
         myCommittees[commCount++] = c;
     }
 
-    public String getName() {
-        return this.lecturer_name;
-    }
+    public String getName() { return this.lecturer_name; }
+    public String getId() { return this.lecturer_id; }
+    public Degree getDegree() { return this.lecturerDegree; }
+    public int getSalary() { return this.salary; }
+    public Department getDepartment() { return this.department; }
 
-    public String getId() {
-        return this.lecturer_id;
-    }
-
-    public Degree getDegree() {
-        return this.lecturerDegree;
-    }
-
-    public int getSalary() {
-        return this.salary;
-    }
-
-    public void setName(String name) {
-        this.lecturer_name = (name != null) ? name : "Unknown";
-    }
-
-    public void setSalary(int salary) {
-        this.salary = (salary >= 0) ? salary : 0;
-    }
+    public void setName(String name) { this.lecturer_name = (name != null) ? name : "Unknown"; }
+    public void setSalary(int salary) { this.salary = (salary >= 0) ? salary : 0; }
+    public void setDepartment(Department department) { this.department = department; }
 
     public void setId(String id) {
         if (id != null && id.length() == 9) this.lecturer_id = id;
         else this.lecturer_id = "000000000";
     }
 
-    public void setDegree(String degreeStr) {
-        if (degreeStr == null) return;
-        String upper = degreeStr.toUpperCase().replace(" ", "_");
-        for (Degree d : Degree.values()) {
-            if (d.name().equals(upper)) {
-                this.lecturerDegree = d;
-                return;
-            }
-        }
-    }
-
-    public Department getDepartment() {
-        return this.department;
-    }
-
-    public void setDepartment(Department department) { this.department = department; }
-
-    public void addArticles(String articles) {
-        if (this.artCount == this.articles.length) {
-            String[] temp = new String[this.articles.length * 2];
-            for (int i = 0; i < this.articles.length; i++) temp[i] = this.articles[i];
-            this.articles = temp;
-        }
-        this.articles[artCount++] = articles;
-    }
-
-    public void setInstitution(String institution) {
-        this.institution = institution;
-    }
-
-    public String getInstitution() {
-        return this.institution;
-    }
-
     public int getNumOfArticles() {
-        return this.artCount;
+        return 0;
     }
 
     public void removeCommittee(String committeeName) {
         if (committeeName == null || commCount == 0) return;
-
         Committee[] temp = new Committee[myCommittees.length];
         int j = 0;
         boolean found = false;
-
         for (int i = 0; i < commCount; i++) {
             if (myCommittees[i] != null && !myCommittees[i].getCommitteeName().equalsIgnoreCase(committeeName)) {
                 temp[j] = myCommittees[i];
@@ -153,7 +88,6 @@ public class Lecturer implements Comparable<Lecturer> {
                 found = true;
             }
         }
-
         if (found) {
             myCommittees = temp;
             commCount--;
@@ -168,14 +102,9 @@ public class Lecturer implements Comparable<Lecturer> {
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-
         if (obj == null || getClass() != obj.getClass()) return false;
-
         Lecturer other = (Lecturer) obj;
-
-        if (this.lecturer_id == null) {
-            return other.lecturer_id == null;
-        }
+        if (this.lecturer_id == null) return other.lecturer_id == null;
         return this.lecturer_id.equals(other.lecturer_id);
     }
 
@@ -186,13 +115,7 @@ public class Lecturer implements Comparable<Lecturer> {
                 "- ID: " + lecturer_id + "\n" +
                 "- Salary: " + salary + "\n" +
                 "- Degree: " + (lecturerDegree != null ? lecturerDegree : "None") + "\n";
-
-        if (department != null) {
-            info += "- Department: " + department.getDepartmentName() + "\n";
-        } else {
-            info += "- Department: None\n";
-        }
-
+        info += "- Department: " + (department != null ? department.getDepartmentName() : "None") + "\n";
         if (commCount > 0) {
             info += "- Committees: ";
             for (int i = 0; i < commCount; i++) {
@@ -201,7 +124,6 @@ public class Lecturer implements Comparable<Lecturer> {
         } else {
             info += "- Committees: None";
         }
-
         return info;
     }
 }

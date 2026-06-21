@@ -121,7 +121,7 @@ public class Main {
                         System.out.print("Enter Lecturer's ID (9 digits): ");
                         lecturerID = scanner.nextLine();
 
-                        if (!administrative.isValidID(lecturerID)) {
+                        if (!Administrative.isValidID(lecturerID)) {
                             System.out.println("Invalid ID! ID must be exactly 9 digits and be a valid one.");
                             continue;
                         }
@@ -215,7 +215,14 @@ public class Main {
                         break;
                     }
 
-                    administrative.addLecturer(lecturerName, lecturerID, lecturerDegree, lecturerSalary, lecturerDegreeName);
+                    // קליטת מוסד לפרופסור מתבצעת כאן ב-Main כעת
+                    String institution = "Unknown";
+                    if (lecturerDegree.equalsIgnoreCase("PROFESSOR")) {
+                        System.out.print("Enter institution name: ");
+                        institution = scanner.nextLine();
+                    }
+
+                    administrative.addLecturer(lecturerName, lecturerID, lecturerDegree, lecturerSalary, institution);
                     System.out.println("Lecturer added successfully.");
                     break;
 
@@ -292,38 +299,54 @@ public class Main {
                     newCommittee.setCommitteeName(committeeName);
                     newCommittee.setChairman(chair);
 
-                    administrative.addCommittee(newCommittee);
-                    System.out.println("Committee '" + committeeName + "' created successfully with " + chairmanName + " as chairman.");
+                    try {
+                        administrative.addCommittee(newCommittee);
+                        System.out.println("Committee '" + committeeName + "' created successfully with " + chairmanName + " as chairman.");
+                    } catch (AdministrativeException e) {
+                        System.out.println(e.getMessage());
+                    }
                     break;
+
                 case 3:
                     System.out.print("Enter committee's name: ");
                     committeeName = scanner.nextLine();
                     System.out.print("Enter lecturer's name: ");
                     lecturerName = scanner.nextLine();
-                    if (administrative.addLecturerToCommittee(committeeName, lecturerName)){
+                    try {
+                        administrative.addLecturerToCommittee(committeeName, lecturerName);
                         System.out.println("Added successfully " + lecturerName + " to committee '" + committeeName + "'.");
+                    } catch (AdministrativeException e) {
+                        System.out.println(e.getMessage());
                     }
                     break;
+
                 case 4:
                     System.out.print("Enter committee's name: ");
                     committeeName = scanner.nextLine();
                     System.out.print("Enter new chairman's name: ");
                     chairmanName = scanner.nextLine();
 
-                    if (administrative.UpdateChairmanCommittee(committeeName, chairmanName)){
+                    try {
+                        administrative.updateChairmanCommittee(committeeName, chairmanName);
                         System.out.println("Updated successfully " + chairmanName + " to committee '" + committeeName + "'.");
+                    } catch (AdministrativeException e) {
+                        System.out.println(e.getMessage());
                     }
-
                     break;
+
                 case 5:
                     System.out.print("Enter committee's name: ");
                     committeeName = scanner.nextLine();
                     System.out.print("Enter lecturer's name: ");
                     lecturerName = scanner.nextLine();
-                    if (administrative.deleteLecturerFromCommittee(committeeName, lecturerName)){
+                    try {
+                        administrative.deleteLecturerFromCommittee(committeeName, lecturerName);
                         System.out.println("Deleted successfully " + lecturerName + " from committee '" + committeeName + "'.");
+                    } catch (AdministrativeException e) {
+                        System.out.println(e.getMessage());
                     }
                     break;
+
                 case 6:
                     String departmentName = "";
                     while (true) {
@@ -389,6 +412,7 @@ public class Main {
                     administrative.AddDepartment(department);
                     System.out.println("Added successfully " + departmentName + " to department.");
                     break;
+
                 case 7:
                     System.out.print("Enter department's name: ");
                     String deptName = scanner.nextLine();
@@ -396,31 +420,22 @@ public class Main {
                     System.out.print("Enter lecturer's name: ");
                     String lectName = scanner.nextLine();
 
-                    boolean deptExists = administrative.isDepartmentExists(deptName);
-                    boolean lectExists = administrative.isLecturerExists(lectName);
-
-                    if (!deptExists && !lectExists) {
-                        System.out.println("Error: Both department \"" + deptName + "\" and lecturer \"" + lectName + "\" do not exist.");
-                        break;
-                    } else if (!deptExists) {
-                        System.out.println("Error: Department \"" + deptName + "\" does not exist.");
-                        break;
-                    } else if (!lectExists) {
-                        System.out.println("Error: Lecturer \"" + lectName + "\" does not exist.");
-                        break;
+                    try {
+                        administrative.addLecturerToDepartment(deptName, lectName);
+                        System.out.println("Successfully added lecturer " + lectName + " to department " + deptName + ".");
+                    } catch (AdministrativeException e) {
+                        System.out.println(e.getMessage());
                     }
-
-                    administrative.addLecturerToDepartment(deptName, lectName);
-
                     break;
+
                 case 8:
                     double averageSalary = administrative.getAverageSalary();
 
                     System.out.println("\n--- College Salary Report ---");
-                    System.out.printf("The average salary of all lecturers in the department is: %.2f\n", averageSalary);
+                    System.out.printf("The average salary of all lecturers in the college is: %.2f\n", averageSalary);
                     System.out.println("-----------------------------");
-
                     break;
+
                 case 9:
                     String department_name = "";
                     System.out.print("Enter department's name: ");
@@ -431,31 +446,38 @@ public class Main {
                         System.out.println("\n--- College Salary Report ---");
                         System.out.printf("The average salary of all lecturers in the college is: %.2f\n", departmentAverageSalary);
                         System.out.println("-----------------------------");
-                    }
-
-                    else {
+                    } else {
                         System.out.println("Error: The department's name doesn't exist. Please try another name.");
                     }
                     break;
+
                 case 10:
                     String full_data = administrative.getAllLecturersFullData();
                     System.out.println("\n--- College Lecturers Info ---\n");
                     System.out.println(full_data);
                     System.out.println("-----------------------------");
                     break;
+
                 case 11:
                     String committeesData = administrative.getAllCommitteesFullData();
                     System.out.println("\n--- College Committees Info ---\n");
                     System.out.println(committeesData);
                     break;
+
                 case 12:
                     System.out.print("Enter lecturer's name: ");
                     lecturerName = scanner.nextLine();
                     System.out.print("Enter article: ");
                     String article = scanner.nextLine();
 
-                    administrative.addArticleToLecturer(lecturerName, article);
+                    try {
+                        administrative.addArticleToLecturer(lecturerName, article);
+                        System.out.println("Article added successfully to " + lecturerName + ".");
+                    } catch (AdministrativeException e) {
+                        System.out.println(e.getMessage());
+                    }
                     break;
+
                 case 13:
                     System.out.print("Enter lecturer's name: ");
                     lecturerName = scanner.nextLine();
@@ -465,19 +487,27 @@ public class Main {
                     Lecturer l1 = administrative.findLecturerByName(lecturerName);
                     Lecturer l2 = administrative.findLecturerByName(lectName);
 
-                    if((l1.getDegree().name().equalsIgnoreCase("DR") || l1.getDegree().name().equalsIgnoreCase("PROFESSOR")) && (l2.getDegree().name().equalsIgnoreCase("DR") || l2.getDegree().name().equalsIgnoreCase("PROFESSOR"))) {
-                        int n = l1.compareTo(l2);
+                    if (l1 == null || l2 == null) {
+                        System.out.println("Error: One or both lecturers do not exist.");
+                        break;
+                    }
 
-                        if (n == 0) {
+                    if ((l1.getDegree().name().equalsIgnoreCase("DR") || l1.getDegree().name().equalsIgnoreCase("PROFESSOR")) &&
+                            (l2.getDegree().name().equalsIgnoreCase("DR") || l2.getDegree().name().equalsIgnoreCase("PROFESSOR"))) {
+                        int compResult = l1.compareTo(l2);
+
+                        if (compResult == 0) {
                             System.out.println("They have both the same number of articles");
-                        } else if (n < 0) {
+                        } else if (compResult < 0) {
                             System.out.println(lectName + " has more articles than " + lecturerName);
                         } else {
                             System.out.println(lecturerName + " has more articles than " + lectName);
                         }
+                    } else {
+                        System.out.println("Error: Comparison can only be performed between advanced degree lecturers (DR/PROFESSOR).");
                     }
-
                     break;
+
                 case 14:
                     System.out.print("Enter Committee name: ");
                     String committee = scanner.nextLine();
@@ -487,39 +517,45 @@ public class Main {
                     Committee c1 = administrative.findCommitteeByName(committee);
                     Committee c2 = administrative.findCommitteeByName(committee2);
 
-                    System.out.print("press 1 to Compare by the Member of Committee, press other number to Compare by the article of Member's Committee: ");
-                    int n = Integer.parseInt(scanner.nextLine());
+                    if (c1 == null || c2 == null) {
+                        System.out.println("Error: One or both committees do not exist.");
+                        break;
+                    }
 
-                    if (n == 1){
-                        c1.setCompareMode(n);
+                    System.out.print("press 1 to Compare by the Member of Committee, press other number to Compare by the article of Member's Committee: ");
+                    int compareOption;
+                    try {
+                        compareOption = Integer.parseInt(scanner.nextLine());
+                    } catch (NumberFormatException e) {
+                        System.out.println("Invalid number! Aborting comparison.");
+                        break;
+                    }
+
+                    if (compareOption == 1) {
+                        c1.setCompareMode(compareOption);
                         int compare = c1.compareTo(c2);
 
                         if (compare == 0) {
                             System.out.println(c1.getCommitteeName() + " and " + c2.getCommitteeName() + " have the same number of members");
-                        }
-                        else if (compare > 0) {
+                        } else if (compare > 0) {
                             System.out.println(c1.getCommitteeName() + " have more members than " + c2.getCommitteeName());
-                        }
-                        else{
+                        } else {
                             System.out.println(c2.getCommitteeName() + " have more members than " + c1.getCommitteeName());
                         }
-                    }
-                    else {
-                        c1.setCompareMode(n);
+                    } else {
+                        c1.setCompareMode(compareOption);
                         int compare = c1.compareTo(c2);
 
                         if (compare == 0) {
-                            System.out.println(c1.getCommitteeName() + " and" + c2.getCommitteeName() + " have the same number of articles");
-                        }
-                        else if (compare > 0) {
+                            System.out.println(c1.getCommitteeName() + " and " + c2.getCommitteeName() + " have the same number of articles");
+                        } else if (compare > 0) {
                             System.out.println(c1.getCommitteeName() + " have more articles than " + c2.getCommitteeName());
-                        }
-                        else{
+                        } else {
                             System.out.println(c2.getCommitteeName() + " have more articles than " + c1.getCommitteeName());
                         }
                     }
-
                     break;
+
                 case 0:
                     System.out.println("Exiting the program...");
                     break;
