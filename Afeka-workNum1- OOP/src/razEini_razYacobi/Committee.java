@@ -127,6 +127,20 @@ public class Committee implements Comparable<Committee> {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        Committee other = (Committee) obj;
+
+        if (this.committee_name == null) {
+            return other.committee_name == null;
+        }
+        return this.committee_name.equals(other.committee_name);
+    }
+
+    @Override
     public String toString() {
         String chairName = (chairman != null && chairman.getName() != null) ? chairman.getName() : "None";
         String info = "Committee: " + committee_name + "\n" +

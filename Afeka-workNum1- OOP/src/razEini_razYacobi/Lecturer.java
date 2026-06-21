@@ -166,6 +166,20 @@ public class Lecturer implements Comparable<Lecturer> {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        Lecturer other = (Lecturer) obj;
+
+        if (this.lecturer_id == null) {
+            return other.lecturer_id == null;
+        }
+        return this.lecturer_id.equals(other.lecturer_id);
+    }
+
+    @Override
     public String toString() {
         String info = "Lecturer Details:\n" +
                 "- Name: " + lecturer_name + "\n" +

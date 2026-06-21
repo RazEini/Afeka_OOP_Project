@@ -82,6 +82,20 @@ public class Department {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        Department other = (Department) obj;
+
+        if (this.department_name == null) {
+            return other.department_name == null;
+        }
+        return this.department_name.equals(other.department_name);
+    }
+
+    @Override
     public String toString() {
         return "Department: " + department_name + " | Lecturers: " + lecturers_Array.length;
     }
