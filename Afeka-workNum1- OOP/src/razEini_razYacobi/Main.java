@@ -59,6 +59,7 @@ public class Main {
             System.out.println("12 - Add Article to Lecturer");
             System.out.println("13 - Compare number of articles between two Lecturers");
             System.out.println("14 - Compare by the Member of Committee or Compare by the article of Member's Committee");
+            System.out.println("15 - Clone Committees");
             System.out.println("0 - Exit");
             System.out.print("Select an option: ");
 
@@ -483,8 +484,8 @@ public class Main {
                     System.out.print("Enter another lecturer's name: ");
                     lectName = scanner.nextLine();
 
-                    Lecturer l1 = administrative.findLecturerByName(lecturerName);
-                    Lecturer l2 = administrative.findLecturerByName(lectName);
+                    Doctor l1 = (Doctor) administrative.findLecturerByName(lecturerName);
+                    Doctor l2 = (Doctor) administrative.findLecturerByName(lectName);
 
                     if (l1 == null || l2 == null) {
                         System.out.println("Error: One or both lecturers do not exist.");
@@ -552,6 +553,18 @@ public class Main {
                         } else {
                             System.out.println(c2.getCommitteeName() + " have more articles than " + c1.getCommitteeName());
                         }
+                    }
+                    break;
+                case 15:
+                    System.out.print("Enter Committee name: ");
+                    committee =  scanner.nextLine();
+                    c1 = administrative.findCommitteeByName(committee);
+                    Committee cloneC1 = c1.clone();
+                    try {
+                        administrative.addCommittee(cloneC1);
+                        System.out.println("Committee '" + cloneC1.getCommitteeName() + "' clone successfully with " + cloneC1.getChairman() + " as chairman.");
+                    } catch (AdministrativeException e) {
+                        System.out.println(e.getMessage());
                     }
                     break;
 

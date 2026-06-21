@@ -1,6 +1,6 @@
 package razEini_razYacobi;
 
-public class Committee implements Comparable<Committee> {
+public class Committee implements Comparable<Committee>, Cloneable {
     private String committee_name;
     private Lecturer[] lecturers_Array;
     private Lecturer chairman;
@@ -171,8 +171,12 @@ public class Committee implements Comparable<Committee> {
 
     public int sumOfArticles() {
         int sum = 0;
+        Doctor[] d = new Doctor[lecturerCount];
+        for (int i = 0; i < d.length; i++){
+            d[i] = (Doctor) lecturers_Array[i];
+        }
         for (int i = 0; i < lecturerCount; i++) {
-            sum += lecturers_Array[i].getNumOfArticles();
+            sum += d[i].getNumOfArticles();
         }
         return sum;
     }
@@ -182,5 +186,17 @@ public class Committee implements Comparable<Committee> {
         if (compareMode == 1)
             return Integer.compare(lecturerCount, o.lecturerCount);
         return Integer.compare(sumOfArticles(), o.sumOfArticles());
+    }
+
+    @Override
+    public Committee clone() {
+        try {
+            Committee clone = (Committee) super.clone();
+            String newName = "new " + clone.getCommitteeName();
+            clone.setCommitteeName(newName);
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

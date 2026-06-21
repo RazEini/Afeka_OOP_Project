@@ -1,6 +1,6 @@
 package razEini_razYacobi;
 
-public class Lecturer implements Comparable<Lecturer> {
+public class Lecturer {
     private String lecturer_name;
     private String lecturer_id;
     private int salary;
@@ -71,10 +71,6 @@ public class Lecturer implements Comparable<Lecturer> {
         else this.lecturer_id = "000000000";
     }
 
-    public int getNumOfArticles() {
-        return 0;
-    }
-
     public void removeCommittee(String committeeName) {
         if (committeeName == null || commCount == 0) return;
         Committee[] temp = new Committee[myCommittees.length];
@@ -92,11 +88,6 @@ public class Lecturer implements Comparable<Lecturer> {
             myCommittees = temp;
             commCount--;
         }
-    }
-
-    @Override
-    public int compareTo(Lecturer o) {
-        return Integer.compare(this.getNumOfArticles(), o.getNumOfArticles());
     }
 
     @Override
