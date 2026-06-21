@@ -19,11 +19,17 @@ public class Committee implements Comparable<Committee> {
         setChairman(chairman);
     }
 
-    public Committee(Committee other) {
+    public Committee(Committee other, boolean isClone) {
         if (other != null) {
-            setCommitteeName(other.committee_name);
+            if (isClone) {
+                setCommitteeName("new-" + other.committee_name);
+            } else {
+                setCommitteeName(other.committee_name);
+            }
             setLecturers(other.lecturers_Array);
+            this.lecturerCount = other.lecturerCount;
             this.chairman = other.chairman;
+            this.compareMode = other.compareMode;
         }
     }
 
