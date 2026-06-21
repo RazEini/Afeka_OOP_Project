@@ -29,6 +29,18 @@ public class Administrative {
         lecturers = newArr;
     }
 
+    private void resizeCommittees() {
+        Committee[] temp = new Committee[committees.length * 2];
+        for (int i = 0; i < committeeCount; i++) temp[i] = committees[i];
+        committees = temp;
+    }
+
+    private void resizeDepartments() {
+        Department[] temp = new Department[departments.length * 2];
+        for (int i = 0; i < departmentCount; i++) temp[i] = departments[i];
+        departments = temp;
+    }
+
     public boolean isLecturerExists(String name) {
         for (int i = 0; i < lecturerCount; i++) {
             if (lecturers[i].getName().equalsIgnoreCase(name)) return true;
@@ -131,17 +143,15 @@ public class Administrative {
     }
 
     public void addCommittee(Committee c) throws AdministrativeException {
-        if (c != null && c.getChairman() != null) {
-            if (ChairmanExists(c.getChairman())) {
-                throw new AdministrativeException("Error: Cannot add committee '" + c.getCommitteeName() +
-                        "' because " + c.getChairman().getName() + " is already chairman of another committee.");
-            }
+        if (c == null) return;
+
+        if (c.getChairman() != null && ChairmanExists(c.getChairman())) {
+            throw new AdministrativeException("Error: Cannot add committee '" + c.getCommitteeName() +
+                    "' because " + c.getChairman().getName() + " is already chairman of another committee.");
         }
 
         if (committeeCount == committees.length) {
-            Committee[] temp = new Committee[committees.length * 2];
-            for (int i = 0; i < committeeCount; i++) temp[i] = committees[i];
-            committees = temp;
+            resizeCommittees();
         }
         committees[committeeCount++] = c;
     }
@@ -257,10 +267,9 @@ public class Administrative {
     public void AddDepartment(Department department) {
         if (department == null) return;
         if (isDepartmentExists(department.getDepartmentName())) return;
+
         if (departmentCount == departments.length) {
-            Department[] temp = new Department[departments.length * 2];
-            for (int i = 0; i < departmentCount; i++) temp[i] = departments[i];
-            departments = temp;
+            resizeDepartments();
         }
         departments[departmentCount++] = department;
     }

@@ -215,7 +215,6 @@ public class Main {
                         break;
                     }
 
-                    // קליטת מוסד לפרופסור מתבצעת כאן ב-Main כעת
                     String institution = "Unknown";
                     if (lecturerDegree.equalsIgnoreCase("PROFESSOR")) {
                         System.out.print("Enter institution name: ");
@@ -444,7 +443,7 @@ public class Main {
                         double departmentAverageSalary = administrative.getAverageSalaryByDepartment(department_name);
 
                         System.out.println("\n--- College Salary Report ---");
-                        System.out.printf("The average salary of all lecturers in the college is: %.2f\n", departmentAverageSalary);
+                        System.out.printf("The average salary of all lecturers in the department is: %.2f\n", departmentAverageSalary);
                         System.out.println("-----------------------------");
                     } else {
                         System.out.println("Error: The department's name doesn't exist. Please try another name.");
