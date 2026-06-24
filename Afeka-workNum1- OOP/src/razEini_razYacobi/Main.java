@@ -10,14 +10,12 @@ public class Main {
     // רז עייני - 328153101
     // רז יעקבי - 213864416
 
-    // חריגה מותאמת אישית לצורך חזרה מיידית לתפריט הראשי
     private static class GoBackException extends Exception {
         public GoBackException() {
             super();
         }
     }
 
-    // פונקציית עזר לקריאת שורה מהמשתמש ובדיקה אם ביקש לחזור חזרה
     private static String readLine() throws GoBackException {
         String input = scanner.nextLine();
         if (input != null && input.trim().equalsIgnoreCase("back")) {

@@ -56,7 +56,7 @@ public class Administrative {
     }
 
     public static boolean isValidID(String idStr) {
-        return idStr != null && idStr.matches("\\d{9}");
+        return idStr != null && idStr.length() == 9;
     }
 
     public void addLecturer(String name, String id, String degreeStr, int salary, String institution) {
