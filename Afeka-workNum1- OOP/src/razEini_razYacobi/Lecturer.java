@@ -1,6 +1,6 @@
 package razEini_razYacobi;
 
-public class Lecturer {
+public class Lecturer implements Comparable<Lecturer> {
     private String lecturer_name;
     private String lecturer_id;
     private int salary;
@@ -88,6 +88,27 @@ public class Lecturer {
             myCommittees = temp;
             commCount--;
         }
+    }
+
+    @Override
+    public int compareTo(Lecturer other) {
+        if (other == null) return 1;
+
+        int thisArticles = 0;
+        int otherArticles = 0;
+
+        // בדיקה האם האובייקט הנוכחי (this) הוא Doctor או Professor
+        if (this instanceof Doctor) {
+            thisArticles = ((Doctor) this).getNumOfArticles();
+        }
+
+        // בדיקה האם האובייקט השני (other) הוא Doctor או Professor
+        if (other instanceof Doctor) {
+            otherArticles = ((Doctor) other).getNumOfArticles();
+        }
+
+        // השוואה בין כמויות המאמרים
+        return Integer.compare(thisArticles, otherArticles);
     }
 
     @Override
