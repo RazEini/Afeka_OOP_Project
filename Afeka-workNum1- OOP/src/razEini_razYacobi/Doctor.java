@@ -1,6 +1,6 @@
 package razEini_razYacobi;
 
-public class Doctor extends Lecturer implements Comparable<Doctor> {
+public class Doctor extends Lecturer {
     private String[] articles;
     private int artCount;
 
@@ -38,11 +38,6 @@ public class Doctor extends Lecturer implements Comparable<Doctor> {
 
     public int getNumOfArticles() {
         return this.artCount;
-    }
-
-    @Override
-    public int compareTo(Doctor o) {
-        return Integer.compare(this.getNumOfArticles(), o.getNumOfArticles());
     }
 
     @Override
