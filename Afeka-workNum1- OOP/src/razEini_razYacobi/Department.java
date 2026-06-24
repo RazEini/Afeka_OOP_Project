@@ -33,7 +33,9 @@ public class Department {
         if (this.lecturers_Array == null) return new Lecturer[1];
         Lecturer[] copy = new Lecturer[this.lecturers_Array.length];
         for (int i = 0; i < this.lecturers_Array.length; i++) {
-            copy[i] = new Lecturer(this.lecturers_Array[i]);
+            if (this.lecturers_Array[i] != null) {
+                copy[i] = new Lecturer(this.lecturers_Array[i]);
+            }
         }
         return copy;
     }

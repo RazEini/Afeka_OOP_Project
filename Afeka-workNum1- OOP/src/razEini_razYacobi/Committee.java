@@ -171,12 +171,10 @@ public class Committee implements Comparable<Committee>, Cloneable {
 
     public int sumOfArticles() {
         int sum = 0;
-        Doctor[] d = new Doctor[lecturerCount];
-        for (int i = 0; i < d.length; i++){
-            d[i] = (Doctor) lecturers_Array[i];
-        }
         for (int i = 0; i < lecturerCount; i++) {
-            sum += d[i].getNumOfArticles();
+            if (lecturers_Array[i] instanceof Doctor) {
+                sum += ((Doctor) lecturers_Array[i]).getNumOfArticles();
+            }
         }
         return sum;
     }
@@ -194,6 +192,25 @@ public class Committee implements Comparable<Committee>, Cloneable {
             Committee clone = (Committee) super.clone();
             String newName = "new " + clone.getCommitteeName();
             clone.setCommitteeName(newName);
+            clone.lecturers_Array = new Lecturer[this.lecturers_Array.length];
+            for (int i = 0; i < this.lecturers_Array.length; i++) {
+                if (this.lecturers_Array[i] != null) {
+                    if (this.lecturers_Array[i] instanceof Professor) {
+                        clone.lecturers_Array[i] = new Professor((Professor) this.lecturers_Array[i]);
+                    } else if (this.lecturers_Array[i] instanceof Doctor) {
+                        clone.lecturers_Array[i] = new Doctor((Doctor) this.lecturers_Array[i]);
+                    } else {
+                        clone.lecturers_Array[i] = new Lecturer(this.lecturers_Array[i]);
+                    }
+                }
+            }
+            if (this.chairman instanceof Professor) {
+                clone.chairman = new Professor((Professor) this.chairman);
+            } else if (this.chairman instanceof Doctor) {
+                clone.chairman = new Doctor((Doctor) this.chairman);
+            } else {
+                clone.chairman = (this.chairman != null) ? new Lecturer(this.chairman) : null;
+            }
             return clone;
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();
