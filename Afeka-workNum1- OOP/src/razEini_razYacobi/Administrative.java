@@ -145,9 +145,11 @@ public class Administrative {
     public void addCommittee(Committee c) throws AdministrativeException {
         if (c == null) return;
 
-        if (c.getChairman() != null && ChairmanExists(c.getChairman())) {
-            throw new AdministrativeException("Error: Cannot add committee '" + c.getCommitteeName() +
-                    "' because " + c.getChairman().getName() + " is already chairman of another committee.");
+        if (!c.getCommitteeName().startsWith("new")) {
+            if (c.getChairman() != null && ChairmanExists(c.getChairman())) {
+                throw new AdministrativeException("Error: Cannot add committee '" + c.getCommitteeName() +
+                        "' because " + c.getChairman().getName() + " is already chairman of another committee.");
+            }
         }
 
         if (committeeCount == committees.length) {
