@@ -67,7 +67,7 @@ public class Lecturer implements Comparable<Lecturer> {
     public void setDepartment(Department department) { this.department = department; }
 
     public void setId(String id) {
-        if (id != null && id.length() == 9) this.lecturer_id = id;
+        if (id != null && id.matches("\\d{9}")) this.lecturer_id = id;
         else this.lecturer_id = "000000000";
     }
 

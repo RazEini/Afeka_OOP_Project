@@ -146,17 +146,6 @@ public class Main {
                                 continue;
                             }
 
-                            boolean onlyDigits = true;
-                            for (int i = 0; i < lecturerID.length(); i++) {
-                                if (lecturerID.charAt(i) < '0' || lecturerID.charAt(i) > '9') {
-                                    onlyDigits = false;
-                                    break;
-                                }
-                            }
-                            if (!onlyDigits) {
-                                System.out.println("Invalid ID! ID must contain numbers only.");
-                                continue;
-                            }
 
                             if (administrative.isLecturersIdExists(lecturerID)) {
                                 System.out.println("ID already exists! Try a different ID.");
