@@ -466,9 +466,19 @@ public class Main {
 
                 case 12:
                     System.out.print("Enter lecturer's name: ");
-                    lecturerName = scanner.nextLine();
+                    lecturerName = scanner.nextLine().trim();
                     System.out.print("Enter article: ");
-                    String article = scanner.nextLine();
+                    String article = scanner.nextLine().trim();
+
+                    if (lecturerName.isEmpty() || article.isEmpty()) {
+                        System.out.println("Error: Lecturer name and article cannot be empty.");
+                        break;
+                    }
+
+                    if (!administrative.isLecturerExists(lecturerName)) {
+                        System.out.println("Error: Lecturer does not exist.");
+                        break;
+                    }
 
                     try {
                         administrative.addArticleToLecturer(lecturerName, article);
@@ -480,39 +490,52 @@ public class Main {
 
                 case 13:
                     System.out.print("Enter lecturer's name: ");
-                    lecturerName = scanner.nextLine();
+                    lecturerName = scanner.nextLine().trim();
                     System.out.print("Enter another lecturer's name: ");
-                    lectName = scanner.nextLine();
+                    lectName = scanner.nextLine().trim();
 
-                    Doctor l1 = (Doctor) administrative.findLecturerByName(lecturerName);
-                    Doctor l2 = (Doctor) administrative.findLecturerByName(lectName);
+                    if (lecturerName.isEmpty() || lectName.isEmpty()) {
+                        System.out.println("Error: Lecturer names cannot be empty.");
+                        break;
+                    }
 
-                    if (l1 == null || l2 == null) {
+                    Lecturer foundL1 = administrative.findLecturerByName(lecturerName);
+                    Lecturer foundL2 = administrative.findLecturerByName(lectName);
+
+                    if (foundL1 == null || foundL2 == null) {
                         System.out.println("Error: One or both lecturers do not exist.");
                         break;
                     }
 
-                    if ((l1.getDegree().name().equalsIgnoreCase("DR") || l1.getDegree().name().equalsIgnoreCase("PROFESSOR")) &&
-                            (l2.getDegree().name().equalsIgnoreCase("DR") || l2.getDegree().name().equalsIgnoreCase("PROFESSOR"))) {
-                        int compResult = l1.compareTo(l2);
-
-                        if (compResult == 0) {
-                            System.out.println("They have both the same number of articles");
-                        } else if (compResult < 0) {
-                            System.out.println(lectName + " has more articles than " + lecturerName);
-                        } else {
-                            System.out.println(lecturerName + " has more articles than " + lectName);
-                        }
-                    } else {
+                    if (!(foundL1 instanceof Doctor) || !(foundL2 instanceof Doctor)) {
                         System.out.println("Error: Comparison can only be performed between advanced degree lecturers (DR/PROFESSOR).");
+                        break;
+                    }
+
+                    Doctor l1 = (Doctor) foundL1;
+                    Doctor l2 = (Doctor) foundL2;
+
+                    int compResult = l1.compareTo(l2);
+
+                    if (compResult == 0) {
+                        System.out.println("They have both the same number of articles");
+                    } else if (compResult < 0) {
+                        System.out.println(lectName + " has more articles than " + lecturerName);
+                    } else {
+                        System.out.println(lecturerName + " has more articles than " + lectName);
                     }
                     break;
 
                 case 14:
                     System.out.print("Enter Committee name: ");
-                    String committee = scanner.nextLine();
+                    String committee = scanner.nextLine().trim();
                     System.out.print("Enter another Committee name: ");
-                    String committee2 = scanner.nextLine();
+                    String committee2 = scanner.nextLine().trim();
+
+                    if (committee.isEmpty() || committee2.isEmpty()) {
+                        System.out.println("Error: Committee names cannot be empty.");
+                        break;
+                    }
 
                     Committee c1 = administrative.findCommitteeByName(committee);
                     Committee c2 = administrative.findCommitteeByName(committee2);
@@ -523,13 +546,27 @@ public class Main {
                     }
 
                     System.out.print("press 1 to Compare by the Member of Committee, press other number to Compare by the article of Member's Committee: ");
-                    int compareOption;
-                    try {
-                        compareOption = Integer.parseInt(scanner.nextLine());
-                    } catch (NumberFormatException e) {
-                        System.out.println("Invalid number! Aborting comparison.");
+                    String optionInput = scanner.nextLine().trim();
+
+                    if (optionInput.isEmpty()) {
+                        System.out.println("Invalid input! Comparison aborted.");
                         break;
                     }
+
+                    boolean isOptionNumeric = true;
+                    for (int i = 0; i < optionInput.length(); i++) {
+                        if (optionInput.charAt(i) < '0' || optionInput.charAt(i) > '9') {
+                            isOptionNumeric = false;
+                            break;
+                        }
+                    }
+
+                    if (!isOptionNumeric || optionInput.length() > 9) {
+                        System.out.println("Invalid input! Comparison aborted.");
+                        break;
+                    }
+
+                    int compareOption = Integer.parseInt(optionInput);
 
                     if (compareOption == 1) {
                         c1.setCompareMode(compareOption);
@@ -555,18 +592,37 @@ public class Main {
                         }
                     }
                     break;
+
                 case 15:
                     System.out.print("Enter Committee name: ");
-                    committee =  scanner.nextLine();
+                    committee = scanner.nextLine().trim();
+
+                    if (committee.isEmpty()) {
+                        System.out.println("Error: Committee name cannot be empty.");
+                        break;
+                    }
+
                     c1 = administrative.findCommitteeByName(committee);
+                    if (c1 == null) {
+                        System.out.println("Error: Committee does not exist.");
+                        break;
+                    }
+
                     Committee cloneC1 = c1.clone();
+                    if (cloneC1 == null) {
+                        System.out.println("Error: Cloning failed.");
+                        break;
+                    }
+
                     try {
                         administrative.addCommittee(cloneC1);
-                        System.out.println("Committee '" + cloneC1.getCommitteeName() + "' clone successfully with " + cloneC1.getChairman() + " as chairman.");
+                        String chairName = (cloneC1.getChairman() != null) ? cloneC1.getChairman().getName() : "Unknown";
+                        System.out.println("Committee '" + cloneC1.getCommitteeName() + "' clone successfully with " + chairName + " as chairman.");
                     } catch (AdministrativeException e) {
                         System.out.println(e.getMessage());
                     }
                     break;
+
                 case 0:
                     System.out.println("Exiting the program...");
                     break;
