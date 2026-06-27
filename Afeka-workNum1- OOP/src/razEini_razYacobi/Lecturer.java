@@ -97,17 +97,14 @@ public class Lecturer implements Comparable<Lecturer> {
         int thisArticles = 0;
         int otherArticles = 0;
 
-        // בדיקה האם האובייקט הנוכחי (this) הוא Doctor או Professor
         if (this instanceof Doctor) {
             thisArticles = ((Doctor) this).getNumOfArticles();
         }
 
-        // בדיקה האם האובייקט השני (other) הוא Doctor או Professor
         if (other instanceof Doctor) {
             otherArticles = ((Doctor) other).getNumOfArticles();
         }
 
-        // השוואה בין כמויות המאמרים
         return Integer.compare(thisArticles, otherArticles);
     }
 
