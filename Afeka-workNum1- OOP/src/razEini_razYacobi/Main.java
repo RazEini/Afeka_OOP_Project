@@ -74,8 +74,8 @@ public class Main {
             System.out.println("11 - Display All Committees Information");
             System.out.println("12 - Add Article to Lecturer");
             System.out.println("13 - Compare number of articles between two Lecturers");
-            System.out.println("14 - Compare by the Member of Committee or Compare by the article of Member's Committee");
-            System.out.println("15 - Clone Committees");
+            System.out.println("14 - Compare committees by number of members or by number of articles");
+            System.out.println("15 - Clone a Committee");
             System.out.println("0 - Exit");
             System.out.print("Select an option: ");
 
@@ -551,7 +551,7 @@ public class Main {
                             break;
                         }
 
-                        System.out.print("Press 1 to Compare by the Member of Committee, press any other number to Compare by the article of Member's Committee: ");
+                        System.out.print("Compare committees: [Press 1] By member count / [Press 2] By article count: ");
                         String optionInput = readLine().trim();
 
                         if (optionInput.isEmpty()) {
@@ -585,7 +585,8 @@ public class Main {
                             } else {
                                 System.out.println(c2.getCommitteeName() + " has more members than " + c1.getCommitteeName());
                             }
-                        } else {
+
+                        } else if (compareOption == 2) {
                             c1.setCompareMode(compareOption);
                             int compare = c1.compareTo(c2);
 
@@ -596,6 +597,9 @@ public class Main {
                             } else {
                                 System.out.println(c2.getCommitteeName() + " has more articles than " + c1.getCommitteeName());
                             }
+
+                        } else {
+                            System.out.println("Invalid option! Comparison aborted.");
                         }
                         break;
 
