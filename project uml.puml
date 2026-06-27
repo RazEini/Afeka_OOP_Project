@@ -2,23 +2,46 @@
 ' Class diagram for the project
 
 skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam backgroundColor white
+skinparam ArrowColor #444444
+skinparam ClassBorderColor #444444
+skinparam ClassBackgroundColor #F9F9F9
+skinparam EnumBackgroundColor #FFF7D6
+skinparam EnumBorderColor #B38F00
+skinparam PackageBorderColor #888888
 
 class Administrative {
   - lecturers : Lecturer[]
-  - departments : Department[]
-  - committees : Committee[]
   - lecturerCount : int
+  - departments : Department[]
   - departmentCount : int
+  + committees : Committee[]
   - committeeCount : int
+  - collegeName : String {readOnly}
   .. operations ..
-  + addLecturer(...)
-  + addDepartment(...)
-  + addCommittee(...)
-  + findLecturer(...)
-  + findCommittee(...)
-  + assignLecturerToCommittee(...)
-  + assignLecturerToDepartment(...)
-  + updateChairman(...)
+  + Administrative(collegeName : String)
+  + getCollegeName() : String
+  + isLecturerExists(name : String) : boolean
+  + isLecturersIdExists(id : String) : boolean
+  + {static} isValidID(idStr : String) : boolean
+  + addLecturer(name : String, id : String, degreeStr : String, salary : int, institution : String) : void
+  + findLecturerByName(name : String) : Lecturer
+  + findCommitteeByName(name : String) : Committee
+  + getAverageSalary() : double
+  + getAverageSalaryByDepartment(department : String) : double
+  + getAllLecturersFullData() : String
+  + getAllCommitteesFullData() : String
+  + isCommitteeExists(name : String) : boolean
+  + addCommittee(c : Committee) : void
+  + addLecturerToCommittee(committeeName : String, lecturerName : String) : void
+  + deleteLecturerFromCommittee(committeeName : String, lecturerName : String) : void
+  + ChairmanExists(l : Lecturer) : boolean
+  + updateChairmanCommittee(committeeName : String, chairmanName : String) : void
+  + isDepartmentExists(departmentName : String) : boolean
+  + AddDepartment(department : Department) : void
+  + addLecturerToDepartment(departmentName : String, lecturerName : String) : void
+  + addArticleToLecturer(name : String, article : String) : void
 }
 
 class AdministrativeException {
@@ -32,35 +55,72 @@ class Committee {
   - lecturerCount : int
   - compareMode : int
   .. operations ..
-  + addLecturer(...)
-  + deleteLecturer(...)
-  + setChairman(...)
+  + Committee()
+  + Committee(name : String, lecturers : Lecturer[], chairman : Lecturer)
+  + Committee(other : Committee, isClone : boolean)
+  + getChairman() : Lecturer
+  + getCommitteeName() : String
+  + setCommitteeName(name : String) : void
+  + setLecturers(lecturers : Lecturer[]) : void
+  + setChairman(chairman : Lecturer) : void
+  + setCompareMode(compareMode : int) : void
+  + isLecturerExists(lecturerName : String) : boolean
+  + addLecturer(lecturer : Lecturer) : void
+  + deleteLecturer(lecturer : Lecturer) : void
   + sumOfArticles() : int
-  + compareTo(other : Committee) : int
+  + compareTo(o : Committee) : int
   + clone() : Committee
+  + equals(obj : Object) : boolean
+  + toString() : String
 }
 
 class Department {
   - department_name : String
   - student_count : int
-  - lecturers : Lecturer[]
+  - lecturers_Array : Lecturer[]
   .. operations ..
-  + setLecturers(...)
-  + isLecturerExists(...) : boolean
+  + Department()
+  + Department(department_name : String, student_count : int)
+  + Department(other : Department)
+  + getDepartmentName() : String
+  + getLecturers() : Lecturer[]
+  + setDepartmentName(department_name : String) : void
+  + setStudentCount(student_count : int) : void
+  + setLecturers(lecturers_Array : Lecturer[]) : void
+  + isLecturerExists(lecturerName : String) : boolean
+  + equals(obj : Object) : boolean
+  + toString() : String
 }
 
 class Lecturer {
   - lecturer_name : String
   - lecturer_id : String
-  - salary : double
+  - salary : int
   - department : Department
   - myCommittees : Committee[]
-  - lecturerDegree : Degree
+  - commCount : int
+  - lecturerDegree : Lecturer.Degree
   .. operations ..
+  + Lecturer()
+  + Lecturer(name : String, id : String, salary : int, department : Department, degree : Lecturer.Degree)
+  + Lecturer(other : Lecturer)
+  + addCommittee(c : Committee) : void
+  + getName() : String
+  + getId() : String
+  + getDegree() : Lecturer.Degree
+  + getSalary() : int
+  + getDepartment() : Department
+  + setName(name : String) : void
+  + setSalary(salary : int) : void
+  + setDepartment(department : Department) : void
+  + setId(id : String) : void
+  + removeCommittee(committeeName : String) : void
   + compareTo(other : Lecturer) : int
+  + equals(obj : Object) : boolean
+  + toString() : String
 }
 
-enum Degree {
+enum "Lecturer.Degree" as LecturerDegree {
   BACHELOR_DEGREE
   MASTER_DEGREE
   DR
@@ -71,23 +131,32 @@ class Doctor {
   - articles : String[]
   - artCount : int
   .. operations ..
-  + addArticles(...)
+  + Doctor()
+  + Doctor(name : String, id : String, salary : int, department : Department, degree : Lecturer.Degree)
+  + Doctor(other : Doctor)
+  + addArticles(article : String) : void
   + getNumOfArticles() : int
+  + toString() : String
 }
 
 class Professor {
   - institution : String
   .. operations ..
-  + setInstitution(...)
+  + Professor()
+  + Professor(name : String, id : String, salary : int, department : Department, degree : Lecturer.Degree, institution : String)
+  + Professor(other : Professor)
+  + setInstitution(institution : String) : void
   + getInstitution() : String
+  + toString() : String
 }
 
 class Main {
   .. operations ..
-  + main(args : String[]) : void
+  + {static} main(args : String[]) : void
+  - {static} readLine() : String
 }
 
-class GoBackException {
+class "Main.GoBackException" as GoBackException <<private static inner>> {
   + GoBackException()
 }
 
@@ -97,20 +166,34 @@ Professor --|> Doctor
 Committee ..|> Comparable
 Committee ..|> Cloneable
 Lecturer ..|> Comparable
-Lecturer --> Degree
-Lecturer --> Department
-Lecturer --> "0..*" Committee
-Department o-- "0..*" Lecturer
-Committee o-- "0..*" Lecturer
+Lecturer --> LecturerDegree : lecturerDegree
+Lecturer --> Department : department
+Lecturer --> "0..*" Committee : myCommittees
+Department o-- "0..*" Lecturer : lecturers_Array
+Committee o-- "0..*" Lecturer : lecturers_Array
 Committee --> "1" Lecturer : chairman
-Administrative o-- "0..*" Lecturer
-Administrative o-- "0..*" Department
-Administrative o-- "0..*" Committee
+Administrative o-- "0..*" Lecturer : lecturers
+Administrative o-- "0..*" Department : departments
+Administrative o-- "0..*" Committee : committees
 Main ..> Administrative
 Main ..> GoBackException
+GoBackException --|> Exception
 
-note right of Main
-  GoBackException is an inner class of Main
+note right of GoBackException
+  Private static inner class of Main
+end note
+
+note right of LecturerDegree
+  Nested enum inside Lecturer
+end note
+
+note right of Administrative
+  Throws AdministrativeException from:
+  addCommittee, addLecturerToCommittee,
+  deleteLecturerFromCommittee,
+  updateChairmanCommittee,
+  addLecturerToDepartment,
+  addArticleToLecturer
 end note
 
 @enduml
