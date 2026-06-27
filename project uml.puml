@@ -1,0 +1,116 @@
+@startuml
+' Class diagram for the project
+
+skinparam classAttributeIconSize 0
+
+class Administrative {
+  - lecturers : Lecturer[]
+  - departments : Department[]
+  - committees : Committee[]
+  - lecturerCount : int
+  - departmentCount : int
+  - committeeCount : int
+  .. operations ..
+  + addLecturer(...)
+  + addDepartment(...)
+  + addCommittee(...)
+  + findLecturer(...)
+  + findCommittee(...)
+  + assignLecturerToCommittee(...)
+  + assignLecturerToDepartment(...)
+  + updateChairman(...)
+}
+
+class AdministrativeException {
+  + AdministrativeException(message : String)
+}
+
+class Committee {
+  - committee_name : String
+  - lecturers_Array : Lecturer[]
+  - chairman : Lecturer
+  - lecturerCount : int
+  - compareMode : int
+  .. operations ..
+  + addLecturer(...)
+  + deleteLecturer(...)
+  + setChairman(...)
+  + sumOfArticles() : int
+  + compareTo(other : Committee) : int
+  + clone() : Committee
+}
+
+class Department {
+  - department_name : String
+  - student_count : int
+  - lecturers : Lecturer[]
+  .. operations ..
+  + setLecturers(...)
+  + isLecturerExists(...) : boolean
+}
+
+class Lecturer {
+  - lecturer_name : String
+  - lecturer_id : String
+  - salary : double
+  - department : Department
+  - myCommittees : Committee[]
+  - lecturerDegree : Degree
+  .. operations ..
+  + compareTo(other : Lecturer) : int
+}
+
+enum Degree {
+  BACHELOR_DEGREE
+  MASTER_DEGREE
+  DR
+  PROFESSOR
+}
+
+class Doctor {
+  - articles : String[]
+  - artCount : int
+  .. operations ..
+  + addArticles(...)
+  + getNumOfArticles() : int
+}
+
+class Professor {
+  - institution : String
+  .. operations ..
+  + setInstitution(...)
+  + getInstitution() : String
+}
+
+class Main {
+  .. operations ..
+  + main(args : String[]) : void
+}
+
+class GoBackException {
+  + GoBackException()
+}
+
+AdministrativeException --|> Exception
+Doctor --|> Lecturer
+Professor --|> Doctor
+Committee ..|> Comparable
+Committee ..|> Cloneable
+Lecturer ..|> Comparable
+Lecturer --> Degree
+Lecturer --> Department
+Lecturer --> "0..*" Committee
+Department o-- "0..*" Lecturer
+Committee o-- "0..*" Lecturer
+Committee --> "1" Lecturer : chairman
+Administrative o-- "0..*" Lecturer
+Administrative o-- "0..*" Department
+Administrative o-- "0..*" Committee
+Main ..> Administrative
+Main ..> GoBackException
+
+note right of Main
+  GoBackException is an inner class of Main
+end note
+
+@enduml
