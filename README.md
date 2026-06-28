@@ -3,8 +3,8 @@
 A comprehensive Object-Oriented console application designed to manage the administrative operations of an academic institution. The system robustly handles the structural hierarchy of departments, committees, and various academic staff members while ensuring data integrity.
 
 ## Authors
-* **Raz Eini** - 328153101
-* **Raz Yakoby** - 213864416
+* **Raz Eini**
+* **Raz Yakoby**
 
 ## System Architecture
 
