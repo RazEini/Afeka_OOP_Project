@@ -10,7 +10,7 @@ A comprehensive Object-Oriented console application designed to manage the admin
 
 Below is the UML class diagram representing the system's architecture and object relations:
 
-![Class Diagram](class diagram pic.png)
+![Class Diagram](assets/class diagram pic.png)
 
 ## User Interface & Features
 
