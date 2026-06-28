@@ -10,7 +10,7 @@ A comprehensive Object-Oriented console application designed to manage the admin
 
 Below is the UML class diagram representing the system's architecture and object relations:
 
-![Class Diagram](Afeka_OOP_Project/assets/class diagram pic.png)
+<img src="Afeka_OOP_Project/assets/class%20diagram%20pic.png" alt="Class Diagram" width="100%">
 
 ## User Interface & Features
 
