@@ -45,35 +45,35 @@ public class Committee implements Comparable<Committee>, Cloneable {
         if (name != null && !name.trim().isEmpty()) {
             this.committee_name = name;
         } else {
-            this.committee_name = "General Committee";
-            System.out.println("Error: Committee name cannot be empty.");
+            throw new IllegalArgumentException("Error: Committee name cannot be empty.");
         }
     }
 
     public void setLecturers(Lecturer[] lecturers) {
         if (lecturers != null) {
-            this.lecturers_Array = new Lecturer[lecturers.length];
+            this.lecturers_Array = new Lecturer[lecturers.length * 2 + 1];
+            this.lecturerCount = 0;
             for (int i = 0; i < lecturers.length; i++) {
                 if (lecturers[i] != null) {
-                    this.lecturers_Array[i] = new Lecturer(lecturers[i]);
+                    this.lecturers_Array[this.lecturerCount++] = lecturers[i];
                 }
             }
         } else {
-            this.lecturers_Array = new Lecturer[0];
+            this.lecturers_Array = new Lecturer[1];
+            this.lecturerCount = 0;
         }
     }
 
     public void setChairman(Lecturer chairman) {
-        if (chairman != null && chairman.getDegree() != null) {
-            String degree = chairman.getDegree().name();
-            if (degree.equals("DR") || degree.equals("PROFESSOR")) {
-                chairman.addCommittee(this);
-                this.chairman = chairman;
-            } else {
-                System.out.println("Error: Chairman must be a DR or PROFESSOR.");
-            }
+        if (chairman == null || chairman.getDegree() == null) {
+            throw new IllegalArgumentException("Error: Invalid Chairman.");
+        }
+        String degree = chairman.getDegree().name();
+        if (degree.equals("DR") || degree.equals("PROFESSOR")) {
+            chairman.addCommittee(this);
+            this.chairman = chairman;
         } else {
-            System.out.println("Error: Invalid Chairman.");
+            throw new IllegalArgumentException("Error: Chairman must be a DR or PROFESSOR.");
         }
     }
 
@@ -105,8 +105,7 @@ public class Committee implements Comparable<Committee>, Cloneable {
     public void deleteLecturer(Lecturer lecturer) {
         if (this.chairman != null && lecturer != null) {
             if (this.chairman.getName().equalsIgnoreCase(lecturer.getName())) {
-                System.out.println("Error: Cannot delete " + lecturer.getName() + " because they are currently the Chairman of this committee.");
-                return;
+                throw new IllegalArgumentException("Error: Cannot delete " + lecturer.getName() + " because they are currently the Chairman of this committee.");
             }
         }
 
@@ -126,7 +125,6 @@ public class Committee implements Comparable<Committee>, Cloneable {
         }
 
         lecturers_Array = temp;
-
         if (removed) {
             lecturerCount--;
         }
