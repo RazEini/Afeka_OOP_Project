@@ -4,17 +4,20 @@ public class Department {
     private String department_name;
     private int student_count;
     private Lecturer[] lecturers_Array;
+    private int lecturerCount;
 
     public Department() {
         setDepartmentName("Unknown");
         setStudentCount(0);
         this.lecturers_Array = new Lecturer[1];
+        this.lecturerCount = 0;
     }
 
     public Department(String department_name, int student_count) {
-        this.department_name = department_name;
-        this.student_count = student_count;
+        setDepartmentName(department_name);
+        setStudentCount(student_count);
         this.lecturers_Array = new Lecturer[1];
+        this.lecturerCount = 0;
     }
 
     public Department(Department other) {
@@ -30,12 +33,10 @@ public class Department {
     }
 
     public Lecturer[] getLecturers() {
-        if (this.lecturers_Array == null) return new Lecturer[1];
-        Lecturer[] copy = new Lecturer[this.lecturers_Array.length];
-        for (int i = 0; i < this.lecturers_Array.length; i++) {
-            if (this.lecturers_Array[i] != null) {
-                copy[i] = new Lecturer(this.lecturers_Array[i]);
-            }
+        if (this.lecturers_Array == null) return new Lecturer[0];
+        Lecturer[] copy = new Lecturer[this.lecturerCount];
+        for (int i = 0; i < this.lecturerCount; i++) {
+            copy[i] = this.lecturers_Array[i];
         }
         return copy;
     }
@@ -44,8 +45,7 @@ public class Department {
         if (department_name != null && !department_name.trim().isEmpty()) {
             this.department_name = department_name;
         } else {
-            this.department_name = "General";
-            System.out.println("Error: Department name cannot be empty.");
+            throw new IllegalArgumentException("Error: Department name cannot be empty."); // <-- זריקת שגיאה במקום הדפסה
         }
     }
 
@@ -53,28 +53,40 @@ public class Department {
         if (student_count >= 0) {
             this.student_count = student_count;
         } else {
-            this.student_count = 0;
-            System.out.println("Error: Student count cannot be negative.");
+            throw new IllegalArgumentException("Error: Student count cannot be negative."); // <-- זריקת שגיאה במקום הדפסה
         }
     }
 
     public void setLecturers(Lecturer[] lecturers_Array) {
         if (lecturers_Array != null) {
-            this.lecturers_Array = new Lecturer[lecturers_Array.length];
+            this.lecturers_Array = new Lecturer[lecturers_Array.length * 2 + 1];
+            this.lecturerCount = 0;
             for (int i = 0; i < lecturers_Array.length; i++) {
                 if (lecturers_Array[i] != null) {
-                    this.lecturers_Array[i] = new Lecturer(lecturers_Array[i]);
+                    this.lecturers_Array[this.lecturerCount++] = lecturers_Array[i]; // <-- העתקת הפניה בלבד
                 }
             }
         } else {
-            this.lecturers_Array = new Lecturer[0];
+            this.lecturers_Array = new Lecturer[1];
+            this.lecturerCount = 0;
         }
+    }
+
+    public void addLecturer(Lecturer lecturer) {
+        if (lecturer == null) return;
+        if (this.lecturerCount == this.lecturers_Array.length) {
+            Lecturer[] temp = new Lecturer[this.lecturers_Array.length * 2];
+            for (int i = 0; i < this.lecturerCount; i++) {
+                temp[i] = this.lecturers_Array[i];
+            }
+            this.lecturers_Array = temp;
+        }
+        this.lecturers_Array[this.lecturerCount++] = lecturer;
     }
 
     public boolean isLecturerExists(String lecturerName) {
         if (lecturerName == null || this.lecturers_Array == null) return false;
-
-        for (int i = 0; i < this.lecturers_Array.length; i++) {
+        for (int i = 0; i < this.lecturerCount; i++) {
             if (this.lecturers_Array[i] != null &&
                     this.lecturers_Array[i].getName().equalsIgnoreCase(lecturerName)) {
                 return true;
@@ -99,6 +111,6 @@ public class Department {
 
     @Override
     public String toString() {
-        return "Department: " + department_name + " | Lecturers: " + lecturers_Array.length;
+        return "Department: " + department_name + " | Lecturers: " + lecturerCount;
     }
 }

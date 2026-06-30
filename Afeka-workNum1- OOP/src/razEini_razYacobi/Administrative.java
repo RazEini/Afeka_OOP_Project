@@ -303,24 +303,7 @@ public class Administrative {
                     + l.getDepartment().getDepartmentName());
         }
 
-        Lecturer[] currentLecturers = targetDept.getLecturers();
-        int count = 0;
-        for (Lecturer currentLecturer : currentLecturers) {
-            if (currentLecturer != null && currentLecturer.getName() != null) {
-                count++;
-            }
-        }
-
-        Lecturer[] newLecturersArray = new Lecturer[count + 1];
-        int index = 0;
-        for (Lecturer currentLecturer : currentLecturers) {
-            if (currentLecturer != null && currentLecturer.getName() != null) {
-                newLecturersArray[index++] = currentLecturer;
-            }
-        }
-
-        newLecturersArray[count] = l;
-        targetDept.setLecturers(newLecturersArray);
+        targetDept.addLecturer(l);
         l.setDepartment(targetDept);
     }
 
