@@ -6,21 +6,21 @@ public class Department {
     private Lecturer[] lecturers_Array;
     private int lecturerCount;
 
-    public Department() {
+    public Department() throws AdministrativeException {
         setDepartmentName("Unknown");
         setStudentCount(0);
         this.lecturers_Array = new Lecturer[1];
         this.lecturerCount = 0;
     }
 
-    public Department(String department_name, int student_count) {
+    public Department(String department_name, int student_count) throws AdministrativeException {
         setDepartmentName(department_name);
         setStudentCount(student_count);
         this.lecturers_Array = new Lecturer[1];
         this.lecturerCount = 0;
     }
 
-    public Department(Department other) {
+    public Department(Department other) throws AdministrativeException {
         if (other != null) {
             setDepartmentName(other.department_name);
             setStudentCount(other.student_count);
@@ -41,19 +41,19 @@ public class Department {
         return copy;
     }
 
-    public void setDepartmentName(String department_name) {
+    public void setDepartmentName(String department_name) throws AdministrativeException {
         if (department_name != null && !department_name.trim().isEmpty()) {
             this.department_name = department_name;
         } else {
-            throw new IllegalArgumentException("Error: Department name cannot be empty."); // <-- זריקת שגיאה במקום הדפסה
+            throw new AdministrativeException("Error: Department name cannot be empty.");
         }
     }
 
-    public void setStudentCount(int student_count) {
+    public void setStudentCount(int student_count) throws AdministrativeException {
         if (student_count >= 0) {
             this.student_count = student_count;
         } else {
-            throw new IllegalArgumentException("Error: Student count cannot be negative."); // <-- זריקת שגיאה במקום הדפסה
+            throw new AdministrativeException("Error: Student count cannot be negative.");
         }
     }
 

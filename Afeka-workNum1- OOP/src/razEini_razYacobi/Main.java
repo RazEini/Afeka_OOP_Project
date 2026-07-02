@@ -228,8 +228,12 @@ public class Main {
                             institution = readLine();
                         }
 
-                        administrative.addLecturer(lecturerName, lecturerID, lecturerDegree, lecturerSalary, institution);
-                        System.out.println("Lecturer added successfully.");
+                        try {
+                            administrative.addLecturer(lecturerName, lecturerID, lecturerDegree, lecturerSalary, institution);
+                            System.out.println("Lecturer added successfully.");
+                        } catch (AdministrativeException e) {
+                            System.out.println(e.getMessage());
+                        }
                         break;
 
                     case 2:
@@ -301,11 +305,10 @@ public class Main {
                             break;
                         }
 
-                        Committee newCommittee = new Committee();
-                        newCommittee.setCommitteeName(committeeName);
-                        newCommittee.setChairman(chair);
-
                         try {
+                            Committee newCommittee = new Committee();
+                            newCommittee.setCommitteeName(committeeName);
+                            newCommittee.setChairman(chair);
                             administrative.addCommittee(newCommittee);
                             System.out.println("Committee '" + committeeName + "' created successfully with " + chairmanName + " as chairman.");
                         } catch (AdministrativeException e) {
@@ -414,9 +417,13 @@ public class Main {
                             }
                         }
 
-                        Department department = new Department(departmentName, studentsNumber);
-                        administrative.AddDepartment(department);
-                        System.out.println("Successfully added department '" + departmentName + "'.");
+                        try {
+                            Department department = new Department(departmentName, studentsNumber);
+                            administrative.AddDepartment(department);
+                            System.out.println("Successfully added department '" + departmentName + "'.");
+                        } catch (AdministrativeException e) {
+                            System.out.println(e.getMessage());
+                        }
                         break;
 
                     case 7:
@@ -458,16 +465,24 @@ public class Main {
                         break;
 
                     case 10:
-                        String full_data = administrative.getAllLecturersFullData();
-                        System.out.println("\n--- College Lecturers Info ---\n");
-                        System.out.println(full_data);
-                        System.out.println("-----------------------------");
+                        try {
+                            String full_data = administrative.getAllLecturersFullData();
+                            System.out.println("\n--- College Lecturers Info ---\n");
+                            System.out.println(full_data);
+                            System.out.println("-----------------------------");
+                        } catch (AdministrativeException e) {
+                            System.out.println(e.getMessage());
+                        }
                         break;
 
                     case 11:
-                        String committeesData = administrative.getAllCommitteesFullData();
-                        System.out.println("\n--- College Committees Info ---\n");
-                        System.out.println(committeesData);
+                        try {
+                            String committeesData = administrative.getAllCommitteesFullData();
+                            System.out.println("\n--- College Committees Info ---\n");
+                            System.out.println(committeesData);
+                        } catch (AdministrativeException e) {
+                            System.out.println(e.getMessage());
+                        }
                         break;
 
                     case 12:
@@ -641,7 +656,6 @@ public class Main {
                 }
             } catch (GoBackException e) {
             } catch (Exception e) {
-                e.printStackTrace();
             }
         }
         scanner.close();
