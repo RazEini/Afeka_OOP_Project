@@ -51,7 +51,7 @@ public class Committee implements Comparable<Committee>, Cloneable {
 
     public void setLecturers(Lecturer[] lecturers) {
         if (lecturers != null) {
-            this.lecturers_Array = new Lecturer[lecturers.length * 2 + 1];
+            this.lecturers_Array = new Lecturer[lecturers.length * 2];
             this.lecturerCount = 0;
             for (int i = 0; i < lecturers.length; i++) {
                 if (lecturers[i] != null) {

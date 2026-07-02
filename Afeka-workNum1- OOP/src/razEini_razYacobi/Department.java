@@ -59,11 +59,11 @@ public class Department {
 
     public void setLecturers(Lecturer[] lecturers_Array) {
         if (lecturers_Array != null) {
-            this.lecturers_Array = new Lecturer[lecturers_Array.length * 2 + 1];
+            this.lecturers_Array = new Lecturer[lecturers_Array.length * 2];
             this.lecturerCount = 0;
             for (int i = 0; i < lecturers_Array.length; i++) {
                 if (lecturers_Array[i] != null) {
-                    this.lecturers_Array[this.lecturerCount++] = lecturers_Array[i]; // <-- העתקת הפניה בלבד
+                    this.lecturers_Array[this.lecturerCount++] = lecturers_Array[i];
                 }
             }
         } else {

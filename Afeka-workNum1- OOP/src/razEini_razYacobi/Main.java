@@ -320,7 +320,7 @@ public class Main {
                         lecturerName = readLine();
                         try {
                             administrative.addLecturerToCommittee(committeeName, lecturerName);
-                            System.out.println("Added successfully " + lecturerName + " to committee '" + committeeName + "'.");
+                            System.out.println("Successfully added " + lecturerName + " to committee '" + committeeName + "'.");
                         } catch (AdministrativeException e) {
                             System.out.println(e.getMessage());
                         }
@@ -334,7 +334,7 @@ public class Main {
 
                         try {
                             administrative.updateChairmanCommittee(committeeName, chairmanName);
-                            System.out.println("Updated successfully " + chairmanName + " to committee '" + committeeName + "'.");
+                            System.out.println("Successfully updated " + chairmanName + " as chairman of committee '" + committeeName + "'.");
                         } catch (AdministrativeException e) {
                             System.out.println(e.getMessage());
                         }
@@ -347,7 +347,7 @@ public class Main {
                         lecturerName = readLine();
                         try {
                             administrative.deleteLecturerFromCommittee(committeeName, lecturerName);
-                            System.out.println("Deleted successfully " + lecturerName + " from committee '" + committeeName + "'.");
+                            System.out.println("Successfully deleted " + lecturerName + " from committee '" + committeeName + "'.");
                         } catch (AdministrativeException e) {
                             System.out.println(e.getMessage());
                         }
@@ -416,7 +416,7 @@ public class Main {
 
                         Department department = new Department(departmentName, studentsNumber);
                         administrative.AddDepartment(department);
-                        System.out.println("Added successfully " + departmentName + " to department.");
+                        System.out.println("Successfully added department '" + departmentName + "'.");
                         break;
 
                     case 7:
@@ -453,7 +453,7 @@ public class Main {
                             System.out.printf("The average salary of all lecturers in the department is: %.2f\n", departmentAverageSalary);
                             System.out.println("-----------------------------");
                         } else {
-                            System.out.println("Error: The department's name doesn't exist. Please try another name.");
+                            System.out.println("Error: The department does not exist. Please try another name.");
                         }
                         break;
 
