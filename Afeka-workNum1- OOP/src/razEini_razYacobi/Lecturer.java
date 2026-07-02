@@ -1,6 +1,6 @@
 package razEini_razYacobi;
 
-public class Lecturer implements Comparable<Lecturer> {
+public class Lecturer implements Comparable {
     private String lecturer_name;
     private String lecturer_id;
     private int salary;
@@ -91,8 +91,8 @@ public class Lecturer implements Comparable<Lecturer> {
     }
 
     @Override
-    public int compareTo(Lecturer other) {
-        if (other == null) return 1;
+    public int compareTo(Object obj) {
+        if (obj == null) return 1;
 
         int thisArticles = 0;
         int otherArticles = 0;
@@ -101,8 +101,8 @@ public class Lecturer implements Comparable<Lecturer> {
             thisArticles = ((Doctor) this).getNumOfArticles();
         }
 
-        if (other instanceof Doctor) {
-            otherArticles = ((Doctor) other).getNumOfArticles();
+        if (obj instanceof Doctor) {
+            otherArticles = ((Doctor) obj).getNumOfArticles();
         }
 
         return Integer.compare(thisArticles, otherArticles);

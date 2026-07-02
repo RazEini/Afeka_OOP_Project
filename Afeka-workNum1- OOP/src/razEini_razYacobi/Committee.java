@@ -1,6 +1,6 @@
 package razEini_razYacobi;
 
-public class Committee implements Comparable<Committee>, Cloneable {
+public class Committee implements Comparable, Cloneable {
     private String committee_name;
     private Lecturer[] lecturers_Array;
     private Lecturer chairman;
@@ -178,10 +178,14 @@ public class Committee implements Comparable<Committee>, Cloneable {
     }
 
     @Override
-    public int compareTo(Committee o) {
+    public int compareTo(Object o) {
+        if (!(o instanceof Committee other)) {
+            throw new ClassCastException("Object must be of type Committee");
+        }
+
         if (compareMode == 1)
-            return Integer.compare(lecturerCount, o.lecturerCount);
-        return Integer.compare(sumOfArticles(), o.sumOfArticles());
+            return Integer.compare(this.lecturerCount, other.lecturerCount);
+        return Integer.compare(this.sumOfArticles(), other.sumOfArticles());
     }
 
     @Override
