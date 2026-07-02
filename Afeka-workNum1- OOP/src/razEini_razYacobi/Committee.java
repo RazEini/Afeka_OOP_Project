@@ -13,7 +13,7 @@ public class Committee implements Comparable, Cloneable {
         this.chairman = null;
     }
 
-    public Committee(String name, Lecturer[] lecturers, Lecturer chairman) throws Exception {
+    public Committee(String name, Lecturer[] lecturers, Lecturer chairman) throws AdministrativeException {
         setCommitteeName(name);
         setLecturers(lecturers);
         setChairman(chairman);
