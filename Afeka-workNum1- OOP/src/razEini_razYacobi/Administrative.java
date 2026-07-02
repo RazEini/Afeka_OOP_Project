@@ -145,7 +145,7 @@ public class Administrative {
     public void addCommittee(Committee c) throws AdministrativeException {
         if (c == null) throw new AdministrativeException("Committee cannot be null.");
 
-        if (!c.getCommitteeName().startsWith("new")) {
+        if (!c.getCommitteeName().startsWith("new-")) {
             if (c.getChairman() != null && ChairmanExists(c.getChairman())) {
                 throw new AdministrativeException("Error: Cannot add committee '" + c.getCommitteeName() +
                         "' because " + c.getChairman().getName() + " is already chairman of another committee.");
@@ -241,14 +241,14 @@ public class Administrative {
 
         Degree degree = newChairman.getDegree();
         if (degree == Degree.DR || degree == Degree.PROFESSOR) {
-            Lecturer originalOldChairman = targetCommittee.getChairman();
-            if (originalOldChairman != null) {
-                originalOldChairman.removeCommittee(committeeName);
-            }
-
             if (targetCommittee.isLecturerExists(chairmanName)) {
                 targetCommittee.deleteLecturer(newChairman);
                 newChairman.removeCommittee(committeeName);
+            }
+
+            Lecturer originalOldChairman = targetCommittee.getChairman();
+            if (originalOldChairman != null) {
+                originalOldChairman.removeCommittee(committeeName);
             }
 
             targetCommittee.setChairman(newChairman);
@@ -318,5 +318,22 @@ public class Administrative {
         } else {
             throw new AdministrativeException("Error: Lecturer " + name + " is not DR or PROFESSOR. Cannot add articles.");
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Administrative{collegeName='" + collegeName + "', lecturers=" + lecturerCount +
+                ", departments=" + departmentCount + ", committees=" + committeeCount + "}";
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Administrative other = (Administrative) obj;
+        if (collegeName == null) {
+            return other.collegeName == null;
+        }
+        return collegeName.equals(other.collegeName);
     }
 }

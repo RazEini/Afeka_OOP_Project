@@ -68,6 +68,9 @@ public class Committee implements Comparable, Cloneable {
         if (chairman == null || chairman.getDegree() == null) {
             throw new AdministrativeException("Error: Invalid Chairman.");
         }
+        if (chairman.getDegree() != Lecturer.Degree.DR && chairman.getDegree() != Lecturer.Degree.PROFESSOR) {
+            throw new AdministrativeException("Error: Chairman must be a DR or PROFESSOR.");
+        }
         chairman.addCommittee(this);
         this.chairman = chairman;
     }
@@ -190,7 +193,7 @@ public class Committee implements Comparable, Cloneable {
     public Committee clone() {
         try {
             Committee clone = (Committee) super.clone();
-            String newName = "new " + clone.getCommitteeName();
+            String newName = "new-" + clone.getCommitteeName();
             try {
                 clone.setCommitteeName(newName);
             } catch (Exception e) {

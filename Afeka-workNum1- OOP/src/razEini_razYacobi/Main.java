@@ -14,6 +14,16 @@ public class Main {
         public GoBackException() {
             super();
         }
+
+        @Override
+        public String toString() {
+            return getClass().getSimpleName();
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return this == obj || (obj != null && getClass() == obj.getClass());
+        }
     }
 
     private static String readLine() throws GoBackException {
@@ -256,7 +266,6 @@ public class Main {
 
                         Lecturer chair = null;
                         String chairmanName = "";
-                        boolean aborted = false;
 
                         while (true) {
                             System.out.print("Enter chairman name: ");
@@ -285,23 +294,11 @@ public class Main {
                                 continue;
                             }
 
-                            String degree = chair.getDegree().toString();
-                            if (!degree.equalsIgnoreCase("DR") && !degree.equalsIgnoreCase("PROFESSOR")) {
-                                System.out.println("Error: Committee cannot be created. Chairman must be a DR or PROFESSOR.");
-                                aborted = true;
-                                break;
-                            }
-
                             if (administrative.ChairmanExists(chair)) {
                                 System.out.println("Error: Lecturer " + chairmanName + " is already chairman of another committee.");
-                                aborted = true;
-                                break;
+                                continue;
                             }
 
-                            break;
-                        }
-
-                        if (aborted) {
                             break;
                         }
 
@@ -655,9 +652,22 @@ public class Main {
                         System.out.println("Invalid option, please try again.");
                 }
             } catch (GoBackException e) {
+            } catch (AdministrativeException e) {
+                System.out.println(e.getMessage());
             } catch (Exception e) {
+                System.out.println("Unexpected error: " + e.getMessage());
             }
         }
         scanner.close();
+    }
+
+    @Override
+    public String toString() {
+        return "Main application for college management";
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return this == obj || (obj != null && getClass() == obj.getClass());
     }
 }

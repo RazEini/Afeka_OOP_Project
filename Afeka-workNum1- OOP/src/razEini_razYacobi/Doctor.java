@@ -42,6 +42,11 @@ public class Doctor extends Lecturer {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj) && obj instanceof Doctor;
+    }
+
+    @Override
     public String toString() {
         return super.toString() + "\n- Number of Articles: " + artCount;
     }

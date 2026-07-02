@@ -30,6 +30,17 @@ public class Professor extends Doctor {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (!super.equals(obj) || !(obj instanceof Professor other)) {
+            return false;
+        }
+        if (institution == null) {
+            return other.institution == null;
+        }
+        return institution.equals(other.institution);
+    }
+
+    @Override
     public String toString() {
         return super.toString() + "\n- Granting Institution: " + institution;
     }
