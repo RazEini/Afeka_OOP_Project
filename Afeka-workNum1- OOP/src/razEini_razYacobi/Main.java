@@ -640,6 +640,8 @@ public class Main {
                         System.out.println("Invalid option, please try again.");
                 }
             } catch (GoBackException e) {
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
         }
         scanner.close();

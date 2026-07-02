@@ -224,7 +224,7 @@ public class Administrative {
         return false;
     }
 
-    public void updateChairmanCommittee(String committeeName, String chairmanName) throws AdministrativeException {
+    public void updateChairmanCommittee(String committeeName, String chairmanName) throws Exception {
         Lecturer newChairman = findLecturerByName(chairmanName);
         if (newChairman == null) {
             throw new AdministrativeException("Error: Lecturer " + chairmanName + " does not exist.");

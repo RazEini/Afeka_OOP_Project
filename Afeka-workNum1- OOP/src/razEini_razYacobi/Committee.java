@@ -16,7 +16,11 @@ public class Committee implements Comparable, Cloneable {
     public Committee(String name, Lecturer[] lecturers, Lecturer chairman) {
         setCommitteeName(name);
         setLecturers(lecturers);
-        setChairman(chairman);
+        try {
+            setChairman(chairman);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public Committee(Committee other, boolean isClone) {
@@ -64,17 +68,12 @@ public class Committee implements Comparable, Cloneable {
         }
     }
 
-    public void setChairman(Lecturer chairman) {
+    public void setChairman(Lecturer chairman) throws Exception {
         if (chairman == null || chairman.getDegree() == null) {
             throw new IllegalArgumentException("Error: Invalid Chairman.");
         }
-        String degree = chairman.getDegree().name();
-        if (degree.equals("DR") || degree.equals("PROFESSOR")) {
-            chairman.addCommittee(this);
-            this.chairman = chairman;
-        } else {
-            throw new IllegalArgumentException("Error: Chairman must be a DR or PROFESSOR.");
-        }
+        chairman.addCommittee(this);
+        this.chairman = chairman;
     }
 
     public void setCompareMode(int compareMode){
