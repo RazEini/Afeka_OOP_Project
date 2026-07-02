@@ -641,7 +641,7 @@ public class Main {
                 }
             } catch (GoBackException e) {
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
         }
         scanner.close();
