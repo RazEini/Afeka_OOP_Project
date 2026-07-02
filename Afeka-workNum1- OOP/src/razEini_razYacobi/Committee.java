@@ -7,23 +7,19 @@ public class Committee implements Comparable, Cloneable {
     private int lecturerCount = 0;
     private int compareMode = 1;
 
-    public Committee() {
+    public Committee() throws AdministrativeException {
         setCommitteeName("General");
         this.lecturers_Array = new Lecturer[1];
         this.chairman = null;
     }
 
-    public Committee(String name, Lecturer[] lecturers, Lecturer chairman) {
+    public Committee(String name, Lecturer[] lecturers, Lecturer chairman) throws Exception {
         setCommitteeName(name);
         setLecturers(lecturers);
-        try {
-            setChairman(chairman);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        setChairman(chairman);
     }
 
-    public Committee(Committee other, boolean isClone) {
+    public Committee(Committee other, boolean isClone) throws AdministrativeException {
         if (other != null) {
             if (isClone) {
                 setCommitteeName("new-" + other.committee_name);
@@ -45,11 +41,11 @@ public class Committee implements Comparable, Cloneable {
         return this.committee_name;
     }
 
-    public void setCommitteeName(String name) {
+    public void setCommitteeName(String name) throws AdministrativeException {
         if (name != null && !name.trim().isEmpty()) {
             this.committee_name = name;
         } else {
-            throw new IllegalArgumentException("Error: Committee name cannot be empty.");
+            throw new AdministrativeException("Error: Committee name cannot be empty.");
         }
     }
 
@@ -68,9 +64,9 @@ public class Committee implements Comparable, Cloneable {
         }
     }
 
-    public void setChairman(Lecturer chairman) throws Exception {
+    public void setChairman(Lecturer chairman) throws AdministrativeException {
         if (chairman == null || chairman.getDegree() == null) {
-            throw new IllegalArgumentException("Error: Invalid Chairman.");
+            throw new AdministrativeException("Error: Invalid Chairman.");
         }
         chairman.addCommittee(this);
         this.chairman = chairman;
@@ -90,7 +86,9 @@ public class Committee implements Comparable, Cloneable {
         return false;
     }
 
-    public void addLecturer(Lecturer lecturer) {
+    public void addLecturer(Lecturer lecturer) throws AdministrativeException {
+        if (lecturer == null) throw new AdministrativeException("Error: Cannot add a null lecturer.");
+        if(isLecturerExists(lecturer.getName())) throw new AdministrativeException("Error: Lecturer " + lecturer.getName() + " already exists in this committee.");
         if (lecturerCount == lecturers_Array.length) {
             if (lecturers_Array.length == 0)
                 lecturers_Array = new Lecturer[1];
@@ -101,10 +99,11 @@ public class Committee implements Comparable, Cloneable {
         lecturers_Array[lecturerCount++] = lecturer;
     }
 
-    public void deleteLecturer(Lecturer lecturer) {
+    public void deleteLecturer(Lecturer lecturer) throws AdministrativeException {
+        if (lecturer == null) throw new AdministrativeException("Error: Lecturer cannot be null.");
         if (this.chairman != null && lecturer != null) {
             if (this.chairman.getName().equalsIgnoreCase(lecturer.getName())) {
-                throw new IllegalArgumentException("Error: Cannot delete " + lecturer.getName() + " because they are currently the Chairman of this committee.");
+                throw new AdministrativeException("Error: Cannot delete " + lecturer.getName() + " because they are currently the Chairman of this committee.");
             }
         }
 
@@ -192,7 +191,11 @@ public class Committee implements Comparable, Cloneable {
         try {
             Committee clone = (Committee) super.clone();
             String newName = "new " + clone.getCommitteeName();
-            clone.setCommitteeName(newName);
+            try {
+                clone.setCommitteeName(newName);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
             clone.lecturers_Array = new Lecturer[this.lecturers_Array.length];
             for (int i = 0; i < this.lecturers_Array.length; i++) {
                 if (this.lecturers_Array[i] != null) {

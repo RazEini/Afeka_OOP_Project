@@ -27,7 +27,8 @@ public class Doctor extends Lecturer {
         }
     }
 
-    public void addArticles(String article) {
+    public void addArticles(String article) throws AdministrativeException {
+        if (article == null || article.trim().isEmpty()) throw new AdministrativeException("Error: Article title cannot be null or empty.");
         if (this.artCount == this.articles.length) {
             String[] temp = new String[this.articles.length * 2];
             for (int i = 0; i < this.articles.length; i++) temp[i] = this.articles[i];

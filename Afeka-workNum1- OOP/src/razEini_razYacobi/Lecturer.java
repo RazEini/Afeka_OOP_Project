@@ -47,7 +47,8 @@ public class Lecturer implements Comparable {
         }
     }
 
-    public void addCommittee(Committee c) {
+    public void addCommittee(Committee c) throws AdministrativeException {
+        if (c==null) throw new AdministrativeException("Error: Cannot add a null committee.");
         if (commCount == myCommittees.length) {
             Committee[] temp = new Committee[myCommittees.length * 2];
             for (int i = 0; i < commCount; i++) temp[i] = myCommittees[i];
@@ -71,8 +72,8 @@ public class Lecturer implements Comparable {
         else this.lecturer_id = "000000000";
     }
 
-    public void removeCommittee(String committeeName) {
-        if (committeeName == null || commCount == 0) return;
+    public void removeCommittee(String committeeName) throws  AdministrativeException {
+        if (committeeName == null || commCount == 0) throw new AdministrativeException("Error: Committee name cannot be null.");;
         Committee[] temp = new Committee[myCommittees.length];
         int j = 0;
         boolean found = false;

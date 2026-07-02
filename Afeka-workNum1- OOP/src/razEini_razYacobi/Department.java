@@ -72,8 +72,9 @@ public class Department {
         }
     }
 
-    public void addLecturer(Lecturer lecturer) {
-        if (lecturer == null) return;
+    public void addLecturer(Lecturer lecturer) throws AdministrativeException {
+        if (lecturer == null) throw new AdministrativeException("Error: Cannot add a null lecturer to the department.");;
+        if(isLecturerExists(lecturer.getName())) throw new AdministrativeException("Error: Lecturer " + lecturer.getName() + " is already a member of this department.");
         if (this.lecturerCount == this.lecturers_Array.length) {
             Lecturer[] temp = new Lecturer[this.lecturers_Array.length * 2];
             for (int i = 0; i < this.lecturerCount; i++) {

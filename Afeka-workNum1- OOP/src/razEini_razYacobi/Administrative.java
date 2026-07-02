@@ -59,7 +59,7 @@ public class Administrative {
         return idStr != null && idStr.length() == 9;
     }
 
-    public void addLecturer(String name, String id, String degreeStr, int salary, String institution) {
+    public void addLecturer(String name, String id, String degreeStr, int salary, String institution) throws AdministrativeException {
         if (lecturerCount == lecturers.length) resizeLecturers();
 
         Degree degree = Degree.BACHELOR_DEGREE;
@@ -117,8 +117,8 @@ public class Administrative {
         return sum / countInDepartment;
     }
 
-    public String getAllLecturersFullData() {
-        if (lecturerCount == 0) return "No lecturers registered.";
+    public String getAllLecturersFullData() throws AdministrativeException {
+        if (lecturerCount == 0) throw new AdministrativeException("No lecturers registered.");
         String result = "";
         for (int i = 0; i < lecturerCount; i++) {
             result += (lecturers[i].toString() + "\n\n");
@@ -126,8 +126,8 @@ public class Administrative {
         return result;
     }
 
-    public String getAllCommitteesFullData() {
-        if (committeeCount == 0) return "No committees registered.";
+    public String getAllCommitteesFullData() throws AdministrativeException {
+        if (committeeCount == 0) throw new AdministrativeException("No committees registered.");
         String result = "";
         for (int i = 0; i < committeeCount; i++) {
             result += committees[i].toString() + "\n";
@@ -143,7 +143,7 @@ public class Administrative {
     }
 
     public void addCommittee(Committee c) throws AdministrativeException {
-        if (c == null) return;
+        if (c == null) throw new AdministrativeException("Committee cannot be null.");
 
         if (!c.getCommitteeName().startsWith("new")) {
             if (c.getChairman() != null && ChairmanExists(c.getChairman())) {
@@ -266,9 +266,9 @@ public class Administrative {
         return false;
     }
 
-    public void AddDepartment(Department department) {
-        if (department == null) return;
-        if (isDepartmentExists(department.getDepartmentName())) return;
+    public void AddDepartment(Department department) throws AdministrativeException {
+        if (department == null) throw new AdministrativeException("Error: Department cannot be null.");;
+        if (isDepartmentExists(department.getDepartmentName())) throw new AdministrativeException("Error: Department '" + department.getDepartmentName() + "' already exists.");;
 
         if (departmentCount == departments.length) {
             resizeDepartments();

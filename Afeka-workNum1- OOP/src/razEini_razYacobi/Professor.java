@@ -8,7 +8,7 @@ public class Professor extends Doctor {
         this.institution = "Unknown";
     }
 
-    public Professor(String name, String id, int salary, Department department, Degree degree, String institution) {
+    public Professor(String name, String id, int salary, Department department, Degree degree, String institution) throws AdministrativeException {
         super(name, id, salary, department, degree);
         setInstitution(institution);
     }
@@ -20,8 +20,9 @@ public class Professor extends Doctor {
         }
     }
 
-    public void setInstitution(String institution) {
-        this.institution = (institution != null) ? institution : "Unknown";
+    public void setInstitution(String institution) throws AdministrativeException {
+        if (institution == null || institution.trim().isEmpty()) throw new AdministrativeException("Error: Institution name cannot be null or empty.");
+        this.institution = institution;
     }
 
     public String getInstitution() {
