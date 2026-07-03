@@ -14,16 +14,6 @@ public class Main {
         public GoBackException() {
             super();
         }
-
-        @Override
-        public String toString() {
-            return getClass().getSimpleName();
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            return this == obj || (obj != null && getClass() == obj.getClass());
-        }
     }
 
     private static String readLine() throws GoBackException {
@@ -659,15 +649,5 @@ public class Main {
             }
         }
         scanner.close();
-    }
-
-    @Override
-    public String toString() {
-        return "Main application for college management";
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return this == obj || (obj != null && getClass() == obj.getClass());
     }
 }
