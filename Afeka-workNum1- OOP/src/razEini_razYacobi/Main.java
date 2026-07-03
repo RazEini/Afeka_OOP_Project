@@ -10,21 +10,6 @@ public class Main {
     // רז עייני - 328153101
     // רז יעקבי - 213864416
 
-    private static class GoBackException extends Exception {
-        public GoBackException() {
-            super();
-        }
-    }
-
-    private static String readLine() throws GoBackException {
-        String input = scanner.nextLine();
-        if (input != null && input.trim().equalsIgnoreCase("back")) {
-            System.out.println("\nReturning to the main menu...");
-            throw new GoBackException();
-        }
-        return input;
-    }
-
     public static void main(String[] args) {
 
         String collegeName = "";
@@ -107,7 +92,7 @@ public class Main {
                         String lecturerName;
                         while (true) {
                             System.out.print("Enter Lecturer's name: ");
-                            lecturerName = readLine();
+                            lecturerName = InputHelper.readLine();
 
                             if (lecturerName == null || lecturerName.trim().isEmpty()) {
                                 System.out.println("Invalid name! Name cannot be empty.");
@@ -137,7 +122,7 @@ public class Main {
                         String lecturerID;
                         while (true) {
                             System.out.print("Enter Lecturer's ID (9 digits): ");
-                            lecturerID = readLine();
+                            lecturerID = InputHelper.readLine();
 
                             if (!Administrative.isValidID(lecturerID)) {
                                 System.out.println("Invalid ID! ID must be exactly 9 digits and be a valid one.");
@@ -156,7 +141,7 @@ public class Main {
                         String lecturerDegree;
                         while (true) {
                             System.out.print("Enter Lecturer's degree (BACHELOR DEGREE, MASTER DEGREE, DR, PROFESSOR): ");
-                            lecturerDegree = readLine().toUpperCase();
+                            lecturerDegree = InputHelper.readLine().toUpperCase();
 
                             if (lecturerDegree.equals("BACHELOR DEGREE") ||
                                     lecturerDegree.equals("MASTER DEGREE") ||
@@ -170,7 +155,7 @@ public class Main {
                         int lecturerSalary = -1;
                         while (lecturerSalary < 0) {
                             System.out.print("Enter Lecturer's salary: ");
-                            String salaryInput = readLine().trim();
+                            String salaryInput = InputHelper.readLine().trim();
 
                             if (salaryInput.isEmpty()) {
                                 System.out.println("Invalid number! Salary cannot be empty.");
@@ -199,7 +184,7 @@ public class Main {
                         String lecturerDegreeName;
                         while (true) {
                             System.out.print("Enter Lecturer's degree name: ");
-                            lecturerDegreeName = readLine();
+                            lecturerDegreeName = InputHelper.readLine();
 
                             if (lecturerDegreeName == null || lecturerDegreeName.trim().isEmpty()) {
                                 System.out.println("Invalid degree name! It cannot be empty.");
@@ -225,7 +210,7 @@ public class Main {
                         String institution = "Unknown";
                         if (lecturerDegree.equalsIgnoreCase("PROFESSOR")) {
                             System.out.print("Enter institution name: ");
-                            institution = readLine();
+                            institution = InputHelper.readLine();
                         }
 
                         try {
@@ -240,7 +225,7 @@ public class Main {
                         String committeeName;
                         while (true) {
                             System.out.print("Enter committee name: ");
-                            committeeName = readLine().trim();
+                            committeeName = InputHelper.readLine().trim();
 
                             if (committeeName.isEmpty()) {
                                 System.out.println("Error: Committee name cannot be empty.");
@@ -259,7 +244,7 @@ public class Main {
 
                         while (true) {
                             System.out.print("Enter chairman name: ");
-                            chairmanName = readLine().trim();
+                            chairmanName =  InputHelper.readLine().trim();
 
                             if (chairmanName.isEmpty()) {
                                 System.out.println("Error: Chairman name cannot be empty.");
@@ -305,9 +290,9 @@ public class Main {
 
                     case 3:
                         System.out.print("Enter committee's name: ");
-                        committeeName = readLine();
+                        committeeName = InputHelper.readLine();
                         System.out.print("Enter lecturer's name: ");
-                        lecturerName = readLine();
+                        lecturerName = InputHelper.readLine();
                         try {
                             administrative.addLecturerToCommittee(committeeName, lecturerName);
                             System.out.println("Successfully added " + lecturerName + " to committee '" + committeeName + "'.");
@@ -318,9 +303,9 @@ public class Main {
 
                     case 4:
                         System.out.print("Enter committee's name: ");
-                        committeeName = readLine();
+                        committeeName = InputHelper.readLine();
                         System.out.print("Enter new chairman's name: ");
-                        chairmanName = readLine();
+                        chairmanName = InputHelper.readLine();
 
                         try {
                             administrative.updateChairmanCommittee(committeeName, chairmanName);
@@ -332,9 +317,9 @@ public class Main {
 
                     case 5:
                         System.out.print("Enter committee's name: ");
-                        committeeName = readLine();
+                        committeeName = InputHelper.readLine();
                         System.out.print("Enter lecturer's name: ");
-                        lecturerName = readLine();
+                        lecturerName = InputHelper.readLine();
                         try {
                             administrative.deleteLecturerFromCommittee(committeeName, lecturerName);
                             System.out.println("Successfully deleted " + lecturerName + " from committee '" + committeeName + "'.");
@@ -347,7 +332,7 @@ public class Main {
                         String departmentName = "";
                         while (true) {
                             System.out.print("Enter department's name: ");
-                            departmentName = readLine();
+                            departmentName = InputHelper.readLine();
 
                             if (departmentName == null || departmentName.trim().isEmpty()) {
                                 System.out.println("Invalid department name! Name cannot be empty.");
@@ -378,7 +363,7 @@ public class Main {
                         int studentsNumber = -1;
                         while (studentsNumber < 0) {
                             System.out.print("Enter the number of students studying there: ");
-                            String studentsInput = readLine().trim();
+                            String studentsInput = InputHelper.readLine().trim();
 
                             if (studentsInput.isEmpty()) {
                                 System.out.println("Invalid number! Input cannot be empty.");
@@ -415,10 +400,10 @@ public class Main {
 
                     case 7:
                         System.out.print("Enter department's name: ");
-                        String deptName = readLine();
+                        String deptName = InputHelper.readLine();
 
                         System.out.print("Enter lecturer's name: ");
-                        String lectName = readLine();
+                        String lectName = InputHelper.readLine();
 
                         try {
                             administrative.addLecturerToDepartment(deptName, lectName);
@@ -439,7 +424,7 @@ public class Main {
                     case 9:
                         String department_name = "";
                         System.out.print("Enter department's name: ");
-                        department_name = readLine();
+                        department_name = InputHelper.readLine();
                         if (administrative.isDepartmentExists(department_name)) {
                             double departmentAverageSalary = administrative.getAverageSalaryByDepartment(department_name);
 
@@ -474,9 +459,9 @@ public class Main {
 
                     case 12:
                         System.out.print("Enter lecturer's name: ");
-                        lecturerName = readLine().trim();
+                        lecturerName = InputHelper.readLine().trim();
                         System.out.print("Enter article: ");
-                        String article = readLine().trim();
+                        String article = InputHelper.readLine().trim();
 
                         if (lecturerName.isEmpty() || article.isEmpty()) {
                             System.out.println("Error: Lecturer name and article cannot be empty.");
@@ -498,9 +483,9 @@ public class Main {
 
                     case 13:
                         System.out.print("Enter lecturer's name: ");
-                        lecturerName = readLine().trim();
+                        lecturerName = InputHelper.readLine().trim();
                         System.out.print("Enter another lecturer's name: ");
-                        lectName = readLine().trim();
+                        lectName = InputHelper.readLine().trim();
 
                         if (lecturerName.isEmpty() || lectName.isEmpty()) {
                             System.out.println("Error: Lecturer names cannot be empty.");
@@ -536,9 +521,9 @@ public class Main {
 
                     case 14:
                         System.out.print("Enter Committee name: ");
-                        String committee = readLine().trim();
+                        String committee = InputHelper.readLine().trim();
                         System.out.print("Enter another Committee name: ");
-                        String committee2 = readLine().trim();
+                        String committee2 = InputHelper.readLine().trim();
 
                         if (committee.isEmpty() || committee2.isEmpty()) {
                             System.out.println("Error: Committee names cannot be empty.");
@@ -554,7 +539,7 @@ public class Main {
                         }
 
                         System.out.print("Compare committees: [Press 1] By member count / [Press 2] By article count: ");
-                        String optionInput = readLine().trim();
+                        String optionInput = InputHelper.readLine().trim();
 
                         if (optionInput.isEmpty()) {
                             System.out.println("Invalid input! Comparison aborted.");
@@ -607,7 +592,7 @@ public class Main {
 
                     case 15:
                         System.out.print("Enter Committee name: ");
-                        committee = readLine().trim();
+                        committee = InputHelper.readLine().trim();
 
                         if (committee.isEmpty()) {
                             System.out.println("Error: Committee name cannot be empty.");
@@ -642,6 +627,7 @@ public class Main {
                         System.out.println("Invalid option, please try again.");
                 }
             } catch (GoBackException e) {
+                System.out.println("\nReturning to the main menu...");
             } catch (AdministrativeException e) {
                 System.out.println(e.getMessage());
             } catch (Exception e) {
