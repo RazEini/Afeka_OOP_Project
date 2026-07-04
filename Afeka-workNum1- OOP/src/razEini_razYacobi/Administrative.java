@@ -224,7 +224,7 @@ public class Administrative {
         return false;
     }
 
-    public void updateChairmanCommittee(String committeeName, String chairmanName) throws Exception {
+    public void updateChairmanCommittee(String committeeName, String chairmanName) throws AdministrativeException {
         Lecturer newChairman = findLecturerByName(chairmanName);
         if (newChairman == null) {
             throw new AdministrativeException("Error: Lecturer " + chairmanName + " does not exist.");
@@ -321,12 +321,6 @@ public class Administrative {
     }
 
     @Override
-    public String toString() {
-        return "Administrative{collegeName='" + collegeName + "', lecturers=" + lecturerCount +
-                ", departments=" + departmentCount + ", committees=" + committeeCount + "}";
-    }
-
-    @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
@@ -335,5 +329,11 @@ public class Administrative {
             return other.collegeName == null;
         }
         return collegeName.equals(other.collegeName);
+    }
+
+    @Override
+    public String toString() {
+        return "Administrative{collegeName='" + collegeName + "', lecturers=" + lecturerCount +
+                ", departments=" + departmentCount + ", committees=" + committeeCount + "}";
     }
 }

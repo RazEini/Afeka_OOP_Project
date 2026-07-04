@@ -131,6 +131,16 @@ public class Committee implements Comparable, Cloneable {
         }
     }
 
+    public int sumOfArticles() {
+        int sum = 0;
+        for (int i = 0; i < lecturerCount; i++) {
+            if (lecturers_Array[i] instanceof Doctor) {
+                sum += ((Doctor) lecturers_Array[i]).getNumOfArticles();
+            }
+        }
+        return sum;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -143,39 +153,6 @@ public class Committee implements Comparable, Cloneable {
             return other.committee_name == null;
         }
         return this.committee_name.equals(other.committee_name);
-    }
-
-    @Override
-    public String toString() {
-        String chairName = (chairman != null && chairman.getName() != null) ? chairman.getName() : "None";
-        String info = "Committee: " + committee_name + "\n" +
-                "Chairman: " + chairName + "\n" +
-                "Members List:\n";
-
-        if (lecturerCount == 0) {
-            info += "  - No members assigned yet.\n";
-        } else {
-            for (int i = 0; i < lecturerCount; i++) {
-                if (lecturers_Array[i] != null) {
-                    info += "  - " + lecturers_Array[i].getName();
-                    if (chairman != null && lecturers_Array[i].getName().equalsIgnoreCase(chairman.getName())) {
-                        info += " (Committee Chairman)";
-                    }
-                    info += "\n";
-                }
-            }
-        }
-        return info;
-    }
-
-    public int sumOfArticles() {
-        int sum = 0;
-        for (int i = 0; i < lecturerCount; i++) {
-            if (lecturers_Array[i] instanceof Doctor) {
-                sum += ((Doctor) lecturers_Array[i]).getNumOfArticles();
-            }
-        }
-        return sum;
     }
 
     @Override
@@ -222,5 +199,28 @@ public class Committee implements Comparable, Cloneable {
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();
         }
+    }
+
+    @Override
+    public String toString() {
+        String chairName = (chairman != null && chairman.getName() != null) ? chairman.getName() : "None";
+        String info = "Committee: " + committee_name + "\n" +
+                "Chairman: " + chairName + "\n" +
+                "Members List:\n";
+
+        if (lecturerCount == 0) {
+            info += "  - No members assigned yet.\n";
+        } else {
+            for (int i = 0; i < lecturerCount; i++) {
+                if (lecturers_Array[i] != null) {
+                    info += "  - " + lecturers_Array[i].getName();
+                    if (chairman != null && lecturers_Array[i].getName().equalsIgnoreCase(chairman.getName())) {
+                        info += " (Committee Chairman)";
+                    }
+                    info += "\n";
+                }
+            }
+        }
+        return info;
     }
 }

@@ -628,8 +628,6 @@ public class Main {
                 }
             } catch (GoBackException e) {
                 System.out.println("\nReturning to the main menu...");
-            } catch (AdministrativeException e) {
-                System.out.println(e.getMessage());
             } catch (Exception e) {
                 System.out.println("Unexpected error: " + e.getMessage());
             }
