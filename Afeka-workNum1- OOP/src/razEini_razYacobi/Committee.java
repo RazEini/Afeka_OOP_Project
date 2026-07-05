@@ -1,36 +1,43 @@
 package razEini_razYacobi;
 
-public class Committee implements Comparable, Cloneable {
+public class Committee<T extends Lecturer.Degree> implements Comparable<Committee>, Cloneable {
     private String committee_name;
     private Lecturer[] lecturers_Array;
     private Lecturer chairman;
     private int lecturerCount = 0;
     private int compareMode = 1;
+    private T committeeDegree;
 
-    public Committee() throws AdministrativeException {
+    public Committee(T degree) throws AdministrativeException {
+        this.committeeDegree = degree;
         setCommitteeName("General");
         this.lecturers_Array = new Lecturer[1];
         this.chairman = null;
     }
 
-    public Committee(String name, Lecturer[] lecturers, Lecturer chairman) throws AdministrativeException {
+    public Committee(String name, Lecturer[] lecturers, Lecturer chairman, T degree) throws AdministrativeException {
+        this.committeeDegree = degree;
         setCommitteeName(name);
         setLecturers(lecturers);
         setChairman(chairman);
     }
 
-    public Committee(Committee other, boolean isClone) throws AdministrativeException {
-        if (other != null) {
-            if (isClone) {
-                setCommitteeName("new-" + other.committee_name);
-            } else {
-                setCommitteeName(other.committee_name);
-            }
-            setLecturers(other.lecturers_Array);
-            this.lecturerCount = other.lecturerCount;
-            this.chairman = other.chairman;
-            this.compareMode = other.compareMode;
+    public Committee(Committee<T> other, boolean isClone) throws AdministrativeException {
+        if (other == null) {
+            throw new AdministrativeException("Error: Cannot copy a null committee.");
         }
+
+        this.committeeDegree = other.committeeDegree;
+
+        if (isClone) {
+            setCommitteeName("new-" + other.committee_name);
+        } else {
+            setCommitteeName(other.committee_name);
+        }
+        setLecturers(other.lecturers_Array);
+        this.lecturerCount = other.lecturerCount;
+        this.chairman = other.chairman;
+        this.compareMode = other.compareMode;
     }
 
     public Lecturer getChairman() {
@@ -54,7 +61,7 @@ public class Committee implements Comparable, Cloneable {
             this.lecturers_Array = new Lecturer[lecturers.length * 2];
             this.lecturerCount = 0;
             for (int i = 0; i < lecturers.length; i++) {
-                if (lecturers[i] != null) {
+                if (lecturers[i] != null && lecturers[i].getDegree().name().equalsIgnoreCase(this.committeeDegree.name())) {
                     this.lecturers_Array[this.lecturerCount++] = lecturers[i];
                 }
             }
@@ -92,6 +99,9 @@ public class Committee implements Comparable, Cloneable {
     public void addLecturer(Lecturer lecturer) throws AdministrativeException {
         if (lecturer == null) throw new AdministrativeException("Error: Cannot add a null lecturer.");
         if(isLecturerExists(lecturer.getName())) throw new AdministrativeException("Error: Lecturer " + lecturer.getName() + " already exists in this committee.");
+        if (lecturer.getDegree() != this.committeeDegree) {
+            throw new AdministrativeException("Error: Lecturer " + lecturer.getName() + " does not have the required degree for this committee (" + this.committeeDegree + ").");
+        }
         if (lecturerCount == lecturers_Array.length) {
             if (lecturers_Array.length == 0)
                 lecturers_Array = new Lecturer[1];
@@ -147,7 +157,7 @@ public class Committee implements Comparable, Cloneable {
 
         if (obj == null || getClass() != obj.getClass()) return false;
 
-        Committee other = (Committee) obj;
+        Committee<T> other = (Committee<T>) obj;
 
         if (this.committee_name == null) {
             return other.committee_name == null;
@@ -156,20 +166,16 @@ public class Committee implements Comparable, Cloneable {
     }
 
     @Override
-    public int compareTo(Object o) {
-        if (!(o instanceof Committee other)) {
-            throw new ClassCastException("Object must be of type Committee");
-        }
-
+    public int compareTo(Committee o) {
         if (compareMode == 1)
-            return Integer.compare(this.lecturerCount, other.lecturerCount);
-        return Integer.compare(this.sumOfArticles(), other.sumOfArticles());
+            return Integer.compare(this.lecturerCount, o.lecturerCount);
+        return Integer.compare(this.sumOfArticles(), o.sumOfArticles());
     }
 
     @Override
-    public Committee clone() {
+    public Committee<T> clone() {
         try {
-            Committee clone = (Committee) super.clone();
+            Committee<T> clone = (Committee<T>) super.clone();
             String newName = "new-" + clone.getCommitteeName();
             try {
                 clone.setCommitteeName(newName);

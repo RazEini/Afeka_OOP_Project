@@ -55,6 +55,18 @@ public class Administrative {
         return false;
     }
 
+    public Degree getDegree(String degree) throws AdministrativeException {
+        for (int i = 0; i < Degree.values().length; i++){
+            String d = Degree.values()[i].name();
+            if (d.contains(String.valueOf("_"))){
+                degree = degree.toUpperCase().replace(" ", "_");
+            }
+            if (Degree.values()[i].name().toLowerCase().equalsIgnoreCase(degree)) return Degree.values()[i];
+        }
+
+        throw new AdministrativeException("Degree not found");
+    }
+
     public static boolean isValidID(String idStr) {
         return idStr != null && idStr.length() == 9;
     }

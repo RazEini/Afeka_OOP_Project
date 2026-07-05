@@ -239,6 +239,19 @@ public class Main {
                             break;
                         }
 
+                        String degree;
+                        while (true) {
+                            System.out.print("Enter degree name: ");
+                            degree = InputHelper.readLine().trim();
+
+                            if (degree.isEmpty()) {
+                                System.out.println("Error: Degree name cannot be empty.");
+                                continue;
+                            }
+
+                            break;
+                        }
+
                         Lecturer chair = null;
                         String chairmanName = "";
 
@@ -278,7 +291,7 @@ public class Main {
                         }
 
                         try {
-                            Committee newCommittee = new Committee();
+                            Committee newCommittee = new Committee(administrative.getDegree(degree));
                             newCommittee.setCommitteeName(committeeName);
                             newCommittee.setChairman(chair);
                             administrative.addCommittee(newCommittee);
