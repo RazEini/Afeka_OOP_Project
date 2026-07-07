@@ -1,17 +1,18 @@
 package razEini_razYacobi;
 
+import java.util.ArrayList;
+
 public class Committee<T extends Lecturer.Degree> implements Comparable<Committee>, Cloneable {
     private String committee_name;
-    private Lecturer[] lecturers_Array;
+    private ArrayList<Lecturer> lecturers_Array;
     private Lecturer chairman;
-    private int lecturerCount = 0;
     private int compareMode = 1;
     private T committeeDegree;
 
     public Committee(T degree) throws AdministrativeException {
         this.committeeDegree = degree;
         setCommitteeName("General");
-        this.lecturers_Array = new Lecturer[1];
+        this.lecturers_Array = new ArrayList<>();
         this.chairman = null;
     }
 
@@ -34,8 +35,8 @@ public class Committee<T extends Lecturer.Degree> implements Comparable<Committe
         } else {
             setCommitteeName(other.committee_name);
         }
-        setLecturers(other.lecturers_Array);
-        this.lecturerCount = other.lecturerCount;
+
+        this.lecturers_Array = new ArrayList<>(other.lecturers_Array);
         this.chairman = other.chairman;
         this.compareMode = other.compareMode;
     }
@@ -57,17 +58,13 @@ public class Committee<T extends Lecturer.Degree> implements Comparable<Committe
     }
 
     public void setLecturers(Lecturer[] lecturers) {
+        this.lecturers_Array = new ArrayList<>();
         if (lecturers != null) {
-            this.lecturers_Array = new Lecturer[lecturers.length * 2];
-            this.lecturerCount = 0;
-            for (int i = 0; i < lecturers.length; i++) {
-                if (lecturers[i] != null && lecturers[i].getDegree().name().equalsIgnoreCase(this.committeeDegree.name())) {
-                    this.lecturers_Array[this.lecturerCount++] = lecturers[i];
+            for (Lecturer l : lecturers) {
+                if (l != null && l.getDegree().name().equalsIgnoreCase(this.committeeDegree.name())) {
+                    this.lecturers_Array.add(l);
                 }
             }
-        } else {
-            this.lecturers_Array = new Lecturer[1];
-            this.lecturerCount = 0;
         }
     }
 
@@ -87,9 +84,8 @@ public class Committee<T extends Lecturer.Degree> implements Comparable<Committe
     }
 
     public boolean isLecturerExists(String lecturerName) {
-        if (this.lecturers_Array.length == 0) return false;
-        for (int i = 0; i < lecturerCount; i++) {
-            if (this.lecturers_Array[i] != null && this.lecturers_Array[i].getName().equals(lecturerName)) {
+        for (Lecturer l : lecturers_Array) {
+            if (l != null && l.getName().equals(lecturerName)) {
                 return true;
             }
         }
@@ -98,54 +94,29 @@ public class Committee<T extends Lecturer.Degree> implements Comparable<Committe
 
     public void addLecturer(Lecturer lecturer) throws AdministrativeException {
         if (lecturer == null) throw new AdministrativeException("Error: Cannot add a null lecturer.");
-        if(isLecturerExists(lecturer.getName())) throw new AdministrativeException("Error: Lecturer " + lecturer.getName() + " already exists in this committee.");
+        if (isLecturerExists(lecturer.getName())) throw new AdministrativeException("Error: Lecturer " + lecturer.getName() + " already exists in this committee.");
         if (lecturer.getDegree() != this.committeeDegree) {
             throw new AdministrativeException("Error: Lecturer " + lecturer.getName() + " does not have the required degree for this committee (" + this.committeeDegree + ").");
         }
-        if (lecturerCount == lecturers_Array.length) {
-            if (lecturers_Array.length == 0)
-                lecturers_Array = new Lecturer[1];
-            Lecturer[] temp = new Lecturer[lecturers_Array.length * 2];
-            for (int i = 0; i < lecturerCount; i++) temp[i] = lecturers_Array[i];
-            lecturers_Array = temp;
-        }
-        lecturers_Array[lecturerCount++] = lecturer;
+        lecturers_Array.add(lecturer);
     }
 
     public void deleteLecturer(Lecturer lecturer) throws AdministrativeException {
         if (lecturer == null) throw new AdministrativeException("Error: Lecturer cannot be null.");
-        if (this.chairman != null && lecturer != null) {
+        if (this.chairman != null) {
             if (this.chairman.getName().equalsIgnoreCase(lecturer.getName())) {
                 throw new AdministrativeException("Error: Cannot delete " + lecturer.getName() + " because they are currently the Chairman of this committee.");
             }
         }
 
-        Lecturer[] temp = new Lecturer[lecturers_Array.length];
-        int j = 0;
-        boolean removed = false;
-
-        for (int i = 0; i < lecturerCount; i++) {
-            if (lecturers_Array[i] != null) {
-                if (!lecturers_Array[i].getName().equalsIgnoreCase(lecturer.getName())) {
-                    temp[j] = lecturers_Array[i];
-                    j++;
-                } else {
-                    removed = true;
-                }
-            }
-        }
-
-        lecturers_Array = temp;
-        if (removed) {
-            lecturerCount--;
-        }
+        lecturers_Array.removeIf(l -> l != null && l.getName().equalsIgnoreCase(lecturer.getName()));
     }
 
     public int sumOfArticles() {
         int sum = 0;
-        for (int i = 0; i < lecturerCount; i++) {
-            if (lecturers_Array[i] instanceof Doctor) {
-                sum += ((Doctor) lecturers_Array[i]).getNumOfArticles();
+        for (Lecturer l : lecturers_Array) {
+            if (l instanceof Doctor) {
+                sum += ((Doctor) l).getNumOfArticles();
             }
         }
         return sum;
@@ -154,7 +125,6 @@ public class Committee<T extends Lecturer.Degree> implements Comparable<Committe
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-
         if (obj == null || getClass() != obj.getClass()) return false;
 
         Committee<T> other = (Committee<T>) obj;
@@ -168,7 +138,7 @@ public class Committee<T extends Lecturer.Degree> implements Comparable<Committe
     @Override
     public int compareTo(Committee o) {
         if (compareMode == 1)
-            return Integer.compare(this.lecturerCount, o.lecturerCount);
+            return Integer.compare(this.lecturers_Array.size(), o.lecturers_Array.size());
         return Integer.compare(this.sumOfArticles(), o.sumOfArticles());
     }
 
@@ -182,18 +152,20 @@ public class Committee<T extends Lecturer.Degree> implements Comparable<Committe
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-            clone.lecturers_Array = new Lecturer[this.lecturers_Array.length];
-            for (int i = 0; i < this.lecturers_Array.length; i++) {
-                if (this.lecturers_Array[i] != null) {
-                    if (this.lecturers_Array[i] instanceof Professor) {
-                        clone.lecturers_Array[i] = new Professor((Professor) this.lecturers_Array[i]);
-                    } else if (this.lecturers_Array[i] instanceof Doctor) {
-                        clone.lecturers_Array[i] = new Doctor((Doctor) this.lecturers_Array[i]);
+
+            clone.lecturers_Array = new ArrayList<>();
+            for (Lecturer l : this.lecturers_Array) {
+                if (l != null) {
+                    if (l instanceof Professor) {
+                        clone.lecturers_Array.add(new Professor((Professor) l));
+                    } else if (l instanceof Doctor) {
+                        clone.lecturers_Array.add(new Doctor((Doctor) l));
                     } else {
-                        clone.lecturers_Array[i] = new Lecturer(this.lecturers_Array[i]);
+                        clone.lecturers_Array.add(new Lecturer(l));
                     }
                 }
             }
+
             if (this.chairman instanceof Professor) {
                 clone.chairman = new Professor((Professor) this.chairman);
             } else if (this.chairman instanceof Doctor) {
@@ -214,13 +186,13 @@ public class Committee<T extends Lecturer.Degree> implements Comparable<Committe
                 "Chairman: " + chairName + "\n" +
                 "Members List:\n";
 
-        if (lecturerCount == 0) {
+        if (lecturers_Array.isEmpty()) {
             info += "  - No members assigned yet.\n";
         } else {
-            for (int i = 0; i < lecturerCount; i++) {
-                if (lecturers_Array[i] != null) {
-                    info += "  - " + lecturers_Array[i].getName();
-                    if (chairman != null && lecturers_Array[i].getName().equalsIgnoreCase(chairman.getName())) {
+            for (Lecturer l : lecturers_Array) {
+                if (l != null) {
+                    info += "  - " + l.getName();
+                    if (chairman != null && l.getName().equalsIgnoreCase(chairman.getName())) {
                         info += " (Committee Chairman)";
                     }
                     info += "\n";

@@ -1,30 +1,29 @@
 package razEini_razYacobi;
 
+import java.util.ArrayList;
+
 public class Department {
     private String department_name;
     private int student_count;
-    private Lecturer[] lecturers_Array;
-    private int lecturerCount;
+    private ArrayList<Lecturer> lecturers_Array;
 
     public Department() throws AdministrativeException {
         setDepartmentName("Unknown");
         setStudentCount(0);
-        this.lecturers_Array = new Lecturer[1];
-        this.lecturerCount = 0;
+        this.lecturers_Array = new ArrayList<>();
     }
 
     public Department(String department_name, int student_count) throws AdministrativeException {
         setDepartmentName(department_name);
         setStudentCount(student_count);
-        this.lecturers_Array = new Lecturer[1];
-        this.lecturerCount = 0;
+        this.lecturers_Array = new ArrayList<>();
     }
 
     public Department(Department other) throws AdministrativeException {
         if (other != null) {
             setDepartmentName(other.department_name);
             setStudentCount(other.student_count);
-            setLecturers(other.lecturers_Array);
+            this.lecturers_Array = new ArrayList<>(other.lecturers_Array);
         }
     }
 
@@ -34,11 +33,7 @@ public class Department {
 
     public Lecturer[] getLecturers() {
         if (this.lecturers_Array == null) return new Lecturer[0];
-        Lecturer[] copy = new Lecturer[this.lecturerCount];
-        for (int i = 0; i < this.lecturerCount; i++) {
-            copy[i] = this.lecturers_Array[i];
-        }
-        return copy;
+        return this.lecturers_Array.toArray(new Lecturer[0]);
     }
 
     public void setDepartmentName(String department_name) throws AdministrativeException {
@@ -58,38 +53,27 @@ public class Department {
     }
 
     public void setLecturers(Lecturer[] lecturers_Array) {
+        this.lecturers_Array = new ArrayList<>();
         if (lecturers_Array != null) {
-            this.lecturers_Array = new Lecturer[lecturers_Array.length * 2];
-            this.lecturerCount = 0;
-            for (int i = 0; i < lecturers_Array.length; i++) {
-                if (lecturers_Array[i] != null) {
-                    this.lecturers_Array[this.lecturerCount++] = lecturers_Array[i];
+            for (Lecturer l : lecturers_Array) {
+                if (l != null) {
+                    this.lecturers_Array.add(l);
                 }
             }
-        } else {
-            this.lecturers_Array = new Lecturer[1];
-            this.lecturerCount = 0;
         }
     }
 
     public void addLecturer(Lecturer lecturer) throws AdministrativeException {
-        if (lecturer == null) throw new AdministrativeException("Error: Cannot add a null lecturer to the department.");;
-        if(isLecturerExists(lecturer.getName())) throw new AdministrativeException("Error: Lecturer " + lecturer.getName() + " is already a member of this department.");
-        if (this.lecturerCount == this.lecturers_Array.length) {
-            Lecturer[] temp = new Lecturer[this.lecturers_Array.length * 2];
-            for (int i = 0; i < this.lecturerCount; i++) {
-                temp[i] = this.lecturers_Array[i];
-            }
-            this.lecturers_Array = temp;
-        }
-        this.lecturers_Array[this.lecturerCount++] = lecturer;
+        if (lecturer == null) throw new AdministrativeException("Error: Cannot add a null lecturer to the department.");
+        if (isLecturerExists(lecturer.getName())) throw new AdministrativeException("Error: Lecturer " + lecturer.getName() + " is already a member of this department.");
+
+        this.lecturers_Array.add(lecturer);
     }
 
     public boolean isLecturerExists(String lecturerName) {
         if (lecturerName == null || this.lecturers_Array == null) return false;
-        for (int i = 0; i < this.lecturerCount; i++) {
-            if (this.lecturers_Array[i] != null &&
-                    this.lecturers_Array[i].getName().equalsIgnoreCase(lecturerName)) {
+        for (Lecturer l : lecturers_Array) {
+            if (l != null && l.getName().equalsIgnoreCase(lecturerName)) {
                 return true;
             }
         }
@@ -99,7 +83,6 @@ public class Department {
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-
         if (obj == null || getClass() != obj.getClass()) return false;
 
         Department other = (Department) obj;
@@ -112,6 +95,6 @@ public class Department {
 
     @Override
     public String toString() {
-        return "Department: " + department_name + " | Lecturers: " + lecturerCount;
+        return "Department: " + department_name + " | Lecturers: " + lecturers_Array.size();
     }
 }

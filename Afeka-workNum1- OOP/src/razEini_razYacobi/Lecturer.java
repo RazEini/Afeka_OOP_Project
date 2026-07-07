@@ -1,13 +1,13 @@
 package razEini_razYacobi;
 
+import java.util.ArrayList;
+
 public class Lecturer implements Comparable<Lecturer> {
     private String lecturer_name;
     private String lecturer_id;
     private int salary;
     private Department department;
-
-    private Committee[] myCommittees;
-    private int commCount;
+    private ArrayList<Committee> myCommittees;
 
     public enum Degree { BACHELOR_DEGREE, MASTER_DEGREE, DR, PROFESSOR }
     private Degree lecturerDegree;
@@ -17,8 +17,7 @@ public class Lecturer implements Comparable<Lecturer> {
         setId("000000000");
         setSalary(0);
         this.department = null;
-        this.myCommittees = new Committee[1];
-        this.commCount = 0;
+        this.myCommittees = new ArrayList<>();
         this.lecturerDegree = Degree.BACHELOR_DEGREE;
     }
 
@@ -27,8 +26,7 @@ public class Lecturer implements Comparable<Lecturer> {
         setId(id);
         setSalary(salary);
         setDepartment(department);
-        this.myCommittees = new Committee[1];
-        this.commCount = 0;
+        this.myCommittees = new ArrayList<>();
         this.lecturerDegree = degree;
     }
 
@@ -39,22 +37,13 @@ public class Lecturer implements Comparable<Lecturer> {
             this.lecturerDegree = other.lecturerDegree;
             setSalary(other.salary);
             this.department = other.department;
-            this.commCount = other.commCount;
-            this.myCommittees = new Committee[other.myCommittees.length];
-            for (int i = 0; i < other.commCount; i++) {
-                this.myCommittees[i] = other.myCommittees[i];
-            }
+            this.myCommittees = new ArrayList<>(other.myCommittees);
         }
     }
 
     public void addCommittee(Committee c) throws AdministrativeException {
-        if (c==null) throw new AdministrativeException("Error: Cannot add a null committee.");
-        if (commCount == myCommittees.length) {
-            Committee[] temp = new Committee[myCommittees.length * 2];
-            for (int i = 0; i < commCount; i++) temp[i] = myCommittees[i];
-            myCommittees = temp;
-        }
-        myCommittees[commCount++] = c;
+        if (c == null) throw new AdministrativeException("Error: Cannot add a null committee.");
+        myCommittees.add(c);
     }
 
     public String getName() { return this.lecturer_name; }
@@ -72,23 +61,11 @@ public class Lecturer implements Comparable<Lecturer> {
         else this.lecturer_id = "000000000";
     }
 
-    public void removeCommittee(String committeeName) throws  AdministrativeException {
-        if (committeeName == null || commCount == 0) throw new AdministrativeException("Error: Committee name cannot be null.");;
-        Committee[] temp = new Committee[myCommittees.length];
-        int j = 0;
-        boolean found = false;
-        for (int i = 0; i < commCount; i++) {
-            if (myCommittees[i] != null && !myCommittees[i].getCommitteeName().equalsIgnoreCase(committeeName)) {
-                temp[j] = myCommittees[i];
-                j++;
-            } else {
-                found = true;
-            }
+    public void removeCommittee(String committeeName) throws AdministrativeException {
+        if (committeeName == null || myCommittees.isEmpty()) {
+            throw new AdministrativeException("Error: Committee name cannot be null.");
         }
-        if (found) {
-            myCommittees = temp;
-            commCount--;
-        }
+        myCommittees.removeIf(c -> c != null && c.getCommitteeName().equalsIgnoreCase(committeeName));
     }
 
     @Override
@@ -126,10 +103,11 @@ public class Lecturer implements Comparable<Lecturer> {
                 "- Salary: " + salary + "\n" +
                 "- Degree: " + (lecturerDegree != null ? lecturerDegree : "None") + "\n";
         info += "- Department: " + (department != null ? department.getDepartmentName() : "None") + "\n";
-        if (commCount > 0) {
+
+        if (!myCommittees.isEmpty()) {
             info += "- Committees: ";
-            for (int i = 0; i < commCount; i++) {
-                info += myCommittees[i].getCommitteeName() + (i < commCount - 1 ? ", " : "");
+            for (int i = 0; i < myCommittees.size(); i++) {
+                info += myCommittees.get(i).getCommitteeName() + (i < myCommittees.size() - 1 ? ", " : "");
             }
         } else {
             info += "- Committees: None";

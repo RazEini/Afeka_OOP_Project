@@ -1,56 +1,33 @@
 package razEini_razYacobi;
 
+import java.util.ArrayList;
 import razEini_razYacobi.Lecturer.Degree;
 
 public class Administrative {
-    private Lecturer[] lecturers;
-    private int lecturerCount;
-    private Department[] departments;
-    private int departmentCount;
-    public Committee[] committees;
-    private int committeeCount;
+    private ArrayList<Lecturer> lecturers;
+    private ArrayList<Department> departments;
+    public ArrayList<Committee> committees;
     private final String collegeName;
 
     public Administrative(String collegeName) {
         this.collegeName = collegeName;
-        this.lecturers = new Lecturer[1];
-        this.departments = new Department[1];
-        this.committees = new Committee[1];
-        this.lecturerCount = 0;
-        this.departmentCount = 0;
-        this.committeeCount = 0;
+        this.lecturers = new ArrayList<>();
+        this.departments = new ArrayList<>();
+        this.committees = new ArrayList<>();
     }
 
     public String getCollegeName() { return this.collegeName; }
 
-    private void resizeLecturers() {
-        Lecturer[] newArr = new Lecturer[lecturers.length * 2];
-        for (int i = 0; i < lecturerCount; i++) newArr[i] = lecturers[i];
-        lecturers = newArr;
-    }
-
-    private void resizeCommittees() {
-        Committee[] temp = new Committee[committees.length * 2];
-        for (int i = 0; i < committeeCount; i++) temp[i] = committees[i];
-        committees = temp;
-    }
-
-    private void resizeDepartments() {
-        Department[] temp = new Department[departments.length * 2];
-        for (int i = 0; i < departmentCount; i++) temp[i] = departments[i];
-        departments = temp;
-    }
-
     public boolean isLecturerExists(String name) {
-        for (int i = 0; i < lecturerCount; i++) {
-            if (lecturers[i].getName().equalsIgnoreCase(name)) return true;
+        for (Lecturer l : lecturers) {
+            if (l.getName().equalsIgnoreCase(name)) return true;
         }
         return false;
     }
 
     public boolean isLecturersIdExists(String id) {
-        for (int i = 0; i < lecturerCount; i++) {
-            if (lecturers[i].getId().equalsIgnoreCase(id)) return true;
+        for (Lecturer l : lecturers) {
+            if (l.getId().equalsIgnoreCase(id)) return true;
         }
         return false;
     }
@@ -72,8 +49,6 @@ public class Administrative {
     }
 
     public void addLecturer(String name, String id, String degreeStr, int salary, String institution) throws AdministrativeException {
-        if (lecturerCount == lecturers.length) resizeLecturers();
-
         Degree degree = Degree.BACHELOR_DEGREE;
         String upper = degreeStr.toUpperCase().replace(" ", "_");
         for (Degree d : Degree.values()) {
@@ -92,36 +67,36 @@ public class Administrative {
             l = new Lecturer(name, id, salary, null, degree);
         }
 
-        lecturers[lecturerCount++] = l;
+        lecturers.add(l);
     }
 
     public Lecturer findLecturerByName(String name) {
-        for (int i = 0; i < lecturerCount; i++) {
-            if (lecturers[i].getName().equalsIgnoreCase(name)) return lecturers[i];
+        for (Lecturer l : lecturers) {
+            if (l.getName().equalsIgnoreCase(name)) return l;
         }
         return null;
     }
 
     public Committee findCommitteeByName(String name) {
-        for (int i = 0; i < committeeCount; i++) {
-            if (committees[i].getCommitteeName().equalsIgnoreCase(name)) return committees[i];
+        for (Committee c : committees) {
+            if (c.getCommitteeName().equalsIgnoreCase(name)) return c;
         }
         return null;
     }
 
     public double getAverageSalary() {
-        if (lecturerCount == 0) return 0;
+        if (lecturers.isEmpty()) return 0;
         double sum = 0;
-        for (int i = 0; i < lecturerCount; i++) sum += lecturers[i].getSalary();
-        return sum / lecturerCount;
+        for (Lecturer l : lecturers) sum += l.getSalary();
+        return sum / lecturers.size();
     }
 
     public double getAverageSalaryByDepartment(String department) {
         double sum = 0;
         int countInDepartment = 0;
-        for (int i = 0; i < lecturerCount; i++) {
-            if (lecturers[i].getDepartment() != null && lecturers[i].getDepartment().getDepartmentName().equalsIgnoreCase(department)) {
-                sum += lecturers[i].getSalary();
+        for (Lecturer l : lecturers) {
+            if (l.getDepartment() != null && l.getDepartment().getDepartmentName().equalsIgnoreCase(department)) {
+                sum += l.getSalary();
                 countInDepartment++;
             }
         }
@@ -130,26 +105,26 @@ public class Administrative {
     }
 
     public String getAllLecturersFullData() throws AdministrativeException {
-        if (lecturerCount == 0) throw new AdministrativeException("No lecturers registered.");
+        if (lecturers.isEmpty()) throw new AdministrativeException("No lecturers registered.");
         String result = "";
-        for (int i = 0; i < lecturerCount; i++) {
-            result += (lecturers[i].toString() + "\n\n");
+        for (Lecturer l : lecturers) {
+            result += (l.toString() + "\n\n");
         }
         return result;
     }
 
     public String getAllCommitteesFullData() throws AdministrativeException {
-        if (committeeCount == 0) throw new AdministrativeException("No committees registered.");
+        if (committees.isEmpty()) throw new AdministrativeException("No committees registered.");
         String result = "";
-        for (int i = 0; i < committeeCount; i++) {
-            result += committees[i].toString() + "\n";
+        for (Committee c : committees) {
+            result += c.toString() + "\n";
         }
         return result;
     }
 
     public boolean isCommitteeExists(String name) {
-        for (int i = 0; i < committeeCount; i++) {
-            if (committees[i].getCommitteeName().equalsIgnoreCase(name)) return true;
+        for (Committee c : committees) {
+            if (c.getCommitteeName().equalsIgnoreCase(name)) return true;
         }
         return false;
     }
@@ -164,10 +139,7 @@ public class Administrative {
             }
         }
 
-        if (committeeCount == committees.length) {
-            resizeCommittees();
-        }
-        committees[committeeCount++] = c;
+        committees.add(c);
     }
 
     public void addLecturerToCommittee(String committeeName, String lecturerName) throws AdministrativeException {
@@ -190,9 +162,9 @@ public class Administrative {
             throw new AdministrativeException("Error: Lecturer " + lecturerName + " already exists in this committee.");
         }
 
-        for (int i = 0; i < committeeCount; i++) {
-            if (committees[i].isLecturerExists(lecturerName)) {
-                throw new AdministrativeException("Error: Lecturer " + lecturerName + " is already a member of committee '" + committees[i].getCommitteeName() + "'.");
+        for (Committee committee : committees) {
+            if (committee.isLecturerExists(lecturerName)) {
+                throw new AdministrativeException("Error: Lecturer " + lecturerName + " is already a member of committee '" + committee.getCommitteeName() + "'.");
             }
         }
 
@@ -226,8 +198,8 @@ public class Administrative {
 
     public boolean ChairmanExists(Lecturer l) {
         if (l == null || l.getName() == null) return false;
-        for (int i = 0; i < committeeCount; i++) {
-            Lecturer currentChair = committees[i].getChairman();
+        for (Committee committee : committees) {
+            Lecturer currentChair = committee.getChairman();
             if (currentChair != null && currentChair.getName() != null &&
                     currentChair.getName().equalsIgnoreCase(l.getName())) {
                 return true;
@@ -270,8 +242,8 @@ public class Administrative {
     }
 
     public boolean isDepartmentExists(String departmentName) {
-        for (int i = 0; i < departmentCount; i++) {
-            if (departments[i].getDepartmentName().equalsIgnoreCase(departmentName)) {
+        for (Department dept : departments) {
+            if (dept.getDepartmentName().equalsIgnoreCase(departmentName)) {
                 return true;
             }
         }
@@ -279,13 +251,10 @@ public class Administrative {
     }
 
     public void AddDepartment(Department department) throws AdministrativeException {
-        if (department == null) throw new AdministrativeException("Error: Department cannot be null.");;
-        if (isDepartmentExists(department.getDepartmentName())) throw new AdministrativeException("Error: Department '" + department.getDepartmentName() + "' already exists.");;
+        if (department == null) throw new AdministrativeException("Error: Department cannot be null.");
+        if (isDepartmentExists(department.getDepartmentName())) throw new AdministrativeException("Error: Department '" + department.getDepartmentName() + "' already exists.");
 
-        if (departmentCount == departments.length) {
-            resizeDepartments();
-        }
-        departments[departmentCount++] = department;
+        departments.add(department);
     }
 
     public void addLecturerToDepartment(String departmentName, String lecturerName) throws AdministrativeException {
@@ -295,9 +264,9 @@ public class Administrative {
         }
 
         Department targetDept = null;
-        for (int i = 0; i < departmentCount; i++) {
-            if (departments[i].getDepartmentName().equalsIgnoreCase(departmentName)) {
-                targetDept = departments[i];
+        for (Department dept : departments) {
+            if (dept.getDepartmentName().equalsIgnoreCase(departmentName)) {
+                targetDept = dept;
                 break;
             }
         }
@@ -345,7 +314,7 @@ public class Administrative {
 
     @Override
     public String toString() {
-        return "Administrative{collegeName='" + collegeName + "', lecturers=" + lecturerCount +
-                ", departments=" + departmentCount + ", committees=" + committeeCount + "}";
+        return "Administrative{collegeName='" + collegeName + "', lecturers=" + lecturers.size() +
+                ", departments=" + departments.size() + ", committees=" + committees.size() + "}";
     }
 }
