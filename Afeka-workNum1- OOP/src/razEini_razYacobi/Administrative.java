@@ -162,12 +162,6 @@ public class Administrative {
             throw new AdministrativeException("Error: Lecturer " + lecturerName + " already exists in this committee.");
         }
 
-        for (Committee committee : committees) {
-            if (committee.isLecturerExists(lecturerName)) {
-                throw new AdministrativeException("Error: Lecturer " + lecturerName + " is already a member of committee '" + committee.getCommitteeName() + "'.");
-            }
-        }
-
         targetCommittee.addLecturer(l);
         l.addCommittee(targetCommittee);
     }
