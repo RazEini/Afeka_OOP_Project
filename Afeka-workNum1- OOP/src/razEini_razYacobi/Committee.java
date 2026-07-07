@@ -1,8 +1,9 @@
 package razEini_razYacobi;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Committee<T extends Lecturer.Degree> implements Comparable<Committee>, Cloneable {
+public class Committee<T extends Lecturer.Degree> implements Comparable<Committee>, Cloneable , Serializable {
     private String committee_name;
     private ArrayList<Lecturer> lecturers_Array;
     private Lecturer chairman;

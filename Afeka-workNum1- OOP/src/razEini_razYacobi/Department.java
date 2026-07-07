@@ -1,8 +1,9 @@
 package razEini_razYacobi;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Department {
+public class Department implements Serializable {
     private String department_name;
     private int student_count;
     private ArrayList<Lecturer> lecturers_Array;

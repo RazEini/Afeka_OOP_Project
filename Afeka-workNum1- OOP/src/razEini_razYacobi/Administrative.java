@@ -1,9 +1,10 @@
 package razEini_razYacobi;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import razEini_razYacobi.Lecturer.Degree;
 
-public class Administrative {
+public class Administrative implements Serializable {
     private ArrayList<Lecturer> lecturers;
     private ArrayList<Department> departments;
     public ArrayList<Committee> committees;

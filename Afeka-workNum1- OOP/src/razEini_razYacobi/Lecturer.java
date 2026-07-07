@@ -1,8 +1,9 @@
 package razEini_razYacobi;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Lecturer implements Comparable<Lecturer> {
+public class Lecturer implements Comparable<Lecturer> , Serializable {
     private String lecturer_name;
     private String lecturer_id;
     private int salary;

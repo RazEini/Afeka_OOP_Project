@@ -1,6 +1,8 @@
 package razEini_razYacobi;
 
-public class Doctor extends Lecturer {
+import java.io.Serializable;
+
+public class Doctor extends Lecturer implements Serializable {
     private String[] articles;
     private int artCount;
 

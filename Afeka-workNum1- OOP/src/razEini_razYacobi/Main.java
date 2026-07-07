@@ -1,45 +1,74 @@
 package razEini_razYacobi;
 
+import java.io.*;
 import java.util.Scanner;
 
 public class Main {
 
     static Scanner scanner = new Scanner(System.in);
+    static final String FILE_NAME = "college_data.dat";
 
     // מגישים:
     // רז עייני - 328153101
     // רז יעקבי - 213864416
 
+    private static void saveSerialization(Administrative administrative, String fileName) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName))) {
+            oos.writeObject(administrative);
+            System.out.println("Data saved successfully.");
+        } catch (IOException e) {
+            System.out.println("Error saving data: " + e.getMessage());
+        }
+    }
+
+    private static Administrative loadSerialization(String fileName) {
+        File file = new File(fileName);
+        if (!file.exists()) {
+            return null;
+        }
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileName))) {
+            return (Administrative) ois.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Error loading saved data. Initializing empty system.");
+            return null;
+        }
+    }
+
     public static void main(String[] args) {
 
-        String collegeName = "";
-        boolean isCollegeNameValid = false;
+        Administrative administrative = loadSerialization(FILE_NAME);
 
-        while (!isCollegeNameValid) {
-            System.out.print("Welcome! Enter the name of the college: ");
-            collegeName = scanner.nextLine();
+        if (administrative == null) {
+            String collegeName = "";
+            boolean isCollegeNameValid = false;
 
-            if (collegeName == null || collegeName.trim().isEmpty()) {
-                System.out.println("Invalid college name! Name cannot be empty.");
-                continue;
-            }
+            while (!isCollegeNameValid) {
+                System.out.print("Welcome! Enter the name of the college: ");
+                collegeName = scanner.nextLine();
 
-            boolean hasDigit = false;
-            for (int i = 0; i < collegeName.length(); i++) {
-                if (collegeName.charAt(i) >= '0' && collegeName.charAt(i) <= '9') {
-                    hasDigit = true;
-                    break;
+                if (collegeName == null || collegeName.trim().isEmpty()) {
+                    System.out.println("Invalid college name! Name cannot be empty.");
+                    continue;
+                }
+
+                boolean hasDigit = false;
+                for (int i = 0; i < collegeName.length(); i++) {
+                    if (collegeName.charAt(i) >= '0' && collegeName.charAt(i) <= '9') {
+                        hasDigit = true;
+                        break;
+                    }
+                }
+
+                if (hasDigit) {
+                    System.out.println("Invalid college name! Name cannot contain numbers.");
+                } else {
+                    isCollegeNameValid = true;
                 }
             }
-
-            if (hasDigit) {
-                System.out.println("Invalid college name! Name cannot contain numbers.");
-            } else {
-                isCollegeNameValid = true;
-            }
+            administrative = new Administrative(collegeName);
+        } else {
+            System.out.println("Welcome back! Data loaded for college: " + administrative.getCollegeName());
         }
-
-        Administrative administrative = new Administrative(collegeName);
 
         int choice = -1;
 
@@ -241,7 +270,7 @@ public class Main {
 
                         String degree;
                         while (true) {
-                            System.out.print("Enter degree name: ");
+                            System.out.print("Enter degree type (BACHELOR DEGREE, MASTER DEGREE, DR, PROFESSOR): ");
                             degree = InputHelper.readLine().trim();
 
                             if (degree.isEmpty()) {
@@ -635,6 +664,7 @@ public class Main {
 
                     case 0:
                         System.out.println("Exiting the program...");
+                        saveSerialization(administrative, FILE_NAME);
                         break;
                     default:
                         System.out.println("Invalid option, please try again.");
