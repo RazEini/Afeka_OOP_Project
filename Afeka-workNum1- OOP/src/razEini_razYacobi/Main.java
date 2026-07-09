@@ -15,6 +15,7 @@ public class Main {
     private static void saveSerialization(Administrative administrative, String fileName) {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName))) {
             oos.writeObject(administrative);
+            oos.close();
             System.out.println("Data saved successfully.");
         } catch (IOException e) {
             System.out.println("Error saving data: " + e.getMessage());
