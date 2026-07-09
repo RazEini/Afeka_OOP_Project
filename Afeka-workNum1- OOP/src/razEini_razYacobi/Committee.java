@@ -96,7 +96,7 @@ public class Committee<T extends Lecturer.Degree> implements Comparable<Committe
     public void addLecturer(Lecturer lecturer) throws AdministrativeException {
         if (lecturer == null) throw new AdministrativeException("Error: Cannot add a null lecturer.");
         if (isLecturerExists(lecturer.getName())) throw new AdministrativeException("Error: Lecturer " + lecturer.getName() + " already exists in this committee.");
-        if (lecturer.getDegree() != this.committeeDegree) {
+        if (!lecturer.getDegree().equals(this.committeeDegree)) {
             throw new AdministrativeException("Error: Lecturer " + lecturer.getName() + " does not have the required degree for this committee (" + this.committeeDegree + ").");
         }
         lecturers_Array.add(lecturer);
@@ -185,6 +185,7 @@ public class Committee<T extends Lecturer.Degree> implements Comparable<Committe
         String chairName = (chairman != null && chairman.getName() != null) ? chairman.getName() : "None";
         String info = "Committee: " + committee_name + "\n" +
                 "Chairman: " + chairName + "\n" +
+                "degree: " + committeeDegree + "\n" +
                 "Members List:\n";
 
         if (lecturers_Array.isEmpty()) {
