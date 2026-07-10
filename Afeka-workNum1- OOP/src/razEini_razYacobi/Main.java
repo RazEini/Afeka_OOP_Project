@@ -673,7 +673,7 @@ public class Main {
             } catch (GoBackException e) {
                 System.out.println("\nReturning to the main menu...");
             } catch (Exception e) {
-                System.out.println("Unexpected error: " + e.getMessage());
+                System.out.println("Unexpected error: " + e.getStackTrace());
             }
         }
         scanner.close();
