@@ -1,11 +1,24 @@
 # College Administrative Management System
  
+![Java](https://img.shields.io/badge/Java-11%2B-orange?logo=openjdk)
+![Build](https://img.shields.io/badge/build-javac-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
+ 
 A comprehensive Object-Oriented Java console application designed to manage the administrative operations of an academic institution (departments, committees, and academic staff). Built with defensive input validation, custom exceptions, and serializable persistence to ensure data integrity and a robust CLI user experience.
  
 ## Authors
  
 - Raz Eini
 - Raz Yakoby
+## Table of Contents
+ 
+- [System Architecture](#system-architecture)
+- [Domain Model](#domain-model)
+- [Directory Structure](#directory-structure)
+- [Interactive Features (CLI Menu)](#interactive-features-cli-menu)
+- [Getting Started](#getting-started)
+- [Example Session](#example-session)
+- [License](#license)
 ## System Architecture
  
 The system uses a clean object-oriented domain model incorporating inheritance, generic type safety, and polymorphic behaviors.
@@ -31,6 +44,21 @@ Constructors and `setLecturers()` strictly enforce that a member's degree matche
 - **Dynamic Comparisons (`Comparable`)**: `Committee` supports runtime criteria switching via `setCompareMode()`, comparing instances either by total member count or total publication count.
 - **Prototyping (`Cloneable`)**: `Committee.clone()` generates a deep copy of the committee and its members (using copy constructors across `Professor`, `Doctor`, and `Lecturer`), prefixing the cloned instance name with `"new-"`.
 - **Persistence**: Objects are serialized to and deserialized from `college_data.dat` via `ObjectOutputStream` and `ObjectInputStream` helpers (`saveSerialization` / `loadSerialization`).
+## Domain Model
+ 
+`Lecturer` is the base type of the academic staff hierarchy, extended by `Doctor` and `Professor`, each carrying its own degree-specific behavior and salary rules. `Committee<T extends Lecturer.Degree>` binds to one of these degrees at the type level, so a `Committee<Professor>` can only ever accept professors as members — the compiler enforces it, not just runtime checks.
+ 
+```
+Lecturer
+ ├── Doctor
+ └── Professor
+ 
+Committee<T extends Lecturer.Degree>
+ └── members: List<T>
+```
+ 
+A full UML class diagram is available at `assets/class diagram pic.png`.
+ 
 ## Directory Structure
  
 ```
@@ -102,3 +130,27 @@ Run the application:
 java -cp bin Main
 ```
  
+## Example Session
+ 
+```
+=== College Administrative Management System ===
+1.  Add Lecturer
+2.  Add Committee
+3.  Add Member to Committee
+...
+0.  Exit
+ 
+> Select an option: 1
+> Enter degree (Lecturer/Doctor/Professor): Doctor
+> Enter name: Dana Cohen
+> Enter salary: 14500
+Doctor 'Dana Cohen' added successfully.
+```
+ 
+Typing `back` at any prompt safely unwinds out of the current operation via `GoBackException`, returning you to the main menu without corrupting in-progress data.
+ 
+## License
+ 
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
+ 
+
