@@ -1,6 +1,6 @@
 # College Administrative Management System
 
-A comprehensive Object-Oriented console application designed to manage the administrative operations of an academic institution. The system robustly handles the structural hierarchy of departments, committees, and various academic staff members while ensuring data integrity.
+A comprehensive Object-Oriented console application designed to manage the administrative operations of an academic institution (departments, committees, and academic staff). The system uses defensive input validation and custom exceptions to preserve data integrity and provide a robust CLI experience.
 
 ## Authors
 * **Raz Eini**
@@ -10,37 +10,46 @@ A comprehensive Object-Oriented console application designed to manage the admin
 
 Below is the UML class diagram representing the system's architecture and object relations:
 
-<img src="assets/class%20diagram%20pic.png" alt="Class Diagram" width="100%">
+<img src="assets/class_diagram_updated.svg" alt="Class Diagram" width="100%">
+
+## Source Highlights / Implementation Notes
+
+- Collections: The implementation uses java.util.ArrayList for collections internally (e.g., Administrative.lecturers, Department.lecturers_Array, Committee.lecturers_Array). The UML reflects ArrayList usage (not fixed-size arrays) and the project does not use manual counters for collection sizes.
+- Committee degree binding: Committee is a generic type parameterized by a Lecturer.Degree, declared as Committee<T extends Lecturer.Degree>. Committee constructors and setLecturers enforce that members' degrees match the committee's required degree.
+- Cloning: Committee.clone() returns a Committee<T>. The clone method prefixes the cloned committee name with "new-" and clones members via the available copy constructors (Professor, Doctor, Lecturer), providing a deep-copy-like behavior of members and chairman.
+- Persistence: Main serializes/deserializes the Administrative object to/from "college_data.dat" using ObjectOutputStream/ObjectInputStream. The Main class includes private static helpers (saveSerialization and loadSerialization) to handle persistence.
+- Input and GoBack behavior:
+  - `InputHelper` is a top-level helper class that centralizes reading lines from System.in. `InputHelper.readLine()` will throw a `GoBackException` when the user types the word `back`.
+  - `GoBackException` is a top-level class (not an inner class) that extends `Exception` and is used as a control-flow mechanism to return to the main menu from nested prompts.
+- Public fields: `Administrative.committees` is implemented as a public `ArrayList<Committee>` in the source (not hidden). This is an implementation detail to be aware of.
+- Degree enum: `Lecturer` contains a nested enum `Degree` with values `BACHELOR_DEGREE`, `MASTER_DEGREE`, `DR`, `PROFESSOR`.
+- Defensive validation: `Main` performs strict validation on input (IDs, names, salaries, department names, etc.) and uses `InputHelper.readLine()` to allow safe cancellation ("back") from nested prompts.
 
 ## User Interface & Features
 
-The system operates via a robust Command Line Interface (CLI) interactive menu. It features strict input validation (defensive programming) to prevent system crashes from invalid user inputs (e.g., negative numbers, strings containing digits where names are expected, invalid IDs). 
-
-### Global Navigation
-* **The `back` Command:** At any prompt within the sub-menus, the user can type `back` to immediately abort the current operation and return to the main menu safely.
-
-### Menu Options
-1. **Add Lecturer:** Registers a new staff member (Validates degree: BACHELOR, MASTER, DR, PROFESSOR).
-2. **Add Committee:** Creates a new committee (Enforces that the Chairman must be a Doctor or Professor and not already chairing another committee).
-3. **Add Member to Committee:** Assigns existing lecturers to committees.
-4. **Update Committee Chairman:** Replaces the current chairman with a valid alternative.
-5. **Remove Member from Committee:** Removes a lecturer from a specific committee.
-6. **Add Department:** Registers a new academic department.
-7. **Assign Lecturer to Department:** Links a lecturer to a specific department.
-8. **College Salary Report:** Calculates and displays the average salary of all staff.
-9. **Department Salary Report:** Calculates the average salary for a specific department.
-10. **Lecturers Roster:** Displays full data for all registered lecturers.
-11. **Committees Roster:** Displays full data for all active committees.
-12. **Add Article:** Adds publication records to a specific Doctor/Professor.
-13. **Compare Lecturers (Articles):** Compares two advanced staff members based on their publication count.
-14. **Compare Committees (Dynamic):** Compares two committees dynamically either by the **number of members** or by the **total number of articles** published by its members.
-15. **Clone Committee:** Creates a deep/shallow duplicate of an existing committee.
+The system operates via an interactive CLI main menu offering the following operations (matches the implemented menu):
+1. Add Lecturer
+2. Add Committee
+3. Add Member to Committee
+4. Update Committee Chairman
+5. Remove Member from Committee
+6. Add Department
+7. Assign Lecturer to Department
+8. Display Average Salary of All College Lecturers
+9. Display Average Salary of a Specific Department
+10. Display All Lecturers Information
+11. Display All Committees Information
+12. Add Article to Lecturer
+13. Compare number of articles between two Lecturers
+14. Compare committees by number of members or by number of articles
+15. Clone a Committee
+0. Exit (on exit, Administrative data will be serialized to "college_data.dat")
 
 ## Technical Concepts Applied
+* Object-Oriented Programming (OOP): Inheritance (Doctor, Professor), Polymorphism, Encapsulation, Composition (departments, committees).
+* Custom Exception Handling: AdministrativeException for logical errors; GoBackException (top-level) for user-initiated "back" control flow handled via InputHelper.
+* Dynamic Interfaces (Comparable): Committee implements Comparable, dynamically switching compare criteria by setCompareMode().
+* Prototyping (Cloneable): Committee implements clone(), cloning members with copy constructors.
+* Defensive Programming: Extensive validation logic within Main and other classes.
 
-* **Object-Oriented Programming (OOP):** Deep utilization of Inheritance, Polymorphism, Encapsulation, and Composition across the administrative entities.
-* **Custom Exception Handling:** * `AdministrativeException` for logical system errors (e.g., adding an existing user).
-  * `GoBackException` (a private static inner class) uniquely used as a control-flow mechanism to return to the main menu gracefully from any nested prompt.
-* **Dynamic Interfaces (`Comparable`):** The `Committee` class implements `Comparable` dynamically, changing its comparison logic based on a state variable (Members count vs. Articles count).
-* **Prototyping (`Cloneable`):** Implementation of the `clone()` method for safe object duplication.
-* **Defensive Programming:** Extensive `while` loops and string parsing techniques in the `Main` class to validate inputs before instantiating objects or calling methods.
+Note: README was updated to reflect actual implementation details: `InputHelper` is a top-level class and `GoBackException` is top-level (not an inner class of `Main`), Committee is generic, and collections use `ArrayList`.

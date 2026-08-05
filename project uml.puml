@@ -1,6 +1,5 @@
 @startuml
-' Class diagram for the project
-
+ ' Updated Class diagram reflecting source code
 skinparam classAttributeIconSize 0
 skinparam shadowing false
 skinparam backgroundColor white
@@ -12,18 +11,16 @@ skinparam EnumBorderColor #B38F00
 skinparam PackageBorderColor #888888
 
 class Administrative {
-  - lecturers : Lecturer[]
-  - lecturerCount : int
-  - departments : Department[]
-  - departmentCount : int
-  + committees : Committee[]
-  - committeeCount : int
+  - lecturers : java.util.ArrayList<Lecturer>
+  - departments : java.util.ArrayList<Department>
+  + committees : java.util.ArrayList<Committee>
   - collegeName : String {readOnly}
   .. operations ..
   + Administrative(collegeName : String)
   + getCollegeName() : String
   + isLecturerExists(name : String) : boolean
   + isLecturersIdExists(id : String) : boolean
+  + getDegree(degree : String) : Lecturer.Degree
   + {static} isValidID(idStr : String) : boolean
   + addLecturer(name : String, id : String, degreeStr : String, salary : int, institution : String) : void
   + findLecturerByName(name : String) : Lecturer
@@ -48,16 +45,16 @@ class AdministrativeException {
   + AdministrativeException(message : String)
 }
 
-class Committee {
+class Committee<T extends Lecturer.Degree> {
   - committee_name : String
-  - lecturers_Array : Lecturer[]
+  - lecturers_Array : java.util.ArrayList<Lecturer>
   - chairman : Lecturer
-  - lecturerCount : int
   - compareMode : int
+  - committeeDegree : T
   .. operations ..
-  + Committee()
-  + Committee(name : String, lecturers : Lecturer[], chairman : Lecturer)
-  + Committee(other : Committee, isClone : boolean)
+  + Committee(degree : T)
+  + Committee(name : String, lecturers : Lecturer[], chairman : Lecturer, degree : T)
+  + Committee(other : Committee<T>, isClone : boolean)
   + getChairman() : Lecturer
   + getCommitteeName() : String
   + setCommitteeName(name : String) : void
@@ -69,7 +66,7 @@ class Committee {
   + deleteLecturer(lecturer : Lecturer) : void
   + sumOfArticles() : int
   + compareTo(o : Committee) : int
-  + clone() : Committee
+  + clone() : Committee<T>
   + equals(obj : Object) : boolean
   + toString() : String
 }
@@ -77,7 +74,7 @@ class Committee {
 class Department {
   - department_name : String
   - student_count : int
-  - lecturers_Array : Lecturer[]
+  - lecturers_Array : java.util.ArrayList<Lecturer>
   .. operations ..
   + Department()
   + Department(department_name : String, student_count : int)
@@ -87,6 +84,7 @@ class Department {
   + setDepartmentName(department_name : String) : void
   + setStudentCount(student_count : int) : void
   + setLecturers(lecturers_Array : Lecturer[]) : void
+  + addLecturer(lecturer : Lecturer) : void
   + isLecturerExists(lecturerName : String) : boolean
   + equals(obj : Object) : boolean
   + toString() : String
@@ -97,8 +95,7 @@ class Lecturer {
   - lecturer_id : String
   - salary : int
   - department : Department
-  - myCommittees : Committee[]
-  - commCount : int
+  - myCommittees : java.util.ArrayList<Committee>
   - lecturerDegree : Lecturer.Degree
   .. operations ..
   + Lecturer()
@@ -151,12 +148,21 @@ class Professor {
 }
 
 class Main {
+  - {static} scanner : java.util.Scanner
+  - {static} FILE_NAME : String = "college_data.dat"
   .. operations ..
+  - {static} saveSerialization(administrative : Administrative, fileName : String) : void
+  - {static} loadSerialization(fileName : String) : Administrative
   + {static} main(args : String[]) : void
-  - {static} readLine() : String
 }
 
-class "Main.GoBackException" as GoBackException <<private static inner>> {
+class InputHelper {
+  - {static} scanner : java.util.Scanner
+  + {static} readLine() : String <<throws GoBackException>>
+  + {static} closeScanner() : void
+}
+
+class GoBackException {
   + GoBackException()
 }
 
@@ -176,24 +182,18 @@ Administrative o-- "0..*" Lecturer : lecturers
 Administrative o-- "0..*" Department : departments
 Administrative o-- "0..*" Committee : committees
 Main ..> Administrative
-Main ..> GoBackException
+Main ..> InputHelper
+InputHelper ..> GoBackException
 GoBackException --|> Exception
 
-note right of GoBackException
-  Private static inner class of Main
-end note
-
-note right of LecturerDegree
-  Nested enum inside Lecturer
+note right of Committee
+  Committee is generic: Committee<T extends Lecturer.Degree>
+  Constructors and setLecturers enforce matching committeeDegree.
+  clone() prefixes the new committee name with "new-" and deep-copies members using copy ctors.
 end note
 
 note right of Administrative
-  Throws AdministrativeException from:
-  addCommittee, addLecturerToCommittee,
-  deleteLecturerFromCommittee,
-  updateChairmanCommittee,
-  addLecturerToDepartment,
-  addArticleToLecturer
+  The implementation uses java.util.ArrayList for collections (not arrays).
 end note
 
 @enduml
