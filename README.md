@@ -36,7 +36,7 @@ The system uses a clean object-oriented domain model incorporating inheritance, 
 `Committee` Degree Binding: `Committee` is parameterized over `Lecturer.Degree`:
  
 ```java
-public class Committee<T extends Lecturer.Degree> implements Comparable<Committee<?>>, Cloneable, Serializable
+public class Committee<T extends Lecturer.Degree> implements Comparable<Committee>, Cloneable, Serializable
 ```
  
 Constructors and `setLecturers()` strictly enforce that a member's degree matches the committee's required bound `T`.
@@ -45,43 +45,48 @@ Constructors and `setLecturers()` strictly enforce that a member's degree matche
  
 - `AdministrativeException`: Handles domain-level logical errors (e.g., duplicate assignments, missing chairman).
 - `GoBackException`: A top-level exception triggered when a user inputs `back`. Integrated with `InputHelper.readLine()` to provide safe, stack-unwinding cancellation out of nested prompts.
-**3. Design Patterns & Interfaces**
- 
+### 3. Design Patterns & Interfaces
+
 - **Dynamic Comparisons (`Comparable`)**: `Committee` supports runtime criteria switching via `setCompareMode()`, comparing instances either by total member count or total publication count.
 - **Prototyping (`Cloneable`)**: `Committee.clone()` generates a deep copy of the committee and its members (using copy constructors across `Professor`, `Doctor`, and `Lecturer`), prefixing the cloned instance name with `"new-"`.
 - **Persistence**: Objects are serialized to and deserialized from `college_data.dat` via `ObjectOutputStream` and `ObjectInputStream` helpers (`saveSerialization` / `loadSerialization`).
+- **Article Storage**: Articles (publications) are stored as `String[]` arrays within the `Doctor` and `Professor` classes, dynamically resized as new articles are added.
 ## Domain Model
  
-`Lecturer` is the base type of the academic staff hierarchy, extended by `Doctor` and `Professor`, each carrying its own degree-specific behavior and salary rules. `Committee<T extends Lecturer.Degree>` binds to one of these degrees at the type level, so a `Committee<Professor>` can only ever accept professors as members — the compiler enforces it, not just runtime checks.
- 
+`Lecturer` is the base type of the academic staff hierarchy, extended by `Doctor`. `Professor` further extends `Doctor` to inherit article management capabilities. `Committee<T extends Lecturer.Degree>` binds to one of these degrees at the type level, so a `Committee<Professor>` can only ever accept professors as members — the compiler enforces it, not just runtime checks.
+
+**Note:** Articles are stored as `String[]` arrays within `Doctor` (and inherited by `Professor`), not as a separate entity.
+
 ```
 Lecturer
- ├── Doctor
- └── Professor
- 
+ └── Doctor        (inherits articles: String[])
+      └── Professor (inherits articles: String[])
+
 Committee<T extends Lecturer.Degree>
  └── members: List<T>
 ```
 
 ## Directory Structure
- 
+
 ```
 .
 ├── assets/
 │   └── class diagram pic.png
-├── src/
-│   ├── Administrative.java
-│   ├── Committee.java
-│   ├── Department.java
-│   ├── Lecturer.java
-│   ├── Doctor.java
-│   ├── Professor.java
-│   ├── Article.java
-│   ├── InputHelper.java
-│   ├── GoBackException.java
-│   ├── AdministrativeException.java
-│   └── Main.java
-├── college_data.dat         # Auto-generated persistence file
+├── Afeka-workNum1- OOP/
+│   ├── src/
+│   │   └── razEini_razYacobi/
+│   │       ├── Administrative.java
+│   │       ├── Committee.java
+│   │       ├── Department.java
+│   │       ├── Lecturer.java
+│   │       ├── Doctor.java           # Contains articles as String[]
+│   │       ├── Professor.java
+│   │       ├── InputHelper.java
+│   │       ├── GoBackException.java
+│   │       ├── AdministrativeException.java
+│   │       └── Main.java
+│   └── college_data.dat             # Auto-generated persistence file
+├── project uml.puml
 └── README.md
 ```
  
@@ -91,21 +96,21 @@ The interactive CLI provides the following administrative capabilities:
  
 | ID | Action | Description |
 |----|--------|--------------|
-| 1 | Add Lecturer | Register a standard Lecturer, Doctor, or Professor |
-| 2 | Add Committee | Create a generic committee bound to a specific degree |
+| 1 | Add Lecturer | Register a new lecturer (specify degree: Lecturer/Doctor/Professor) |
+| 2 | Add Committee | Create a committee and define its academic degree requirement |
 | 3 | Add Member to Committee | Assign an eligible lecturer to a committee |
 | 4 | Update Committee Chairman | Assign or replace committee chairmanship |
 | 5 | Remove Member from Committee | Unassign a lecturer from a committee |
-| 6 | Add Department | Register an academic department |
+| 6 | Add Department | Register a new academic department |
 | 7 | Assign Lecturer to Department | Link a lecturer to a department |
 | 8 | Average Salary (College) | Calculate overall average salary across all lecturers |
 | 9 | Average Salary (Department) | Calculate average salary within a specific department |
-| 10 | Display All Lecturers | Print complete roster and attributes |
+| 10 | Display All Lecturers | Print complete roster with names, IDs, degrees, and salaries |
 | 11 | Display All Committees | Print committee details, chairmen, and members |
-| 12 | Add Article to Lecturer | Record a published research article |
+| 12 | Add Article to Lecturer | Record a published research article (Doctors/Professors only) |
 | 13 | Compare Articles | Compare article publication counts between two lecturers |
-| 14 | Compare Committees | Compare two committees dynamically by members or total articles |
-| 15 | Clone Committee | Deep-copy a committee and its nested members |
+| 14 | Compare Committees | Compare two committees by member count or total articles |
+| 15 | Clone Committee | Deep-copy a committee with all its members |
 | 0 | Exit | Save system state to `college_data.dat` and terminate |
  
 ## Getting Started
@@ -114,40 +119,41 @@ The interactive CLI provides the following administrative capabilities:
  
 - Java Development Kit (JDK): Version 11 or higher installed.
 ### Compilation & Execution
- 
+
 Clone the repository:
- 
+
 ```bash
 git clone https://github.com/your-username/your-repo-name.git
 cd your-repo-name
+cd "Afeka-workNum1- OOP"
 ```
- 
+
 Compile the source files:
- 
+
 ```bash
-javac -d bin src/*.java
+javac -d bin src/razEini_razYacobi/*.java
 ```
- 
+
 Run the application:
- 
+
 ```bash
-java -cp bin Main
+java -cp bin razEini_razYacobi.Main
 ```
  
 ## Example Session
  
 ```
-=== College Administrative Management System ===
-1.  Add Lecturer
-2.  Add Committee
-3.  Add Member to Committee
+--- College Management Menu ---
+[Type 'back' at any stage to return to this menu]
+1 - Add Lecturer to College
 ...
-0.  Exit
- 
-> Select an option: 1
-> Enter degree (Lecturer/Doctor/Professor): Doctor
-> Enter name: Dana Cohen
-> Enter salary: 14500
+0 - Exit
+
+Select an option: 1
+Enter Lecturer's name: Dana Cohen
+Enter Lecturer's ID (9 digits): 123456789
+Enter Lecturer's degree (BACHELOR DEGREE, MASTER DEGREE, DR, PROFESSOR): DR
+Enter Lecturer's salary: 14500
 Doctor 'Dana Cohen' added successfully.
 ```
  
