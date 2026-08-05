@@ -62,9 +62,7 @@ Lecturer
 Committee<T extends Lecturer.Degree>
  └── members: List<T>
 ```
- 
-A full UML class diagram is available at `assets/class diagram pic.png`.
- 
+
 ## Directory Structure
  
 ```
