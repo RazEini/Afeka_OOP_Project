@@ -1,30 +1,3 @@
-
-Claude finished the response
-
-
-Message collapsed
-
-ארגן תוכן למבנה README מובנה בעברית
-ארגן תוכן למבנה README מובנה בעברית
-אשמח להכין את זה. אני יוצר קובץ README.md מסודר על בסיס התוכן שנתת.
-
-
-Created a file, read a file
-Created a file, read a file
-אם תרצה, אני יכול גם להוסיף אזור "Class Diagram" שמצביע לקובץ בתיקיית assets, או badges (Java version, license וכו') — רק תגיד.
-
-
-Readme
-Document · MD 
-
-
-
-
-
-Claude is AI and can make mistakes. Please double-check responses.
-
-
-Readme · MD
 # College Administrative Management System
  
 A comprehensive Object-Oriented Java console application designed to manage the administrative operations of an academic institution (departments, committees, and academic staff). Built with defensive input validation, custom exceptions, and serializable persistence to ensure data integrity and a robust CLI user experience.
