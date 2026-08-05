@@ -10,6 +10,12 @@ A comprehensive Object-Oriented Java console application designed to manage the 
  
 - Raz Eini
 - Raz Yakoby
+
+
+## Class Diagram
+
+![Class Diagram](assets/class%20diagram%20pic.png)
+
 ## Table of Contents
  
 - [System Architecture](#system-architecture)
