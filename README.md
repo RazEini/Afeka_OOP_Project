@@ -1,55 +1,131 @@
+
+Claude finished the response
+
+
+Message collapsed
+
+ארגן תוכן למבנה README מובנה בעברית
+ארגן תוכן למבנה README מובנה בעברית
+אשמח להכין את זה. אני יוצר קובץ README.md מסודר על בסיס התוכן שנתת.
+
+
+Created a file, read a file
+Created a file, read a file
+אם תרצה, אני יכול גם להוסיף אזור "Class Diagram" שמצביע לקובץ בתיקיית assets, או badges (Java version, license וכו') — רק תגיד.
+
+
+Readme
+Document · MD 
+
+
+
+
+
+Claude is AI and can make mistakes. Please double-check responses.
+
+
+Readme · MD
 # College Administrative Management System
-
-A comprehensive Object-Oriented console application designed to manage the administrative operations of an academic institution (departments, committees, and academic staff). The system uses defensive input validation and custom exceptions to preserve data integrity and provide a robust CLI experience.
-
+ 
+A comprehensive Object-Oriented Java console application designed to manage the administrative operations of an academic institution (departments, committees, and academic staff). Built with defensive input validation, custom exceptions, and serializable persistence to ensure data integrity and a robust CLI user experience.
+ 
 ## Authors
-* **Raz Eini**
-* **Raz Yakoby**
-
+ 
+- Raz Eini
+- Raz Yakoby
 ## System Architecture
-
-Below is the UML class diagram representing the system's architecture and object relations:
-
-<img src="assets/class diagram pic.png" alt="Class Diagram" width="100%">
-
-## Source Highlights / Implementation Notes
-
-- Collections: The implementation uses java.util.ArrayList for collections internally (e.g., Administrative.lecturers, Department.lecturers_Array, Committee.lecturers_Array). The UML reflects ArrayList usage (not fixed-size arrays) and the project does not use manual counters for collection sizes.
-- Committee degree binding: Committee is a generic type parameterized by a Lecturer.Degree, declared as Committee<T extends Lecturer.Degree>. Committee constructors and setLecturers enforce that members' degrees match the committee's required degree.
-- Cloning: Committee.clone() returns a Committee<T>. The clone method prefixes the cloned committee name with "new-" and clones members via the available copy constructors (Professor, Doctor, Lecturer), providing a deep-copy-like behavior of members and chairman.
-- Persistence: Main serializes/deserializes the Administrative object to/from "college_data.dat" using ObjectOutputStream/ObjectInputStream. The Main class includes private static helpers (saveSerialization and loadSerialization) to handle persistence.
-- Input and GoBack behavior:
-  - `InputHelper` is a top-level helper class that centralizes reading lines from System.in. `InputHelper.readLine()` will throw a `GoBackException` when the user types the word `back`.
-  - `GoBackException` is a top-level class (not an inner class) that extends `Exception` and is used as a control-flow mechanism to return to the main menu from nested prompts.
-- Public fields: `Administrative.committees` is implemented as a public `ArrayList<Committee>` in the source (not hidden). This is an implementation detail to be aware of.
-- Degree enum: `Lecturer` contains a nested enum `Degree` with values `BACHELOR_DEGREE`, `MASTER_DEGREE`, `DR`, `PROFESSOR`.
-- Defensive validation: `Main` performs strict validation on input (IDs, names, salaries, department names, etc.) and uses `InputHelper.readLine()` to allow safe cancellation ("back") from nested prompts.
-
-## User Interface & Features
-
-The system operates via an interactive CLI main menu offering the following operations (matches the implemented menu):
-1. Add Lecturer
-2. Add Committee
-3. Add Member to Committee
-4. Update Committee Chairman
-5. Remove Member from Committee
-6. Add Department
-7. Assign Lecturer to Department
-8. Display Average Salary of All College Lecturers
-9. Display Average Salary of a Specific Department
-10. Display All Lecturers Information
-11. Display All Committees Information
-12. Add Article to Lecturer
-13. Compare number of articles between two Lecturers
-14. Compare committees by number of members or by number of articles
-15. Clone a Committee
-0. Exit (on exit, Administrative data will be serialized to "college_data.dat")
-
-## Technical Concepts Applied
-* Object-Oriented Programming (OOP): Inheritance (Doctor, Professor), Polymorphism, Encapsulation, Composition (departments, committees).
-* Custom Exception Handling: AdministrativeException for logical errors; GoBackException (top-level) for user-initiated "back" control flow handled via InputHelper.
-* Dynamic Interfaces (Comparable): Committee implements Comparable, dynamically switching compare criteria by setCompareMode().
-* Prototyping (Cloneable): Committee implements clone(), cloning members with copy constructors.
-* Defensive Programming: Extensive validation logic within Main and other classes.
-
-Note: README was updated to reflect actual implementation details: `InputHelper` is a top-level class and `GoBackException` is top-level (not an inner class of `Main`), Committee is generic, and collections use `ArrayList`.
+ 
+The system uses a clean object-oriented domain model incorporating inheritance, generic type safety, and polymorphic behaviors.
+ 
+### Core Technical Highlights
+ 
+**1. Advanced Generics & Type Safety**
+ 
+`Committee` Degree Binding: `Committee` is parameterized over `Lecturer.Degree`:
+ 
+```java
+public class Committee<T extends Lecturer.Degree> implements Comparable<Committee<?>>, Cloneable, Serializable
+```
+ 
+Constructors and `setLecturers()` strictly enforce that a member's degree matches the committee's required bound `T`.
+ 
+**2. Exception Handling & Control Flow**
+ 
+- `AdministrativeException`: Handles domain-level logical errors (e.g., duplicate assignments, missing chairman).
+- `GoBackException`: A top-level exception triggered when a user inputs `back`. Integrated with `InputHelper.readLine()` to provide safe, stack-unwinding cancellation out of nested prompts.
+**3. Design Patterns & Interfaces**
+ 
+- **Dynamic Comparisons (`Comparable`)**: `Committee` supports runtime criteria switching via `setCompareMode()`, comparing instances either by total member count or total publication count.
+- **Prototyping (`Cloneable`)**: `Committee.clone()` generates a deep copy of the committee and its members (using copy constructors across `Professor`, `Doctor`, and `Lecturer`), prefixing the cloned instance name with `"new-"`.
+- **Persistence**: Objects are serialized to and deserialized from `college_data.dat` via `ObjectOutputStream` and `ObjectInputStream` helpers (`saveSerialization` / `loadSerialization`).
+## Directory Structure
+ 
+```
+.
+├── assets/
+│   └── class diagram pic.png
+├── src/
+│   ├── Administrative.java
+│   ├── Committee.java
+│   ├── Department.java
+│   ├── Lecturer.java
+│   ├── Doctor.java
+│   ├── Professor.java
+│   ├── Article.java
+│   ├── InputHelper.java
+│   ├── GoBackException.java
+│   ├── AdministrativeException.java
+│   └── Main.java
+├── college_data.dat         # Auto-generated persistence file
+└── README.md
+```
+ 
+## Interactive Features (CLI Menu)
+ 
+The interactive CLI provides the following administrative capabilities:
+ 
+| ID | Action | Description |
+|----|--------|--------------|
+| 1 | Add Lecturer | Register a standard Lecturer, Doctor, or Professor |
+| 2 | Add Committee | Create a generic committee bound to a specific degree |
+| 3 | Add Member to Committee | Assign an eligible lecturer to a committee |
+| 4 | Update Committee Chairman | Assign or replace committee chairmanship |
+| 5 | Remove Member from Committee | Unassign a lecturer from a committee |
+| 6 | Add Department | Register an academic department |
+| 7 | Assign Lecturer to Department | Link a lecturer to a department |
+| 8 | Average Salary (College) | Calculate overall average salary across all lecturers |
+| 9 | Average Salary (Department) | Calculate average salary within a specific department |
+| 10 | Display All Lecturers | Print complete roster and attributes |
+| 11 | Display All Committees | Print committee details, chairmen, and members |
+| 12 | Add Article to Lecturer | Record a published research article |
+| 13 | Compare Articles | Compare article publication counts between two lecturers |
+| 14 | Compare Committees | Compare two committees dynamically by members or total articles |
+| 15 | Clone Committee | Deep-copy a committee and its nested members |
+| 0 | Exit | Save system state to `college_data.dat` and terminate |
+ 
+## Getting Started
+ 
+### Prerequisites
+ 
+- Java Development Kit (JDK): Version 11 or higher installed.
+### Compilation & Execution
+ 
+Clone the repository:
+ 
+```bash
+git clone https://github.com/your-username/your-repo-name.git
+cd your-repo-name
+```
+ 
+Compile the source files:
+ 
+```bash
+javac -d bin src/*.java
+```
+ 
+Run the application:
+ 
+```bash
+java -cp bin Main
+```
+ 
